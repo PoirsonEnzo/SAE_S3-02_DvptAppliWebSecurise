@@ -22,7 +22,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: OnSie
+      MYSQL_DATABASE: netvod
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
