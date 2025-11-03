@@ -3,6 +3,7 @@
 namespace Service\dispatch;
 
 use Service\action\AddUserAction;
+use Service\action\AfficherCatalogue;
 use Service\action\SigninAction;
 use Service\action\SignoutAction;
 use Service\action\DefaultAction;
@@ -26,6 +27,9 @@ class Dispatcher {
                 break;
             case 'SignOut':
                 $act = new SignoutAction();
+                break;
+            case 'Catalogue';
+                $act = new AfficherCatalogue();
                 break;
             default:
                 $act = new DefaultAction();
@@ -51,6 +55,8 @@ class Dispatcher {
                 <a href="?action=AddUser">Inscription</a> |
                 <a href="?action=SignIn">Connexion</a> |
                 <a href="?action=SignOut">Déconnexion</a> |
+                <a href="?action=Catalogue">Afficher le catalogue</a> |
+               
                 <a href="/SQL/db_init.php">Initialiser la BD</a>
             </nav>
             <hr>
