@@ -10,5 +10,7 @@
       "email": "matteog57@outlook.fr"
     }
   ],
-  "require": {}
+  "require": {
+    "ext-pdo": "*"
+  }
 }

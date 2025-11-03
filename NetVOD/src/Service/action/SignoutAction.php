@@ -1,9 +1,9 @@
 <?php
-namespace iutnc\deefy\action;
+namespace Service\action;
 
 class SignoutAction extends Action
 {
-    public function execute(): string
+    public function getResult(): string
     {
         session_unset();
         session_destroy();

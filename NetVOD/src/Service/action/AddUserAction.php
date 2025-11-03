@@ -1,12 +1,11 @@
 <?php
-namespace iutnc\deefy\action;
-
-use iutnc\deefy\auth\AuthnProvider;
-use iutnc\deefy\exception\AuthnException;
+namespace Service\action;
+use Service\auth\AuthnProvider;
+use Service\Exception\AuthnException;
 
 class AddUserAction extends Action
 {
-    public function execute(): string
+    public function getResult(): string
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             return <<<HTML

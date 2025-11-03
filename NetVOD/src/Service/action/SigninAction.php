@@ -1,12 +1,11 @@
 <?php
-namespace iutnc\deefy\action;
+namespace Service\action;
 
-use iutnc\deefy\auth\AuthnProvider;
-use iutnc\deefy\exception\AuthnException;
+use Service\auth\AuthnProvider;
 
 class SigninAction extends Action
 {
-    public function execute(): string
+    public function getResult(): string
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             return <<<HTML
@@ -41,9 +40,6 @@ HTML;
             <p><a href="?action=home" class="text-blue-500 hover:underline">Retour à l’accueil</a></p>
 HTML;
 
-        } catch (AuthnException $e) {
-            $msg = htmlspecialchars($e->getMessage());
-            return "<p class='text-red-500 font-semibold'>Erreur : {$msg}</p>";
         } catch (\Exception $e) {
             $msg = htmlspecialchars($e->getMessage());
             return "<p class='text-red-500 font-semibold'>Erreur interne : {$msg}</p>";

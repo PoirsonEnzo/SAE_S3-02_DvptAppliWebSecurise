@@ -1,37 +1,38 @@
 <?php
-
 namespace Service\action;
 
-abstract class Action {
 
-    protected ?string $http_method = null;
-    protected ?string $hostname = null;
-    protected ?string $script_name = null;
 
-    protected string $result = "";
+abstract class Action
+{
+    abstract public function getResult(): string;
 
-    public function __construct() {
-        $this->http_method = $_SERVER['REQUEST_METHOD'];
-        $this->hostname = $_SERVER['HTTP_HOST'];
-        $this->script_name = $_SERVER['SCRIPT_NAME'];
+    protected function renderTracks(array $tracks): string
+    {
+        $html = '';
 
-        $this->result = $this->execute();
-    }
+        foreach ($tracks as $track) {
+            $title = htmlspecialchars($track->title ?? 'Sans titre');
+            // Chemin vers le fichier
+            $filePath = property_exists($track, 'filename') && $track->filename !== ''
+                ? "/src/iutnc/uploads/{$track->filename}"
+                : '#';
 
-    public function execute(): string {
-        if ($this->http_method === 'POST') {
-            return $this->post();
-        } else {
-            return $this->get();
+            $author = 'Inconnu';
+            $html .= <<<HTML
+            <div class="bg-white shadow-md rounded p-4 mb-4 flex justify-between items-center hover:shadow-lg transition">
+                <div>
+                    <h3 class="text-lg font-bold">{$title}</h3>
+                    <p class="text-gray-600">Auteur : {$author}</p>
+                </div>
+                <audio controls class="w-48">
+                    <source src="{$filePath}" type="audio/mpeg">
+                    Votre navigateur ne supporte pas la lecture audio.
+                </audio>
+            </div>
+HTML;
         }
-    }
 
-    // Chaque Service.action doit définir ce qu’elle fait dans le GET et dans le POST
-    abstract protected function get(): string;
-    abstract protected function post(): string;
-
-    // permet de récupérer le résultat
-    public function getResult(): string {
-        return $this->result;
+        return $html;
     }
 }

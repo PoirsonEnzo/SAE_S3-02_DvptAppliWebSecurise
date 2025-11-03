@@ -2,6 +2,9 @@
 
 namespace Service\dispatch;
 
+use Service\action\AddUserAction;
+use Service\action\SigninAction;
+use Service\action\SignoutAction;
 use Service\action\DefaultAction;
 
 class Dispatcher {
@@ -10,11 +13,20 @@ class Dispatcher {
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) session_start();
-        $this->action = $_GET['Service.action'] ?? 'default';
+        $this->action = $_GET['action'] ?? 'default';
     }
 
     public function run(): void {
         switch ($this->action) {
+            case 'AddUser':
+                $act = new AddUserAction();
+                break;
+            case 'SignIn':
+                $act = new SigninAction();
+                break;
+            case 'SignOut':
+                $act = new SignoutAction();
+                break;
             default:
                 $act = new DefaultAction();
                 break;
@@ -39,9 +51,10 @@ class Dispatcher {
         <body>
             <h1>NetVOD</h1>
             <nav>
-                <a href="?Service.action=default">Accueil</a> |
-
-
+                <a href="?action=default">Accueil</a> |
+                <a href="?action=AddUser">Inscription</a> |
+                <a href="?action=SignIn">Connexion</a> |
+                <a href="?action=SignOut">Déconnexion</a> |
             </nav>
             <hr>
             $html
