@@ -6,7 +6,7 @@ class DefaultAction extends Action {
 
     protected function get(): string {
         return <<<HTML
-        <h1>Bienvenue sur le Service de documentation Scientifique </h1>
+        <h1>Bienvenue sur NetVOD </h1>
         HTML;
     }
 
