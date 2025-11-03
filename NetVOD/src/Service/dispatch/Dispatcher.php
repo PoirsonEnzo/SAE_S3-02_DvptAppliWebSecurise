@@ -42,11 +42,7 @@ class Dispatcher {
         <head>
             <meta charset="UTF-8">
             <title>NetVOD</title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 2em; background: #fafafa; }
-                nav a { margin-right: 1em; text-decoration: none; color: #0077cc; }
-                nav a:hover { text-decoration: underline; }
-            </style>
+            <link rel="stylesheet" href="css/style.css">
         </head>
         <body>
             <h1>NetVOD</h1>
