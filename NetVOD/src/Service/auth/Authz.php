@@ -30,13 +30,6 @@ class Authz
         if ($requiredRole === self::USER_AUTHENTICATED) {
             return;
         }
-
-        // Vérifie si rôle admin nécessaire
-        if ($requiredRole === self::USER_ADMIN && $user->role !== 'ADMIN') {
-            // Redirige ou message explicite
-            header('Location: ?action=default&error=access_denied');
-            exit();
-        }
     }
 
 
@@ -54,7 +47,7 @@ class Authz
         $ownerId = $repo->findPlaylistOwner($playlistId);
 
         $user = $_SESSION['user'];
-        if ($ownerId !== $user['id'] && $user['role'] !== 100) {
+        if ($ownerId !== $user['id_utilisateur']) {
             throw new AuthzException("Accès refusé : vous n’êtes pas propriétaire de cette playlist");
         }
     }

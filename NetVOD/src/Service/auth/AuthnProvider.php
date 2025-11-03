@@ -19,22 +19,21 @@ class AuthnProvider
             $repo = DeefyRepository::getInstance();
             $pdo = $repo->getPDO();
 
-            $stmt = $pdo->prepare("SELECT * FROM User WHERE email = :email");
+            $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE email = :email");
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$user) {
-                throw new AuthnException("Utilisateur inconnu.");
+                throw new AuthnException("utilisateur inconnu.");
             }
 
-            if (!password_verify($mdp, $user['passwd'])) {
+            if (!password_verify($mdp, $user['mot_de_passe'])) {
                 throw new AuthnException("Mot de passe incorrect.");
             }
 
             return [
-                'id'    => $user['id'],
+                'id'    => $user['id_utilisateur'],
                 'email' => $user['email'],
-                'role'  => $user['role']
             ];
 
         } catch (PDOException $e) {
@@ -56,21 +55,30 @@ class AuthnProvider
             $repo = DeefyRepository::getInstance();
             $pdo = $repo->getPDO();
 
-            $stmt = $pdo->prepare("SELECT id FROM User WHERE email = :email");
+            // Vérifie si l'utilisateur existe déjà
+            $stmt = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = :email");
             $stmt->execute(['email' => $email]);
             if ($stmt->fetch()) {
                 throw new AuthnException("Un compte existe déjà avec cet email.");
             }
 
+            // Hash sécurisé du mot de passe
             $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
-            $insert = $pdo->prepare("INSERT INTO User (email, passwd, role) VALUES (:email, :passwd, 1)");
-            $insert->execute(['email' => $email, 'passwd' => $hash]);
+            // Insertion dans la table utilisateur
+            $insert = $pdo->prepare("
+            INSERT INTO utilisateur (email, mot_de_passe, date_creation, nb_profil)
+            VALUES (:email, :mot_de_passe, NOW(), 0)
+        ");
+
+            $insert->execute([
+                'email' => $email,
+                'mot_de_passe' => $hash,
+            ]);
 
             return [
-                'id'    => $pdo->lastInsertId(),
+                'id_utilisateur' => $pdo->lastInsertId(),
                 'email' => $email,
-                'role'  => 1
             ];
 
         } catch (PDOException $e) {
@@ -78,8 +86,10 @@ class AuthnProvider
         }
     }
 
+
+
     /**
-     * @return array Les données de l'utilisateur [id, email, role]
+     * @return array Les données de l'utilisateur [id_utilisateur, email]
      * @throws AuthnException Si aucun utilisateur n'est connecté.
      */
     public static function getSignedInUser(): array
