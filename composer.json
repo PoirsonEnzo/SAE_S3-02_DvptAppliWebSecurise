@@ -1,0 +1,14 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Service\\": "src/Service/"
+    }
+  },
+  "authors": [
+    {
+      "name": "MatteoGren",
+      "email": "matteog57@outlook.fr"
+    }
+  ],
+  "require": {}
+}
