@@ -9,7 +9,7 @@ class SignoutAction extends Action
         session_destroy();
         return <<<HTML
         <p class="text-green-500 font-semibold">Vous avez été déconnecté.</p>
-        <p><a href="?action=signin" class="text-blue-500 hover:underline">Se reconnecter</a></p>
+        <p><a href="?action=SignIn" class="text-blue-500 hover:underline">Se reconnecter</a></p>
 HTML;
     }
 }
