@@ -5,7 +5,7 @@ try {
     $rootPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // --- Création de la base si nécessaire ---
-    $rootPdo->exec("CREATE DATABASE IF NOT EXISTS `NetVOD` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+    $rootPdo->exec("CREATE DATABASE IF NOT EXISTS `netvod` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
 
     // --- Créer l'utilisateur s'il n'existe pas, ou mettre à jour son mot de passe ---
     // CREATE USER IF NOT EXISTS ... fonctionne sur MySQL 8+
@@ -14,11 +14,11 @@ try {
     $rootPdo->exec("ALTER USER 'user'@'%' IDENTIFIED BY 'password';");
 
     // --- Accorder les droits sur la base NetVOD ---
-    $rootPdo->exec("GRANT ALL PRIVILEGES ON `NetVOD`.* TO 'user'@'%';");
+    $rootPdo->exec("GRANT ALL PRIVILEGES ON `netvod`.* TO 'user'@'%';");
     $rootPdo->exec("FLUSH PRIVILEGES;");
 
     // --- Connexion avec l'utilisateur 'user' à la base NetVOD ---
-    $pdo = new PDO("mysql:host=db;dbname=NetVOD;charset=utf8mb4", "user", "password");
+    $pdo = new PDO("mysql:host=db;dbname=netvod;charset=utf8mb4", "user", "password");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // --- Configuration initiale ---
