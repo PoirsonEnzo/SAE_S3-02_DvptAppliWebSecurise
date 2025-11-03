@@ -29,7 +29,7 @@ class Dispatcher {
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
-            <title>OnSie</title>
+            <title>NetVOD</title>
             <style>
                 body { font-family: Arial, sans-serif; margin: 2em; background: #fafafa; }
                 nav a { margin-right: 1em; text-decoration: none; color: #0077cc; }
@@ -37,7 +37,7 @@ class Dispatcher {
             </style>
         </head>
         <body>
-            <h1>SQL</h1>
+            <h1>NetVOD</h1>
             <nav>
                 <a href="?Service.action=default">Accueil</a> |
 
