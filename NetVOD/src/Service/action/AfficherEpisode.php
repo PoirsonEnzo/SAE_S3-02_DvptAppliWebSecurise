@@ -21,6 +21,8 @@ class AfficherEpisode extends Action
         }
 
         $idEpisode = (int) $_GET['id'];
+        $idUtilisateur = (int) $_SESSION['user']['id']; // récupère l'id utilisateur
+
         $pdo = DeefyRepository::getInstance()->getPDO();
 
         // --- Récupération des infos de l'épisode ---
@@ -40,7 +42,35 @@ class AfficherEpisode extends Action
         $titre = htmlspecialchars($ep['titre']);
         $resume = nl2br(htmlspecialchars($ep['resume']));
         $duree = htmlspecialchars($ep['duree']);
-        $fichierVideo = htmlspecialchars($ep['fichier']); // ex: episode1.mp4
+        $fichierVideo = htmlspecialchars($ep['fichier']);
+
+        // --- Ajout automatique dans la table en_cours ---
+        try {
+            // Vérifie s'il n'est pas déjà enregistré
+            $check = $pdo->prepare("
+                SELECT 1 FROM en_cours 
+                WHERE id_utilisateur = :id_utilisateur AND id_episode = :id_episode
+            ");
+            $check->execute([
+                'id_utilisateur' => $idUtilisateur,
+                'id_episode' => $idEpisode
+            ]);
+
+            if (!$check->fetch()) {
+                // Ajoute le couple si inexistant
+                $insert = $pdo->prepare("
+                    INSERT INTO en_cours (id_utilisateur, id_episode)
+                    VALUES (:id_utilisateur, :id_episode)
+                ");
+                $insert->execute([
+                    'id_utilisateur' => $idUtilisateur,
+                    'id_episode' => $idEpisode
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Optionnel : tu peux loguer ou ignorer, car c’est non-bloquant
+            error_log("Erreur lors de l'ajout dans en_cours : " . $e->getMessage());
+        }
 
         // --- HTML principal ---
         $html = "
