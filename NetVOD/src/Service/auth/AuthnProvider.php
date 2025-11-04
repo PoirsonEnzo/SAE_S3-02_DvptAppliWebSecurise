@@ -67,8 +67,8 @@ class AuthnProvider
 
             // Insertion dans la table utilisateur
             $insert = $pdo->prepare("
-            INSERT INTO utilisateur (email, mot_de_passe, date_creation, nb_profil)
-            VALUES (:email, :mot_de_passe, NOW(), 0)
+            INSERT INTO utilisateur (email, mot_de_passe, date_creation)
+            VALUES (:email, :mot_de_passe, NOW())
         ");
 
             $insert->execute([
