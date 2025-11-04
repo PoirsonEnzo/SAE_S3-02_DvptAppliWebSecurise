@@ -4,6 +4,7 @@ namespace Service\dispatch;
 
 use Service\action\AddUserAction;
 use Service\action\AfficherCatalogue;
+use Service\action\AfficherEpisode;
 use Service\action\AfficherSerie;
 use Service\action\SigninAction;
 use Service\action\SignoutAction;
@@ -35,6 +36,9 @@ class Dispatcher {
                 break;
             case 'afficherSerie':
                 $act = new AfficherSerie();
+                break;
+            case 'afficherEpisode':
+                $act = new AfficherEpisode();
                 break;
             default:
                 $act = new DefaultAction();
