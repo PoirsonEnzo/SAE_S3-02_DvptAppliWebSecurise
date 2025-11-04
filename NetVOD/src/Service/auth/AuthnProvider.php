@@ -102,6 +102,15 @@ class AuthnProvider
     }
 
     /**
+     * @return bool
+     */
+    public static function isUserRegistered(): bool
+    {
+        return !empty($_SESSION['user']);
+    }
+
+
+    /**
      * Déconnecte l'utilisateur.
      */
     public static function signout(): void
