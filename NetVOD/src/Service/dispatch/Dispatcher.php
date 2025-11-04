@@ -8,6 +8,7 @@ use Service\action\AfficherSerie;
 use Service\action\SigninAction;
 use Service\action\SignoutAction;
 use Service\action\DefaultAction;
+use Service\auth\AuthnProvider;
 
 class Dispatcher {
 
@@ -44,6 +45,12 @@ class Dispatcher {
     }
 
     private function renderPage(string $html): void {
+        if (!AuthnProvider::isUserRegistered()) {
+            $lien_auth = '<a href="?action=SignIn">Connexion</a>';
+        } else {
+            $lien_auth = '<a href="?action=SignOut">Déconnexion</a>';
+        } 
+
         echo <<<PAGE
         <!DOCTYPE html>
         <html lang="fr">
@@ -57,8 +64,7 @@ class Dispatcher {
             <nav>
                 <a href="?action=default">Accueil</a> |
                 <a href="?action=AddUser">Inscription</a> |
-                <a href="?action=SignIn">Connexion</a> |
-                <a href="?action=SignOut">Déconnexion</a> |
+                 $lien_auth |
                 <a href="?action=Catalogue">Afficher le catalogue</a> |
                
                 <a href="/SQL/db_init.php">Initialiser la BD</a>
