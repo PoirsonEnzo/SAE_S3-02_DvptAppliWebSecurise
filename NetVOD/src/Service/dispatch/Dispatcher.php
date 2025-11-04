@@ -10,6 +10,8 @@ use Service\action\SigninAction;
 use Service\action\SignoutAction;
 use Service\action\DefaultAction;
 use Service\auth\AuthnProvider;
+use Service\action\ajouterFavorisAction;
+use Service\action\addProfilAction;
 
 class Dispatcher {
 
@@ -41,7 +43,10 @@ class Dispatcher {
                 $act = new AfficherEpisode();
                 break;
             case 'ajouterFavorisAction':
-                $act = new \Service\action\ajouterFavorisAction();
+                $act = new ajouterFavorisAction();
+                break;
+            case 'addProfilAction':
+                $act = new addProfilAction();
                 break;
             default:
                 $act = new DefaultAction();
@@ -72,6 +77,7 @@ class Dispatcher {
                 <a href="?action=default">Accueil</a> |
                 <a href="?action=AddUser">Inscription</a> |
                  $lien_auth |
+                <a href="?action=addProfilAction">Profil</a> |
                 <a href="?action=Catalogue">Afficher le catalogue</a> |
                
                 <a href="/SQL/db_init.php">Initialiser la BD</a>
