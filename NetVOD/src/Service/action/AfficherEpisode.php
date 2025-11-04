@@ -56,7 +56,7 @@ class AfficherEpisode extends Action
             </div>
 
             <p><strong>Résumé :</strong> {$resume}</p>
-            <p><strong>Durée :</strong> {$duree} min</p>
+            <p><strong>Durée :</strong> {$duree} secondes</p>
 
             <p><a href='?action=Catalogue' class='btn-retour'>← Retour au catalogue</a></p>
         </div>
