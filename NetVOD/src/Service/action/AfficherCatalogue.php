@@ -27,7 +27,13 @@ class AfficherCatalogue extends Action
                 foreach ($results as $data) {
                     $titre = htmlspecialchars($data['titre']);
                     $id = (int)$data['id_serie'];
-                    $html .= "<a href='?action=afficherSerie&id={$id}' class='serie-card'>{$titre}</a><br>";
+                    $html .= "
+                        <div class='serie-card'>
+                            <img src='../../../img/a.jpg' alt='Image de la série {$titre}' class='serie-img'>
+                            <a href='?action=afficherSerie&id={$id}'>{$titre}</a>
+                        </div>
+                        <br>
+                    ";
                 }
                 $html .= "</div>";
 
