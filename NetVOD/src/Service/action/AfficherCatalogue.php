@@ -19,13 +19,13 @@ class AfficherCatalogue extends Action
                 $pdo = DeefyRepository::getInstance()->getPDO();
 
                 //Recuperation des pistes de la playlist
-                $stmt = $pdo->prepare("SELECT id_serie, titre FROM serie");
+                $stmt = $pdo->prepare("SELECT id_serie, titre_serie FROM serie");
                 $stmt->execute();
                 $results = $stmt->fetchAll();
 
                 $html .= "<h3>Catalogue des séries</h3><div class='series-grid'>";
                 foreach ($results as $data) {
-                    $titre = htmlspecialchars($data['titre']);
+                    $titre = htmlspecialchars($data['titre_serie']);
                     $id = (int)$data['id_serie'];
                     $html .= "
                         <div class='serie-card'>
