@@ -46,6 +46,7 @@ try {
             `id_utilisateur` INT UNSIGNED NOT NULL AUTO_INCREMENT,
             `email` VARCHAR(255) NOT NULL UNIQUE,
             `mot_de_passe` VARCHAR(255) NOT NULL,
+            `date_creation` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id_utilisateur`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
@@ -57,6 +58,7 @@ try {
             `prenom` VARCHAR(100) DEFAULT NULL,
             `numero_carte` VARCHAR(20) DEFAULT NULL,
             `genre_prefere` VARCHAR(100) DEFAULT NULL,
+            
             PRIMARY KEY (`id_profil`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 

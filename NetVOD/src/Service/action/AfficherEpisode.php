@@ -25,7 +25,7 @@ class AfficherEpisode extends Action
 
         // --- Récupération des infos de l'épisode ---
         $stmt = $pdo->prepare("
-            SELECT titre, resume, duree, file
+            SELECT titre, resume, duree, fichier
             FROM episode
             WHERE id_episode = ?
         ");
@@ -40,7 +40,7 @@ class AfficherEpisode extends Action
         $titre = htmlspecialchars($ep['titre']);
         $resume = nl2br(htmlspecialchars($ep['resume']));
         $duree = htmlspecialchars($ep['duree']);
-        $fichierVideo = htmlspecialchars($ep['file']); // ex: episode1.mp4
+        $fichierVideo = htmlspecialchars($ep['fichier']); // ex: episode1.mp4
 
         // --- HTML principal ---
         $html = "

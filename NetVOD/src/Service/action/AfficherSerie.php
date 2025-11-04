@@ -23,7 +23,7 @@ class AfficherSerie extends Action
 
         // --- Infos série ---
         $stmt = $pdo->prepare("
-            SELECT id_serie, titre, descriptif, annee, date_ajout
+            SELECT id_serie, titre_serie, descriptif, annee, date_ajout
             FROM serie
             WHERE id_serie = ?
         ");
@@ -34,7 +34,7 @@ class AfficherSerie extends Action
             return "<p>❌ Série introuvable.</p>";
         }
 
-        $titre = htmlspecialchars($serie['titre']);
+        $titre = htmlspecialchars($serie['titre_serie']);
         $desc = htmlspecialchars($serie['descriptif']);
         $annee = htmlspecialchars($serie['annee']);
         $dateAjout = htmlspecialchars($serie['date_ajout']);
@@ -51,10 +51,10 @@ class AfficherSerie extends Action
 
         // --- Épisodes ---
         $stmt2 = $pdo->prepare("
-            SELECT id_episode, numero, titre, duree
+            SELECT id_episode, numero_episode, titre, duree
             FROM episode
-            WHERE serie_id = ?
-            ORDER BY numero ASC
+            WHERE id_serie = ?
+            ORDER BY numero_episode ASC
         ");
         $stmt2->execute([$idSerie]);
         $episodes = $stmt2->fetchAll();
@@ -64,7 +64,7 @@ class AfficherSerie extends Action
         } else {
             $html .= "<div class='episodes-grid'>";
             foreach ($episodes as $ep) {
-                $num = (int)$ep['numero'];
+                $num = (int)$ep['numero_episode'];
                 $titreEp = htmlspecialchars($ep['titre']);
                 $duree = htmlspecialchars($ep['duree']);
                 $idEp = (int)$ep['id_episode'];
