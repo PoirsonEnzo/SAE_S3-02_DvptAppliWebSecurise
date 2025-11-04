@@ -40,6 +40,9 @@ class Dispatcher {
             case 'afficherEpisode':
                 $act = new AfficherEpisode();
                 break;
+            case 'ajouterFavorisAction':
+                $act = new \Service\action\ajouterFavorisAction();
+                break;
             default:
                 $act = new DefaultAction();
                 break;

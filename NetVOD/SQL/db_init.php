@@ -129,10 +129,10 @@ try {
 
         // FAVORIS
         "CREATE TABLE `favoris` (
-            `id_utilisateur` INT UNSIGNED NOT NULL,
+            `id_profil` INT UNSIGNED NOT NULL,
             `id_serie` INT UNSIGNED NOT NULL,
-            PRIMARY KEY (`id_utilisateur`, `id_serie`),
-            FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE,
+            PRIMARY KEY (`id_profil`, `id_serie`),
+            FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE,
             FOREIGN KEY (`id_serie`) REFERENCES `serie`(`id_serie`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
