@@ -42,23 +42,37 @@ class DefaultAction extends Action
         $stmt->execute(['id_profil' => $idProfil]);
         $favoris = $stmt->fetchAll();
 
-        // DejaVisionnees
+
+        // Totalep
         $stmt = $pdo->prepare("
             SELECT 
                 COUNT(DISTINCT e.id_episode) AS total_episodes,
-                COUNT(DISTINCT v.id_episode) AS episodes_vus,
                 e.id_serie,
-                s.titre_serie
+                s.titre_serie,
+                s.img
             FROM episode e
-            LEFT JOIN visionnees v 
-                ON v.id_episode = e.id_episode
             INNER JOIN serie s 
                 ON s.id_serie = e.id_serie
+            GROUP BY e.id_serie,s.titre_serie,s.img
+        ");
+        $stmt->execute();
+        $totalep = $stmt->fetchAll();
+
+        // DejaVisionnees
+
+        $stmt = $pdo->prepare("
+            SELECT 
+                e.id_serie,
+                COUNT(DISTINCT v.id_episode) AS episodes_vus
+            FROM episode e
+            INNER JOIN visionnees v 
+                ON v.id_episode = e.id_episode
             WHERE v.id_profil = ?
             GROUP BY e.id_serie
         ");
         $stmt->execute([$idProfil]);
         $vision = $stmt->fetchAll();
+
 
         $html = "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
         $html .= "<h3>Profil actuel : <strong>{$username}</strong></h3>";
@@ -86,16 +100,21 @@ class DefaultAction extends Action
         $html .= "</div>";
 
         // Affichage deja visonnes
-        $html .= "<h3>Déjà visonnées :</h3><div class='series-grid'>";
-        foreach ($vision as $v) {
-            if($v['total_episodes'] == $v['episodes_vus']) {
-                $img = $f['img'] ?: 'a.jpg';
-                $html .= "<div class='serie-card'>
+        $html .= "<h3>Séries déjà visionnées :</h3><div class='series-grid'>";
+
+        foreach ($totalep as $te) {
+            foreach ($vision as $v) {
+                // On compare bien la même série
+                if ($te['id_serie'] == $v['id_serie'] && $te['total_episodes'] == $v['episodes_vus']) {
+                    $img = $te['img'] ?: 'a.jpg';
+                    $html .= "<div class='serie-card'>
                         <img src='../../../img/{$img}' class='serie-img'>
-                        <a href='?action=afficherSerie&id={$v['id_serie']}'>{$v['titre_serie']}</a>
+                        <a href='?action=afficherSerie&id={$te['id_serie']}'>{$te['titre_serie']}</a>
                       </div>";
+                }
             }
         }
+
         $html .= "</div>";
 
         return $html;
