@@ -111,11 +111,10 @@ class AfficherSerie extends Action
                 //chemin vers ton dossier image (adapter si besoin)
                 $html .= "
                     <div class='episode-card'>
+                        <a href='?action=afficherEpisode&id={$idEp}'>
                         <img src='img/{$imgFile}' alt='Image épisode {$num}' class='episode-img'>
                         <div class='episode-info'>
-                            <a href='?action=afficherEpisode&id={$idEp}'>
-                                <strong>Épisode {$num}</strong> : {$titreEp}
-                            </a>
+                            <strong>Épisode {$num}</strong> : {$titreEp}</a>
                             <p>Durée : {$duree} secondes</p>
                         </div>
                     </div>
