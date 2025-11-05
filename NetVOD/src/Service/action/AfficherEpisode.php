@@ -104,6 +104,8 @@ class AfficherEpisode extends Action
 
             <p><strong>Résumé :</strong> {$resume}</p>
             <p><strong>Durée :</strong> {$duree} secondes</p>
+            
+            <p><a href='?action=Commentaire={$idEpisode}' class='btn-retour'>- - Laisser un commentaire - -</a></p>
 
             <p><a href='?action=Catalogue' class='btn-retour'>← Retour au catalogue</a></p>
         </div>
