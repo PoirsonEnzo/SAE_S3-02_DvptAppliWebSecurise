@@ -40,7 +40,7 @@ class AfficherEpisode extends Action
             return "<p>❌ Aucun profil trouvé pour cet utilisateur.</p>";
         }
 
-        $idProfil = (int) $profil['id_profil'];
+        $idProfil = (int) $_SESSION['profil']['id_profil'] ?? null;
 
         // --- Récupération des infos de l'épisode ---
         $stmt = $pdo->prepare("
