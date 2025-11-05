@@ -72,9 +72,9 @@ class DefaultAction extends Action
         $vision = $stmt->fetchAll();
 
         // --- Compte actif en haut à droite ---
-        $html = "<div class='compte-actif'>Connecté sur le profil : <strong>{$username}</strong></div>";
 
-        $html .= "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
+
+        $html = "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
 
         // --- Affichage épisodes en cours ---
         $html .= "<h3>Épisodes en cours :</h3><div class='series-grid'>";

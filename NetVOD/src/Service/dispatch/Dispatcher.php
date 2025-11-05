@@ -34,74 +34,47 @@ class Dispatcher {
 
     public function run(): void {
         switch ($this->action) {
-            case 'AddUser':
-                $act = new AddUserAction();
-                break;
-            case 'SignIn':
-                $act = new SigninAction();
-                break;
-            case 'SignOut':
-                $act = new SignoutAction();
-                break;
-            case 'Catalogue':
-                $act = new AfficherCatalogue();
-                break;
-            case 'AfficherSerie':
-                $act = new AfficherSerie();
-                break;
-            case 'AfficherEpisode':
-                $act = new AfficherEpisode();
-                break;
-            case 'AjouterFavoris':
-                $act = new AjouterFavorisAction();
-                break;
-            case 'SupFavoris' :
-                $act = new SupprimerFavorisAction();
-                break;
-            case 'AddProfilAction':
-                $act = new AddProfilAction();
-                break;
-            case 'activateAccount':
-                $act = new ActivateAccountAction();
-                break;
-            case 'ChoisirProfilAction':
-                $act = new ChoisirProfilAction();
-                break;
-            case 'ProfiActiflAction':
-                $act = new ProfiActiflAction();
-                break;
-            case 'RechercheMotCle':
-                $act = new RechercheMotCleAction();
-                break;
-            case 'CatalogueTri':
-                $act = new CatalogueTriAction();
-                break;
-            case 'ForgotPassword':
-                $act = new ForgotPasswordAction();
-                break;
-            case 'ResetPassword':
-                $act = new ResetPasswordAction();
-                break;
-            case 'Commentaire' :
-                $act = new CommentaireAction();
-                break;
-            case 'supprimerCom' :
-                $act = new SuppCommentaireAction();
-                break;
-            default:
-                $act = new DefaultAction();
-                break;
+            case 'AddUser':             $act = new AddUserAction(); break;
+            case 'SignIn':              $act = new SigninAction(); break;
+            case 'SignOut':             $act = new SignoutAction(); break;
+            case 'Catalogue':           $act = new AfficherCatalogue(); break;
+            case 'AfficherSerie':       $act = new AfficherSerie(); break;
+            case 'AfficherEpisode':     $act = new AfficherEpisode(); break;
+            case 'AjouterFavoris':      $act = new AjouterFavorisAction(); break;
+            case 'SupFavoris':          $act = new SupprimerFavorisAction(); break;
+            case 'AddProfilAction':     $act = new AddProfilAction(); break;
+            case 'activateAccount':     $act = new ActivateAccountAction(); break;
+            case 'ChoisirProfilAction': $act = new ChoisirProfilAction(); break;
+            case 'ProfiActiflAction':   $act = new ProfiActiflAction(); break;
+            case 'RechercheMotCle':     $act = new RechercheMotCleAction(); break;
+            case 'CatalogueTri':        $act = new CatalogueTriAction(); break;
+            case 'ForgotPassword':      $act = new ForgotPasswordAction(); break;
+            case 'ResetPassword':       $act = new ResetPasswordAction(); break;
+            case 'Commentaire':         $act = new CommentaireAction(); break;
+            case 'supprimerCom':        $act = new SuppCommentaireAction(); break;
+            default:                    $act = new DefaultAction(); break;
         }
 
         $this->renderPage($act->getResult());
     }
 
     private function renderPage(string $html): void {
+
+        // --- Lien connexion / déconnexion ---
         if (!AuthnProvider::isUserRegistered()) {
-            $lien_auth = '<a href="?action=AddUser">Inscription</a> |<a href="?action=SignIn">Connexion</a>';
+            $lien_auth = '<a href="?action=AddUser">Inscription</a> | <a href="?action=SignIn">Connexion</a>';
         } else {
             $lien_auth = '<a href="?action=SignOut">Déconnexion</a>';
-        } 
+        }
+
+        // --- Affichage du profil actif uniquement si sélectionné ---
+
+        if (!empty($_SESSION['profil']) && !empty($_SESSION['profil']['username'])) {
+            $username = htmlspecialchars($_SESSION['profil']['username']);
+            $compte_actif = "<div class='compte-actif'>Profil actif : <strong>{$username}</strong></div>";
+        }else {
+            $compte_actif = "<div class='compte-actif'>Aucun profil actif</div>";
+        }
 
         echo <<<PAGE
         <!DOCTYPE html>
@@ -113,13 +86,14 @@ class Dispatcher {
         </head>
         <body>
             <h1>NetVOD</h1>
+            $compte_actif
+
             <nav>
                 <a href="?action=default">Accueil</a> |
-                 $lien_auth |
+                $lien_auth |
                 <a href="?action=AddProfilAction">Profil</a> |
-                <a href="?action=ChoisirProfilAction">selection</a> |
-                <a href="?action=Catalogue">Afficher le catalogue</a> |
-               
+                <a href="?action=ChoisirProfilAction">Sélection</a> |
+                <a href="?action=Catalogue">Catalogue</a> |
                 <a href="/SQL/db_init.php">Initialiser la BD</a>
             </nav>
             <hr>
