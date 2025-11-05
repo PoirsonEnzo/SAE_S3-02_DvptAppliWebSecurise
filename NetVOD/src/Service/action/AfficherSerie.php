@@ -105,7 +105,7 @@ class AfficherSerie extends Action
                         <img src='../../../img/a.jpg' alt='Image épisode {$num}' class='episode-img'>
                         <div class='episode-info'>
                             <a href='?action=afficherEpisode&id={$idEp}'><strong>Épisode {$num}</strong> : {$titreEp}</a>
-                            <p>Durée : {$duree} min</p>
+                            <p>Durée : {$duree} secondes</p>
                         </div>
                     </div>
                 ";
