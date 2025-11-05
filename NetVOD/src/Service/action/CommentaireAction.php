@@ -26,14 +26,14 @@ class CommentaireAction extends Action
 
         $check = $pdo->prepare("SELECT * FROM commentaire WHERE id_profil = ? AND id_episode = ?" );
         $check->execute([$idProfil,$idEpisode]);
-        if ($check->fetch()){
-            $com = $check->fetchAll();
+        $com = $check->fetchAll();
 
-            foreach($com as $co) {
+        if ($com) {
+            foreach ($com as $co) {
                 $idCom = $co['id_commentaire'];
                 return "<p>Voici votre commentaire :</p>
-                    <p>{$co['texte']}</p>
-                    <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p>";
+            <p>{$co['texte']}</p>
+            <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p>";
             }
         }
 

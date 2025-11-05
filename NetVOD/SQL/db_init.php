@@ -161,7 +161,7 @@ try {
             `id_profil` INT UNSIGNED NOT NULL,
             `id_episode` INT UNSIGNED NOT NULL,
             `texte` TEXT DEFAULT NULL,
-            `note` TINYINT UNSIGNED NOT NULL CHECK (`note` BETWEEN 1 AND 5),
+            `note` TINYINT UNSIGNED NOT NULL CHECK (`note` BETWEEN 1 AND 20),
             PRIMARY KEY (`id_commentaire`),
             FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE,
             FOREIGN KEY (`id_episode`) REFERENCES `episode`(`id_episode`) ON DELETE CASCADE

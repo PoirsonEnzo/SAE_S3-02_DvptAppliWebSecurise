@@ -106,10 +106,42 @@ class AfficherEpisode extends Action
             <p><strong>Durée :</strong> {$duree} secondes</p>
             
             <p><a href='?action=Commentaire&id={$idEpisode}' class='btn-retour'>- - Laisser un commentaire - -</a></p>
+            ";
 
-            <p><a href='?action=Catalogue' class='btn-retour'>← Retour au catalogue</a></p>
-        </div>
-        ";
+            $html .= '<div class="moyenneNote">';
+            $moyNote = $pdo -> prepare(
+              "SELECT AVG(note) AS moyenne
+                    FROM commentaire
+                    WHERE id_episode = ?"
+            );
+            $moyNote ->execute([$idEpisode]);
+            $results = $moyNote->fetchAll();
+            $html .= "<p>Note moyenne de cet épisode :</p>";
+            foreach ($results as $moy){
+                $html .= "<p>{$moy['moyenne']}</p>";
+            }
+            $html .= '<div>';
+
+
+            $html .= '<div class="commentaires">';
+            $comms = $pdo -> prepare(
+                "SELECT c.texte,p.username
+                        FROM commentaire c
+                        INNER JOIN profil p
+                        ON c.id_profil = p.id_profil
+                        WHERE id_episode = ?"
+            );
+            $comms ->execute([$idEpisode]);
+            $results = $comms->fetchAll();
+            $html .= "<p>Commentaires :</p>";
+            foreach ($results as $com){
+                $html .= "<p>{$com['username']}</p><p>{$com['texte']}</p>";
+            }
+            $html .= '<div>';
+
+            $html .= "<p><a href='?action=Catalogue' class='btn-retour'>← Retour au catalogue</a></p>
+            </div>
+            ";
 
         return $html;
     }
