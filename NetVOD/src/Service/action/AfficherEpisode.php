@@ -103,7 +103,6 @@ class AfficherEpisode extends Action
         $html = "
         <div class='episode-detail'>
             <h2>{$titre}</h2>
-            <img src='../../../img/{$imgFile}' alt='Image de l’épisode' class='episode-detail-img'>
 
             <div class='video-container'>
                 <video width='640' height='360' controls>
