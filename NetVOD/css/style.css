@@ -177,6 +177,21 @@ h2, h3 {
     border-bottom: 2px solid #1a2338;
 }
 
+.etoile a {
+    display: inline-block;
+    font-size: 2rem;
+    color: gold;
+    text-decoration: none;
+    transition: transform 0.25s ease-in-out;
+
+}
+
+.etoile a:hover {
+    transition: transform 0.25s ease-in-out;
+    transform: scale(1.4);
+    color: #ffd700;
+}
+
 .serie-card a {
     color: #e0e0e0;
     text-decoration: none;

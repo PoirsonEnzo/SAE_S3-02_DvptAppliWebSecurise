@@ -98,6 +98,11 @@ class DefaultAction extends Action
                             <img src='../../../img/{$img}' class='serie-img' alt='{$f['titre_serie']}'>
                         </a>
                         <a href='?action=AfficherSerie&id={$f['id_serie']}'>{$f['titre_serie']}</a>
+                        <div class='etoile'>
+                            <a href='?action=SupFavoris&id={$f['id_serie']}'>
+                                ⭐
+                            </a>
+                        </div>
                       </div>";
         }
         $html .= "</div>";
