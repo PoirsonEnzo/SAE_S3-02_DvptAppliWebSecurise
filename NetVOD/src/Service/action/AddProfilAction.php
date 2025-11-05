@@ -17,7 +17,7 @@ class AddProfilAction extends Action
 
         // --- GET : afficher le formulaire de création ---
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM profil2utilisateur WHERE id_utilisateur = ?");
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM profil WHERE id_utilisateur = ?");
             $stmt->execute([$idUtilisateur]);
             $nbProfils = (int)$stmt->fetchColumn();
 
@@ -75,10 +75,6 @@ HTML;
         ");
         $stmt->execute([$username, $nom, $prenom, $genre_prefere, $idUtilisateur]);
         $idProfil = (int)$pdo->lastInsertId();
-
-        // Liaison profil → utilisateur
-        $stmt = $pdo->prepare("INSERT INTO profil2utilisateur (id_utilisateur, id_profil) VALUES (?, ?)");
-        $stmt->execute([$idUtilisateur, $idProfil]);
 
         // Enregistrer le profil actif en session
         $_SESSION['profil'] = [
