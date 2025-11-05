@@ -34,7 +34,7 @@ class AjouterFavorisAction extends Action
 
         if ($check->fetch()) {
             return "<p>Cette série est déjà dans vos favoris.</p>
-                    <p><a href='?action=afficherSerie&id={$idSerie}'>Retour à la série</a></p>";
+                    <p><a href='?action=AfficherSerie&id={$idSerie}'>Retour à la série</a></p>";
         }
 
         // Insertion dans favoris
@@ -42,6 +42,6 @@ class AjouterFavorisAction extends Action
         $stmt->execute([$idProfil, $idSerie]);
 
         return "<p>Série ajoutée à vos favoris !</p>
-                <p><a href='?action=afficherSerie&id={$idSerie}'>Retour à la série</a></p>";
+                <p><a href='?action=AfficherSerie&id={$idSerie}'>Retour à la série</a></p>";
     }
 }

@@ -8,15 +8,17 @@ use Service\action\AfficherCatalogue;
 use Service\action\AfficherEpisode;
 use Service\action\AfficherSerie;
 use Service\action\CatalogueTriAction;
+use Service\action\ChoisirProfilAction;
 use Service\action\ForgotPasswordAction;
+use Service\action\ProfiActiflAction;
 use Service\action\RechercheMotCleAction;
 use Service\action\ResetPasswordAction;
 use Service\action\SigninAction;
 use Service\action\SignoutAction;
 use Service\action\DefaultAction;
 use Service\auth\AuthnProvider;
-use Service\action\ajouterFavorisAction;
-use Service\action\addProfilAction;
+use Service\action\AjouterFavorisAction;
+use Service\action\AddProfilAction;
 use Service\action\CommentaireAction;
 use Service\action\SuppCommentaireAction;
 
@@ -43,26 +45,26 @@ class Dispatcher {
             case 'Catalogue':
                 $act = new AfficherCatalogue();
                 break;
-            case 'afficherSerie':
+            case 'AfficherSerie':
                 $act = new AfficherSerie();
                 break;
-            case 'afficherEpisode':
+            case 'AfficherEpisode':
                 $act = new AfficherEpisode();
                 break;
-            case 'ajouterFavorisAction':
-                $act = new ajouterFavorisAction();
+            case 'AjouterFavoris':
+                $act = new AjouterFavorisAction();
                 break;
-            case 'addProfilAction':
-                $act = new addProfilAction();
+            case 'AddProfilAction':
+                $act = new AddProfilAction();
                 break;
             case 'activateAccount':
                 $act = new ActivateAccountAction();
                 break;
             case 'ChoisirProfilAction':
-                $act = new \Service\action\ChoisirProfilAction();
+                $act = new ChoisirProfilAction();
                 break;
             case 'ProfiActiflAction':
-                $act = new \Service\action\ProfiActiflAction();
+                $act = new ProfiActiflAction();
                 break;
             case 'RechercheMotCle':
                 $act = new RechercheMotCleAction();
@@ -110,7 +112,7 @@ class Dispatcher {
             <nav>
                 <a href="?action=default">Accueil</a> |
                  $lien_auth |
-                <a href="?action=addProfilAction">Profil</a> |
+                <a href="?action=AddProfilAction">Profil</a> |
                 <a href="?action=ChoisirProfilAction">selection</a> |
                 <a href="?action=Catalogue">Afficher le catalogue</a> |
                

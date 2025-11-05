@@ -25,7 +25,7 @@ class ChoisirProfilAction extends Action
         $profils = $stmt->fetchAll();
 
         if (!$profils) {
-            return "<p>Aucun profil trouvé. <a href='?action=addProfilAction'>Créer un profil</a></p>";
+            return "<p>Aucun profil trouvé. <a href='?action=AddProfilAction'>Créer un profil</a></p>";
         }
 
         // Construction du HTML à l'intérieur de la méthode

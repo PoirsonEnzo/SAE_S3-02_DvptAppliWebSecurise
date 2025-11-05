@@ -46,10 +46,10 @@ class AfficherCatalogue extends Action
                 // Lien sur l'image
                 $html .= "
                     <div class='serie-card'>
-                        <a href='?action=afficherSerie&id={$id}'>
+                        <a href='?action=AfficherSerie&id={$id}'>
                             <img src='../../../img/{$image}' alt='Image de la série {$titre}' class='serie-img'>
                         </a>
-                        <a href='?action=afficherSerie&id={$id}' class='serie-title'>{$titre}</a>
+                        <a href='?action=AfficherSerie&id={$id}' class='serie-title'>{$titre}</a>
                     </div>
                 ";
             }

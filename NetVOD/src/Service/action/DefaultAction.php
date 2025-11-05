@@ -79,10 +79,10 @@ class DefaultAction extends Action
         foreach ($episodes as $ep) {
             $img = $ep['img'] ?: 'a.jpg';
             $html .= "<div class='serie-card'>
-                        <a href='?action=afficherEpisode&id={$ep['id_episode']}'>
+                        <a href='?action=AfficherEpisode&id={$ep['id_episode']}'>
                             <img src='../../../img/{$img}' class='serie-img' alt='{$ep['titre_serie']} - {$ep['titre']}'>
                         </a>
-                        <a href='?action=afficherEpisode&id={$ep['id_episode']}'>{$ep['titre_serie']} - {$ep['titre']}</a>
+                        <a href='?action=AfficherEpisode&id={$ep['id_episode']}'>{$ep['titre_serie']} - {$ep['titre']}</a>
                       </div>";
         }
         $html .= "</div>";
@@ -92,10 +92,10 @@ class DefaultAction extends Action
         foreach ($favoris as $f) {
             $img = $f['img'] ?: 'a.jpg';
             $html .= "<div class='serie-card'>
-                        <a href='?action=afficherSerie&id={$f['id_serie']}'>
+                        <a href='?action=AfficherSerie&id={$f['id_serie']}'>
                             <img src='../../../img/{$img}' class='serie-img' alt='{$f['titre_serie']}'>
                         </a>
-                        <a href='?action=afficherSerie&id={$f['id_serie']}'>{$f['titre_serie']}</a>
+                        <a href='?action=AfficherSerie&id={$f['id_serie']}'>{$f['titre_serie']}</a>
                       </div>";
         }
         $html .= "</div>";
@@ -107,10 +107,10 @@ class DefaultAction extends Action
                 if ($te['id_serie'] == $v['id_serie'] && $te['total_episodes'] == $v['episodes_vus']) {
                     $img = $te['img'] ?: 'a.jpg';
                     $html .= "<div class='serie-card'>
-                                <a href='?action=afficherSerie&id={$te['id_serie']}'>
+                                <a href='?action=AfficherSerie&id={$te['id_serie']}'>
                                     <img src='../../../img/{$img}' class='serie-img' alt='{$te['titre_serie']}'>
                                 </a>
-                                <a href='?action=afficherSerie&id={$te['id_serie']}'>{$te['titre_serie']}</a>
+                                <a href='?action=AfficherSerie&id={$te['id_serie']}'>{$te['titre_serie']}</a>
                               </div>";
                 }
             }

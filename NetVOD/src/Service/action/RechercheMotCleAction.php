@@ -52,7 +52,7 @@ class RechercheMotCleAction extends Action
                     <div class='serie-card'>
                         <img src='../../../img/a.jpg' alt='Image de la série {$titre}' class='serie-img'>
                         <div class='serie-info'>
-                            <a href='?action=afficherSerie&id={$id}'><strong>{$titre}</strong></a>
+                            <a href='?action=AfficherSerie&id={$id}'><strong>{$titre}</strong></a>
                             <p>{$desc}</p>
                         </div>
                     </div>

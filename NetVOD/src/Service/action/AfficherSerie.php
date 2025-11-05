@@ -78,7 +78,7 @@ class AfficherSerie extends Action
             <p><strong>Nombre d’épisodes :</strong> {$nbEpisodes}</p>
 
             <div class='favoris-container'>
-                <form method='post' action='?action=ajouterFavorisAction&id={$idSerie}'>
+                <form method='post' action='?action=AjouterFavoris&id={$idSerie}'>
                     <button type='submit' class='btn-favori'>Ajouter à mes favoris</button>
                 </form>
             </div>
@@ -111,7 +111,7 @@ class AfficherSerie extends Action
 
                 $html .= "
                     <div class='episode-card'>
-                    <a href='?action=afficherEpisode&id={$idEp}'>
+                    <a href='?action=AfficherEpisode&id={$idEp}'>
                         <img src='img/{$imgFile}' alt='Image épisode {$num}' class='episode-img'>
                         <div class='episode-info'>  
                             
