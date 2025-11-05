@@ -13,7 +13,7 @@ body {
 /* === Catalogue : barre de recherche et tri === */
 .catalogue-controls {
     display: flex;
-    justify-content: center;  
+    justify-content: center;
     align-items: center;
     margin-top: 20px;
     margin-bottom: 25px;
