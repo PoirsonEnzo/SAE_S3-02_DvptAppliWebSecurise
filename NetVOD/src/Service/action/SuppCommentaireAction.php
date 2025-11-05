@@ -3,7 +3,6 @@
 namespace Service\action;
 
 use Service\repository\DeefyRepository;
-use \PDO;
 
 class SuppCommentaireAction extends Action
 {

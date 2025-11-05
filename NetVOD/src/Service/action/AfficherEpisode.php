@@ -37,7 +37,7 @@ class AfficherEpisode extends Action
         $profil = $stmtProfil->fetch();
 
         if (!$profil) {
-            return "<p>❌ Aucun profil trouvé pour cet utilisateur.</p>";
+            return "<p>Aucun profil trouvé pour cet utilisateur.</p>";
         }
 
         $idProfil = (int) $_SESSION['profil']['id_profil'] ?? null;
@@ -52,7 +52,7 @@ class AfficherEpisode extends Action
         $ep = $stmt->fetch();
 
         if (!$ep) {
-            return "<p>❌ Épisode introuvable.</p>";
+            return "<p>Épisode introuvable.</p>";
         }
 
         // --- Sécurisation des données ---

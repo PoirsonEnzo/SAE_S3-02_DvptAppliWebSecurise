@@ -2,7 +2,6 @@
 
 namespace Service\action;
 
-use Service\auth\AuthnProvider;
 use Service\repository\DeefyRepository;
 
 class ResetPasswordAction extends Action

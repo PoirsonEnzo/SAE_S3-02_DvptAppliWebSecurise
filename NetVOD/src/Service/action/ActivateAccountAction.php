@@ -35,7 +35,7 @@ class ActivateAccountAction extends Action
             ->execute(['token' => $token]);
 
         return "
-            <p class='text-green-500 font-semibold'>✅ Votre compte a bien été activé !</p>
+            <p class='text-green-500 font-semibold'>Votre compte a bien été activé !</p>
             <a href='?action=SignIn' class='text-blue-600 underline'>Se connecter</a>
         ";
     }

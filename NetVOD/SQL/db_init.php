@@ -239,7 +239,7 @@ try {
     <title>NetVOD</title>
 </head>
 <body>
-<p>Base initialisée avec succès. Les comptes devront être activés via un lien de token.</p>
+<p>Base initialisée avec succès.</p>
 <a href="../">Retour à l'accueil</a>
 </body>
 </html>
