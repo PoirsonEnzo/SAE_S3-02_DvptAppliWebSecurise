@@ -66,7 +66,6 @@ class AfficherEpisode extends Action
             $existing = $check->fetch();
 
             if ($existing) {
-                // ✅ Met à jour l’épisode existant pour cette série
                 $update = $pdo->prepare("
                     UPDATE en_cours
                     SET id_episode = :new_episode
@@ -79,7 +78,6 @@ class AfficherEpisode extends Action
                     'old_episode' => $existing['id_episode']
                 ]);
             } else {
-                // ✅ Ajoute un nouvel épisode pour cette série
                 $insert = $pdo->prepare("
                     INSERT INTO en_cours (id_profil, id_episode)
                     VALUES (:id_profil, :id_episode)
@@ -90,7 +88,6 @@ class AfficherEpisode extends Action
                 ]);
             }
 
-            // 🔹 Ajoute à la table "visionnées"
             $insertV = $pdo->prepare("
                 INSERT IGNORE INTO visionnees (id_profil, id_episode)
                 VALUES (:id_profil, :id_episode)
@@ -136,11 +133,11 @@ class AfficherEpisode extends Action
         ");
         $moyNote->execute([$idEpisode]);
         $note = $moyNote->fetchColumn() ?? "Aucune note";
-        $html .= "<p>Note moyenne de cet épisode : <strong>{$note}</strong></p>";
+        $html .= "<div class='note'><p>Note moyenne de cet épisode : <strong>{$note}</strong></p></div>";
 
         // 🔹 Commentaires
         $comms = $pdo->prepare("
-            SELECT c.texte, p.username
+            SELECT c.texte, p.username,p.id_utilisateur
             FROM commentaire c
             JOIN profil p ON c.id_profil = p.id_profil
             WHERE id_episode = ?
@@ -150,7 +147,7 @@ class AfficherEpisode extends Action
 
         $html .= "<div class='commentaires'><h3>Commentaires :</h3>";
         foreach ($results as $com) {
-            $html .= "<p><strong>{$com['username']} :</strong> " . htmlspecialchars($com['texte']) . "</p>";
+            $html .= "<p><strong>user{$com['id_utilisateur']} | {$com['username']} :</strong> " . htmlspecialchars($com['texte']) . "</p>";
         }
         $html .= "</div>";
 

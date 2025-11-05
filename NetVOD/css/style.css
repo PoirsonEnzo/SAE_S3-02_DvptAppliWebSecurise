@@ -343,6 +343,50 @@ h2, h3 {
     outline: none;
 }
 
+.commentaires {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #332d2d; /* Fond clair pour le bloc global */
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
 
+.commentaires p {
+    background-color: #554f4f; /* Fond blanc pour chaque commentaire */
+    padding: 10px 15px;
+    margin-bottom: 10px; /* Espace entre les commentaires */
+    border-left: 4px solid #007BFF; /* Petite bordure colorée à gauche */
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Légère ombre pour relief */
+}
+
+.commentaires p strong {
+    display: block;
+    margin-bottom: 5px; /* Sépare le nom du texte */
+
+}
+
+.note {
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #332d2d; /* Fond clair pour le bloc global */
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 40%;
+
+}
+
+.note p {
+
+    padding: 10px 15px;
+    margin-bottom: 10px; /* Espace entre les commentaires */
+    border-radius: 5px;
+}
+
+.note p strong {
+    display: block;
+    margin-bottom: 5px; /* Sépare le nom du texte */
+
+}
 
 
