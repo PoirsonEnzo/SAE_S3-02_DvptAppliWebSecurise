@@ -2,6 +2,7 @@
 namespace Service\action;
 use Service\auth\AuthnProvider;
 use Service\Exception\AuthnException;
+use Service\repository\DeefyRepository;
 
 class AddUserAction extends Action
 {
@@ -24,6 +25,10 @@ class AddUserAction extends Action
                         <label for="password2" class="block font-semibold">Confirmer le mot de passe :</label>
                         <input type="password" id="password2" name="password2" required class="w-full border px-3 py-2 rounded">
                     </div>
+                    <div>
+                        <label for="carte" class="block font-semibold">Rentrer numéro de carte :</label>
+                        <input type="carte" id="carte" name="carte" required class="w-full border px-3 py-2 rounded">
+                    </div>
                     <button type="submit" class="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
                         Créer le compte
                     </button>
@@ -35,6 +40,7 @@ HTML;
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
         $password2 = $_POST['password2'] ?? '';
+        $carte = $_POST['carte'] ?? '';
 
         if ($password !== $password2) {
             return "<p class='text-red-500 font-semibold'>Les mots de passe ne correspondent pas.</p>";
@@ -42,6 +48,11 @@ HTML;
 
         try {
             $user = AuthnProvider::register($email, $password);
+            $pdo = DeefyRepository::getInstance()->getPDO();
+            $idUtilisateur = (int)$_SESSION['user']['id'];
+            // Insertion du profil
+            $stmt = $pdo->prepare("UPDATE profil SET num_carte = ? WHERE id_utilisateur = ?");
+            $stmt->execute([$carte,$idUtilisateur]);
             return "<p class='text-green-500 font-semibold'>Compte créé avec succès pour <strong>{$user['email']}</strong></p>";
         } catch (AuthnException $e) {
             return "<p class='text-red-500 font-semibold'>Erreur : " . htmlspecialchars($e->getMessage()) . "</p>";
