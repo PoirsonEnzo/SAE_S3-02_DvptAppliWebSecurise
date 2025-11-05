@@ -34,7 +34,7 @@ try {
         "activation_token", "commentaire", "en_cours", "visionnees", "favoris",
         "episode", "public2serie", "genre2serie",
         "public_cible", "genre", "serie",
-        "profil", "utilisateur"
+        "profil", "utilisateur", "reset_token"
     ];
     foreach ($tables as $t) {
         $pdo->exec("DROP TABLE IF EXISTS `$t`;");
