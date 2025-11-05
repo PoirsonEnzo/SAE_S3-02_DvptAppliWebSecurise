@@ -49,12 +49,14 @@ class CommentaireAction extends Action
                             class='w-full border px-3 py-2 rounded h-32 resize-y'
                             placeholder='Écris ton commentaire ici...'></textarea>
                     </div>
+                    </br>
                     <div>
                         <label for='note' class='block font-semibold'>Note (sur 20) :</label>
                         <input id='note' name='note' type='number' min='0' max='20' step='1' required
                                class='w-full border px-3 py-2 rounded'
                                placeholder='Entrez une note entre 0 et 20'>
                     </div>
+                    </br>
                     <button type='submit' class='w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition'>
                         Publier
                     </button>
