@@ -17,14 +17,23 @@ class AfficherCatalogue extends Action
 
             // Formulaire de recherche
             $html = "
-                    <div class='catalogue-header'>
-                        <h2>Catalogue des séries</h2>
-                        <form method='get' action='' class='search-form'>
-                            <input type='hidden' name='action' value='RechercheMotCle'>
-                            <input type='text' name='search' placeholder='Rechercher une série...'>
-                            <button type='submit'>🔍</button>
-                        </form>
-                    </div>
+                <h2>Catalogue des séries</h2>
+                <div class='catalogue-top'>
+                    <form method='get' action='' class='search-bar'>
+                        <input type='hidden' name='action' value='CatalogueTri'>
+                        <input type='text' name='search' placeholder='Rechercher une série...'>
+                        <select name='tri'>
+                            <option value='titre_serie'>Titre</option>
+                            <option value='date_ajout'>Date d’ajout</option>
+                            <option value='nb_episodes'>Nombre d’épisodes</option>
+                        </select>
+                        <select name='ordre'>
+                            <option value='ASC'>Croissant</option>
+                            <option value='DESC'>Décroissant</option>
+                        </select>
+                        <button type='submit'>🔍</button>
+                    </form>
+                </div>
                 ";
 
 

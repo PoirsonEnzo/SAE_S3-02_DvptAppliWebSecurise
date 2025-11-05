@@ -10,35 +10,65 @@ body {
 .btn-favori {
     margin-top: 15px;
 }
-/* Centre le formulaire de recherche */
-.search-form, .search-bar {
+/* === Catalogue : barre de recherche et tri === */
+.catalogue-controls {
     display: flex;
-    justify-content: center; /* Centre horizontalement */
-    align-items: center;     /* Centre verticalement si besoin */
-    gap: 10px;               /* Espacement entre le champ et le bouton */
-    margin: 20px 0;          /* Marge en haut et en bas */
+    justify-content: center;   /* Centrage horizontal */
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 25px;
 }
 
-.search-form input[type="text"], .search-bar input[type="text"] {
+.catalogue-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap; /* pour ne pas casser sur petit écran */
+    background-color: #0f1625;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(90, 150, 255, 0.25);
+}
+
+.catalogue-form input[type="text"] {
     padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #555;
-    background: #0d111d;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #141b2f;
+    color: #e0e0e0;
+    width: 220px;
+}
+
+.catalogue-form select {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #141b2f;
     color: #e0e0e0;
 }
 
-.search-form button, .search-bar button {
-    padding: 8px 12px;
-    border-radius: 6px;
+.catalogue-form button {
+    padding: 8px 16px;
     border: none;
-    background: #7aa9ff;
+    border-radius: 8px;
+    background-color: #4d7aff;
     color: #fff;
+    font-weight: 500;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.25s ease;
 }
 
-.search-form button:hover, .search-bar button:hover {
-    background: #5c87e0;
+.catalogue-form button:hover {
+    background-color: #335ccc;
+    transform: scale(1.05);
+}
+
+/* Centrage du titre */
+h2 {
+    text-align: center;
+    margin-top: 25px;
+    color: #fff;
 }
 
 
