@@ -13,7 +13,7 @@ body {
 /* === Catalogue : barre de recherche et tri === */
 .catalogue-controls {
     display: flex;
-    justify-content: center;   /* Centrage horizontal */
+    justify-content: center;  
     align-items: center;
     margin-top: 20px;
     margin-bottom: 25px;
@@ -24,7 +24,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    flex-wrap: wrap; /* pour ne pas casser sur petit écran */
+    flex-wrap: wrap;
     background-color: #0f1625;
     padding: 12px 20px;
     border-radius: 12px;
@@ -63,13 +63,13 @@ body {
     background-color: #335ccc;
     transform: scale(1.05);
 }
-/* Centre le formulaire de recherche */
+
 .search-form, .search-bar {
     display: flex;
-    justify-content: center; /* Centre horizontalement */
-    align-items: center;     /* Centre verticalement si besoin */
-    gap: 10px;               /* Espacement entre le champ et le bouton */
-    margin: 20px 0;          /* Marge en haut et en bas */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
 }
 
 .search-form input[type="text"], .search-bar input[type="text"] {
@@ -346,30 +346,30 @@ h2, h3 {
 .commentaires {
     margin: 20px 0;
     padding: 10px;
-    background-color: #332d2d; /* Fond clair pour le bloc global */
+    background-color: #332d2d;
     border-radius: 8px;
     border: 1px solid #ddd;
 }
 
 .commentaires p {
-    background-color: #554f4f; /* Fond blanc pour chaque commentaire */
+    background-color: #554f4f;
     padding: 10px 15px;
-    margin-bottom: 10px; /* Espace entre les commentaires */
-    border-left: 4px solid #007BFF; /* Petite bordure colorée à gauche */
+    margin-bottom: 10px;
+    border-left: 4px solid #007BFF;
     border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Légère ombre pour relief */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .commentaires p strong {
     display: block;
-    margin-bottom: 5px; /* Sépare le nom du texte */
+    margin-bottom: 5px;
 
 }
 
 .note {
     margin: 20px auto;
     padding: 10px;
-    background-color: #332d2d; /* Fond clair pour le bloc global */
+    background-color: #332d2d;
     border-radius: 8px;
     border: 1px solid #ddd;
     width: 40%;
@@ -379,13 +379,13 @@ h2, h3 {
 .note p {
 
     padding: 10px 15px;
-    margin-bottom: 10px; /* Espace entre les commentaires */
+    margin-bottom: 10px;
     border-radius: 5px;
 }
 
 .note p strong {
     display: block;
-    margin-bottom: 5px; /* Sépare le nom du texte */
+    margin-bottom: 5px;
 
 }
 
