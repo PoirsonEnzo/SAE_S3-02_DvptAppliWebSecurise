@@ -17,6 +17,8 @@ use Service\action\DefaultAction;
 use Service\auth\AuthnProvider;
 use Service\action\ajouterFavorisAction;
 use Service\action\addProfilAction;
+use Service\action\CommentaireAction;
+use Service\action\SuppCommentaireAction;
 
 class Dispatcher {
 
@@ -73,6 +75,12 @@ class Dispatcher {
                 break;
             case 'ResetPassword':
                 $act = new ResetPasswordAction();
+                break;
+            case 'Commentaire' :
+                $act = new CommentaireAction();
+                break;
+            case 'supprimerCom' :
+                $act = new SuppCommentaireAction();
                 break;
             default:
                 $act = new DefaultAction();
