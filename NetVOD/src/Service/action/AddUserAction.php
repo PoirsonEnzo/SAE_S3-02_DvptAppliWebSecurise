@@ -49,9 +49,9 @@ HTML;
         try {
             $user = AuthnProvider::register($email, $password);
             $pdo = DeefyRepository::getInstance()->getPDO();
-            $idUtilisateur = (int)$_SESSION['user']['id'];
-            // Insertion du profil
-            $stmt = $pdo->prepare("UPDATE profil SET num_carte = ? WHERE id_utilisateur = ?");
+            $idUtilisateur = (int)$pdo->lastInsertId();
+            // Insertion du numéro de carte
+            $stmt = $pdo->prepare("UPDATE utilisateur SET num_carte = ? WHERE id_utilisateur = ?");
             $stmt->execute([$carte,$idUtilisateur]);
             return "<p class='text-green-500 font-semibold'>Compte créé avec succès pour <strong>{$user['email']}</strong></p>";
         } catch (AuthnException $e) {
