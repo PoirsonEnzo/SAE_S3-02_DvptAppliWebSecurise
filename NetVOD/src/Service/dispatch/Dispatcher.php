@@ -2,11 +2,11 @@
 
 namespace Service\dispatch;
 
+use Service\action\ActivateAccountAction;
 use Service\action\AddUserAction;
 use Service\action\AfficherCatalogue;
 use Service\action\AfficherEpisode;
 use Service\action\AfficherSerie;
-use Service\action\RechercheMotCleAction;
 use Service\action\SigninAction;
 use Service\action\SignoutAction;
 use Service\action\DefaultAction;
@@ -44,13 +44,19 @@ class Dispatcher {
                 $act = new AfficherEpisode();
                 break;
             case 'ajouterFavorisAction':
-                $act = new AjouterFavorisAction();
+                $act = new ajouterFavorisAction();
                 break;
             case 'addProfilAction':
                 $act = new addProfilAction();
                 break;
-            case 'RechercheMotCle':
-                $act = new RechercheMotCleAction();
+            case 'activateAccount':
+                $act = new ActivateAccountAction();
+                break;
+            case 'ChoisirProfilAction':
+                $act = new \Service\action\ChoisirProfilAction();
+                break;
+            case 'ProfiActiflAction':
+                $act = new \Service\action\ProfiActiflAction();
                 break;
             default:
                 $act = new DefaultAction();
@@ -82,6 +88,7 @@ class Dispatcher {
                 <a href="?action=AddUser">Inscription</a> |
                  $lien_auth |
                 <a href="?action=addProfilAction">Profil</a> |
+                <a href="?action=ChoisirProfilAction">selection</a> |
                 <a href="?action=Catalogue">Afficher le catalogue</a> |
                
                 <a href="/SQL/db_init.php">Initialiser la BD</a>
