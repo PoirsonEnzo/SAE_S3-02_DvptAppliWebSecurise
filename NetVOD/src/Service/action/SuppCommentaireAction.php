@@ -14,7 +14,7 @@ class SuppCommentaireAction extends Action
                     <a href="?action=AddUser">S’inscrire</a></p>';
         }
         if (!isset($_GET['id'])) {
-            return "<p>Aucun commentaire sélectionné.</p>";
+            return "<div class='commentaire-detail'><p>Aucun commentaire sélectionné.</p></div>";
         }
         $idCom = (int) $_GET['id'];
         $pdo = DeefyRepository::getInstance()->getPDO();
@@ -26,7 +26,7 @@ class SuppCommentaireAction extends Action
         ");
         $stmt->execute([$idCom]);
 
-        return "<p>Commentaire supprimé</p>
-                <p><a href='?action=default'>Retourner à l'accueil</a> </p>";
+        return "<div class='commentaire-detail'><p>Commentaire supprimé</p>
+                <p><a href='?action=default'>Retourner à l'accueil</a> </p></div>";
     }
 }

@@ -31,9 +31,10 @@ class CommentaireAction extends Action
         if ($com) {
             foreach ($com as $co) {
                 $idCom = $co['id_commentaire'];
-                return "<p>Voici votre commentaire :</p>
-            <p>{$co['texte']}</p>
-            <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p>";
+                return "<div class='commentaire-detail'><p>Voici votre commentaire :</p>
+            <p>Commentaire : {$co['texte']}</p>
+            <p>Note : {$co['note']}</p>
+            <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p></div>";
             }
         }
 
@@ -69,9 +70,9 @@ class CommentaireAction extends Action
             ");
             $check->execute([$idProfil,$idEpisode,$commentaire,$note]);
             $idCom = $pdo->lastInsertId();
-            $html = "<p>Voici votre commentaire :</p>
+            $html = "<div class='commentaire-detail'><p>Voici votre commentaire :</p>
                     <p>$commentaire</p>
-                    <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p>";
+                    <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p></div>";
         }
 
 

@@ -110,7 +110,7 @@ class AfficherEpisode extends Action
 
             $html .= '<div class="moyenneNote">';
             $moyNote = $pdo -> prepare(
-              "SELECT AVG(note) AS moyenne
+              "SELECT ROUND(AVG(note), 2) AS moyenne
                     FROM commentaire
                     WHERE id_episode = ?"
             );
