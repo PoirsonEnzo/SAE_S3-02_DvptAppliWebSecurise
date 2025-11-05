@@ -65,26 +65,44 @@ class AuthnProvider
             // Hash sécurisé du mot de passe
             $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
-            // Insertion dans la table utilisateur
+            // Insertion utilisateur (désactivé par défaut)
             $insert = $pdo->prepare("
             INSERT INTO utilisateur (email, mot_de_passe, date_creation)
             VALUES (:email, :mot_de_passe, NOW())
         ");
-
             $insert->execute([
                 'email' => $email,
                 'mot_de_passe' => $hash,
             ]);
 
+            $idUtilisateur = $pdo->lastInsertId();
+
+            // Génération du token aléatoire
+            $token = bin2hex(random_bytes(32));
+
+            // Enregistrement du token avec date d'expiration
+            $insertToken = $pdo->prepare("
+            INSERT INTO activation_token (id_utilisateur, token, expiration)
+            VALUES (:id, :token, DATE_ADD(NOW(), INTERVAL 15 MINUTE))
+        ");
+            $insertToken->execute([
+                'id' => $idUtilisateur,
+                'token' => $token
+            ]);
+
+            // Retourne les infos utilisateur + lien d’activation
+            $activationLink = "?action=ActivateAccount&token={$token}";
             return [
-                'id_utilisateur' => $pdo->lastInsertId(),
+                'id_utilisateur' => $idUtilisateur,
                 'email' => $email,
+                'activation_link' => $activationLink
             ];
 
         } catch (PDOException $e) {
             throw new AuthnException("Erreur base de données : " . $e->getMessage());
         }
     }
+
 
 
 
