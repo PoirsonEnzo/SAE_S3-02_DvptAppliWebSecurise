@@ -42,17 +42,9 @@ HTML;
 
         try {
             $user = AuthnProvider::register($email, $password);
-            $link = htmlspecialchars($user['activation_link']);
-            return "
-        <p class='text-green-500 font-semibold'>
-            Compte créé pour <strong>{$user['email']}</strong> ✅<br>
-            Cliquez sur le lien ci-dessous pour activer votre compte :
-        </p>
-        <a href='{$link}' class='text-blue-600 underline'>{$link}</a>
-    ";
+            return "<p class='text-green-500 font-semibold'>Compte créé avec succès pour <strong>{$user['email']}</strong></p>";
         } catch (AuthnException $e) {
             return "<p class='text-red-500 font-semibold'>Erreur : " . htmlspecialchars($e->getMessage()) . "</p>";
         }
-
     }
 }
