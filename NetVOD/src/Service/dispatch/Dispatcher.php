@@ -16,6 +16,7 @@ use Service\action\ResetPasswordAction;
 use Service\action\SigninAction;
 use Service\action\SignoutAction;
 use Service\action\DefaultAction;
+use Service\action\SupprimerFavorisAction;
 use Service\auth\AuthnProvider;
 use Service\action\AjouterFavorisAction;
 use Service\action\AddProfilAction;
@@ -53,6 +54,9 @@ class Dispatcher {
                 break;
             case 'AjouterFavoris':
                 $act = new AjouterFavorisAction();
+                break;
+            case 'SupFavoris' :
+                $act = new SupprimerFavorisAction();
                 break;
             case 'AddProfilAction':
                 $act = new AddProfilAction();

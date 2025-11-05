@@ -76,16 +76,38 @@ class AfficherSerie extends Action
             <p><strong>Année de sortie :</strong> {$annee}</p>
             <p><strong>Date d’ajout :</strong> {$dateAjout}</p>
             <p><strong>Nombre d’épisodes :</strong> {$nbEpisodes}</p>
+            ";
 
-            <div class='favoris-container'>
-                <form method='post' action='?action=AjouterFavoris&id={$idSerie}'>
-                    <button type='submit' class='btn-favori'>Ajouter à mes favoris</button>
-                </form>
+        $idProfil = (int) $_SESSION['profil']['id_profil'];
+
+        // Vérifier si déjà en favoris
+        $check = $pdo->prepare("SELECT * FROM favoris WHERE id_profil = ? AND id_serie = ?");
+        $check->execute([$idProfil, $idSerie]);
+
+        if (!$check->fetch()) {
+            $html .= " 
+                <div class='favoris-container'>
+                    <form method='post' action='?action=AjouterFavoris&id={$idSerie}'>
+                        <button type='submit' class='btn-favori'>Ajouter à mes favoris</button>
+                    </form>
+                </div>
             </div>
-        </div>
+    
+            <h3>Liste des épisodes</h3>
+            ";
+        }else{
+            $html .= " 
+                <div class='favoris-container'>
+                    <form method='post' action='?action=SupFavoris&id={$idSerie}'>
+                        <button type='submit' class='btn-favori'>Supprimer de mes favoris</button>
+                    </form>
+                </div>
+            </div>
+    
+            <h3>Liste des épisodes</h3>
+            ";
+        }
 
-        <h3>Liste des épisodes</h3>
-        ";
 
         // --- Liste des épisodes ---
         $stmtEpisodes = $pdo->prepare("
