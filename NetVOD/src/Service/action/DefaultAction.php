@@ -42,7 +42,6 @@ class DefaultAction extends Action
         $stmt->execute(['id_profil' => $idProfil]);
         $favoris = $stmt->fetchAll();
 
-
         // Totalep
         $stmt = $pdo->prepare("
             SELECT 
@@ -59,7 +58,6 @@ class DefaultAction extends Action
         $totalep = $stmt->fetchAll();
 
         // DejaVisionnees
-
         $stmt = $pdo->prepare("
             SELECT 
                 e.id_serie,
@@ -73,7 +71,6 @@ class DefaultAction extends Action
         $stmt->execute([$idProfil]);
         $vision = $stmt->fetchAll();
 
-
         $html = "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
         $html .= "<h3>Profil actuel : <strong>{$username}</strong></h3>";
 
@@ -82,7 +79,9 @@ class DefaultAction extends Action
         foreach ($episodes as $ep) {
             $img = $ep['img'] ?: 'a.jpg';
             $html .= "<div class='serie-card'>
-                        <img src='../../../img/{$img}' class='serie-img'>
+                        <a href='?action=afficherEpisode&id={$ep['id_episode']}'>
+                            <img src='../../../img/{$img}' class='serie-img' alt='{$ep['titre_serie']} - {$ep['titre']}'>
+                        </a>
                         <a href='?action=afficherEpisode&id={$ep['id_episode']}'>{$ep['titre_serie']} - {$ep['titre']}</a>
                       </div>";
         }
@@ -93,28 +92,29 @@ class DefaultAction extends Action
         foreach ($favoris as $f) {
             $img = $f['img'] ?: 'a.jpg';
             $html .= "<div class='serie-card'>
-                        <img src='../../../img/{$img}' class='serie-img'>
+                        <a href='?action=afficherSerie&id={$f['id_serie']}'>
+                            <img src='../../../img/{$img}' class='serie-img' alt='{$f['titre_serie']}'>
+                        </a>
                         <a href='?action=afficherSerie&id={$f['id_serie']}'>{$f['titre_serie']}</a>
                       </div>";
         }
         $html .= "</div>";
 
-        // Affichage deja visonnes
+        // Affichage déjà visionnées
         $html .= "<h3>Séries déjà visionnées :</h3><div class='series-grid'>";
-
         foreach ($totalep as $te) {
             foreach ($vision as $v) {
-                // On compare bien la même série
                 if ($te['id_serie'] == $v['id_serie'] && $te['total_episodes'] == $v['episodes_vus']) {
                     $img = $te['img'] ?: 'a.jpg';
                     $html .= "<div class='serie-card'>
-                        <img src='../../../img/{$img}' class='serie-img'>
-                        <a href='?action=afficherSerie&id={$te['id_serie']}'>{$te['titre_serie']}</a>
-                      </div>";
+                                <a href='?action=afficherSerie&id={$te['id_serie']}'>
+                                    <img src='../../../img/{$img}' class='serie-img' alt='{$te['titre_serie']}'>
+                                </a>
+                                <a href='?action=afficherSerie&id={$te['id_serie']}'>{$te['titre_serie']}</a>
+                              </div>";
                 }
             }
         }
-
         $html .= "</div>";
 
         return $html;
