@@ -7,7 +7,7 @@ class AddProfilAction extends Action
 {
     public function getResult(): string
     {
-        // Vérification de connexion
+        // Vérifie si l'utilisateur est connecté
         if (!isset($_SESSION['user'])) {
             return "<p>Vous devez être connecté pour créer un profil.</p>";
         }
@@ -15,11 +15,9 @@ class AddProfilAction extends Action
         $pdo = DeefyRepository::getInstance()->getPDO();
         $idUtilisateur = (int)$_SESSION['user']['id'];
 
-        // --- GET : afficher formulaire ---
+        // --- GET : afficher le formulaire de création ---
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
-            // Vérifier le nombre de profils existants
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM PROFIL WHERE id_utilisateur = ?");
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM profil2utilisateur WHERE id_utilisateur = ?");
             $stmt->execute([$idUtilisateur]);
             $nbProfils = (int)$stmt->fetchColumn();
 
@@ -61,25 +59,37 @@ HTML;
         $prenom = trim($_POST['prenom'] ?? '');
         $genre_prefere = trim($_POST['genre_prefere'] ?? '');
 
-        // Vérification nombre de profils
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM PROFIL WHERE id_utilisateur = ?");
+        // Vérifie à nouveau le nombre de profils
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM profil WHERE id_utilisateur = ?");
         $stmt->execute([$idUtilisateur]);
         $nbProfils = (int)$stmt->fetchColumn();
+
         if ($nbProfils >= 4) {
             return "<p>Vous avez déjà 4 profils. Impossible d'en créer un autre.</p>";
         }
 
-        // Insertion du profil
-        $stmt = $pdo->prepare("INSERT INTO profil (username, nom, prenom, genre_prefere, id_utilisateur) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$username, $nom, $prenom, $genre_prefere,$idUtilisateur]);
+        // Insertion du profil dans la table 'profil'
+        $stmt = $pdo->prepare("
+            INSERT INTO profil (username, nom, prenom, genre_prefere, id_utilisateur) 
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        $stmt->execute([$username, $nom, $prenom, $genre_prefere, $idUtilisateur]);
         $idProfil = (int)$pdo->lastInsertId();
 
+        // Liaison profil → utilisateur
+        $stmt = $pdo->prepare("INSERT INTO profil2utilisateur (id_utilisateur, id_profil) VALUES (?, ?)");
+        $stmt->execute([$idUtilisateur, $idProfil]);
+
+        // Enregistrer le profil actif en session
         $_SESSION['profil'] = [
             'id_profil' => $idProfil,
-            'username' => $username
+            'username' => $username,
+            'nom' => $nom,
+            'prenom' => $prenom,
+            'genre_prefere' => $genre_prefere
         ];
 
-        return "<p>Profil <strong>{$username}</strong> créé avec succès !</p>
-                <p><a href='?action=DefaultAction' class='text-blue-500 hover:underline'>Retour a l'index</a></p>";
+        return "<p>Profil <strong>{$username}</strong> créé avec succès et activé !</p>
+                <p><a href='?action=default'>Retour à l'accueil</a></p>";
     }
 }

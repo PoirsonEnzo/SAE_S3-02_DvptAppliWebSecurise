@@ -52,6 +52,12 @@ class Dispatcher {
             case 'activateAccount':
                 $act = new ActivateAccountAction();
                 break;
+            case 'ChoisirProfilAction':
+                $act = new \Service\action\ChoisirProfilAction();
+                break;
+            case 'ProfiActiflAction':
+                $act = new \Service\action\ProfiActiflAction();
+                break;
             default:
                 $act = new DefaultAction();
                 break;
@@ -82,6 +88,7 @@ class Dispatcher {
                 <a href="?action=AddUser">Inscription</a> |
                  $lien_auth |
                 <a href="?action=addProfilAction">Profil</a> |
+                <a href="?action=ChoisirProfilAction">selection</a> |
                 <a href="?action=Catalogue">Afficher le catalogue</a> |
                
                 <a href="/SQL/db_init.php">Initialiser la BD</a>
