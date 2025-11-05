@@ -19,7 +19,7 @@ class AddProfilAction extends Action
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             // Vérifier le nombre de profils existants
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM profil2utilisateur WHERE id_utilisateur = ?");
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM PROFIL WHERE id_utilisateur = ?");
             $stmt->execute([$idUtilisateur]);
             $nbProfils = (int)$stmt->fetchColumn();
 

@@ -46,8 +46,6 @@ try {
             `id_utilisateur` INT UNSIGNED NOT NULL AUTO_INCREMENT,
             `email` VARCHAR(255) NOT NULL UNIQUE,
             `mot_de_passe` VARCHAR(255) NOT NULL,
-            `nom` VARCHAR(255) NOT NULL,
-            `prenom` VARCHAR(255) NOT NULL,
             `num_carte` VARCHAR(255) NOT NULL,
             `date_creation` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id_utilisateur`)
