@@ -83,12 +83,13 @@ class AfficherSerie extends Action
                 </form>
             </div>
         </div>
+
         <h3>Liste des épisodes</h3>
         ";
 
         // --- Liste des épisodes ---
         $stmtEpisodes = $pdo->prepare("
-            SELECT id_episode, numero_episode, titre, duree
+            SELECT id_episode, numero_episode, titre, duree, img
             FROM episode
             WHERE id_serie = ?
             ORDER BY numero_episode ASC
@@ -105,10 +106,12 @@ class AfficherSerie extends Action
                 $titreEp = htmlspecialchars($ep['titre']);
                 $duree = htmlspecialchars($ep['duree']);
                 $idEp = (int)($ep['id_episode']);
+                $imgFile = htmlspecialchars($ep['img'] ?? 'default.png');
 
+                //chemin vers ton dossier image (adapter si besoin)
                 $html .= "
                     <div class='episode-card'>
-                        <img src='../../../img/a.jpg' alt='Image épisode {$num}' class='episode-img'>
+                        <img src='img/{$imgFile}' alt='Image épisode {$num}' class='episode-img'>
                         <div class='episode-info'>
                             <a href='?action=afficherEpisode&id={$idEp}'>
                                 <strong>Épisode {$num}</strong> : {$titreEp}
