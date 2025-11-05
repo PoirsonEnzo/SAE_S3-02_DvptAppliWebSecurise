@@ -42,6 +42,24 @@ class DefaultAction extends Action
         $stmt->execute(['id_profil' => $idProfil]);
         $favoris = $stmt->fetchAll();
 
+        // DejaVisionnees
+        $stmt = $pdo->prepare("
+            SELECT 
+                COUNT(DISTINCT e.id_episode) AS total_episodes,
+                COUNT(DISTINCT v.id_episode) AS episodes_vus,
+                e.id_serie,
+                s.titre_serie
+            FROM episode e
+            LEFT JOIN visionnees v 
+                ON v.id_episode = e.id_episode
+            INNER JOIN serie s 
+                ON s.id_serie = e.id_serie
+            WHERE v.id_profil = ?
+            GROUP BY e.id_serie
+        ");
+        $stmt->execute([$idProfil]);
+        $vision = $stmt->fetchAll();
+
         $html = "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
         $html .= "<h3>Profil actuel : <strong>{$username}</strong></h3>";
 
@@ -64,6 +82,19 @@ class DefaultAction extends Action
                         <img src='../../../img/{$img}' class='serie-img'>
                         <a href='?action=afficherSerie&id={$f['id_serie']}'>{$f['titre_serie']}</a>
                       </div>";
+        }
+        $html .= "</div>";
+
+        // Affichage deja visonnes
+        $html .= "<h3>Déjà visonnées :</h3><div class='series-grid'>";
+        foreach ($vision as $v) {
+            if($v['total_episodes'] == $v['episodes_vus']) {
+                $img = $f['img'] ?: 'a.jpg';
+                $html .= "<div class='serie-card'>
+                        <img src='../../../img/{$img}' class='serie-img'>
+                        <a href='?action=afficherSerie&id={$v['id_serie']}'>{$v['titre_serie']}</a>
+                      </div>";
+            }
         }
         $html .= "</div>";
 

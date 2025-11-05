@@ -84,6 +84,15 @@ class AfficherEpisode extends Action
                     'id_profil' => $idProfil,
                     'id_episode' => $idEpisode
                 ]);
+                // 🔹 Insère dans la table vision en associant au profil
+                $insertV = $pdo->prepare("
+                INSERT INTO visionnees (id_profil, id_episode)
+                VALUES (:id_profil, :id_episode)
+            ");
+                $insertV->execute([
+                    'id_profil' => $idProfil,
+                    'id_episode' => $idEpisode
+                ]);
             }
         } catch (\Exception $e) {
             // Logue l'erreur sans bloquer

@@ -68,6 +68,16 @@ class AjouterEnCoursAction extends Action
                 'id_episode' => $idEpisode
             ]);
 
+            // 🔹 Insère dans la table en_cours en associant au profil
+            $insert = $pdo->prepare("
+                INSERT INTO visionnees (id_profil, id_episode)
+                VALUES (:id_profil, :id_episode)
+            ");
+            $insert->execute([
+                'id_profil' => $idProfil,
+                'id_episode' => $idEpisode
+            ]);
+
             return "<p class='text-green-500 font-semibold'>
                 Épisode ajouté à la liste « En cours » du profil <strong>{$_SESSION['profil']['username']}</strong> !
             </p>
