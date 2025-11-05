@@ -189,7 +189,8 @@ try {
         "INSERT INTO `profil` (`id_profil`, `username`, `nom`, `prenom`, `genre_prefere`, `id_utilisateur`) VALUES
         (1, 'Coquelicot', 'Grenier', 'Matteo', 'Le Rock', '1');",
 
-
+        "INSERT INTO `profil` (`id_profil`, `username`, `nom`, `prenom`, `genre_prefere`, `id_utilisateur`) VALUES
+        (2, 'Dawato', 'Poirson', 'Enzo', 'Valorant', '1');",
 
         // SÉRIES
 

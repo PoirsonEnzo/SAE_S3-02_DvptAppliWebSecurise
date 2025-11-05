@@ -283,3 +283,19 @@ h2, h3 {
 }
 
 
+/* === Compte Actif === */
+
+.compte-actif {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #1e2a4a;
+    padding: 8px 12px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    font-weight: bold;
+    z-index: 1000;
+}
+
+
+
