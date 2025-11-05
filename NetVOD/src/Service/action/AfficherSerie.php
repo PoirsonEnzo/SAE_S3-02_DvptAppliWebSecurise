@@ -64,10 +64,20 @@ class AfficherSerie extends Action
             <p><strong>Année de sortie :</strong> {$annee}</p>
             <p><strong>Date d’ajout :</strong> {$dateAjout}</p>
             <p><strong>Nombre d’épisodes :</strong> {$nbEpisodes}</p>
-        </div>
+        </div>";
 
-        <h3>Liste des épisodes</h3>
+
+
+        "<h3>Liste des épisodes</h3>
         ";
+
+        // --- Bouton pour ajouter aux favoris ---
+        $html .= "
+            <form method='post' action='?action=ajouterFavorisAction&id={$idSerie}'>
+                <button type='submit' class='btn-favori'>Ajouter à mes favoris</button>
+            </form>
+        ";
+        echo "<br>";
 
         // --- Liste des épisodes ---
         $stmt2 = $pdo->prepare("
@@ -78,6 +88,7 @@ class AfficherSerie extends Action
         ");
         $stmt2->execute([$idSerie]);
         $episodes = $stmt2->fetchAll();
+
 
         if (empty($episodes)) {
             $html .= "<p>Aucun épisode disponible.</p>";
@@ -101,6 +112,8 @@ class AfficherSerie extends Action
             }
             $html .= "</div>";
         }
+
+
 
         // --- Lien de retour ---
         $html .= "<p><a href='?action=Catalogue' class='btn-retour'>← Retour au catalogue</a></p>";
