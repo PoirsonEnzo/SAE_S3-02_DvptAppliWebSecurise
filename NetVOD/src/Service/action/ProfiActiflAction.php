@@ -23,10 +23,9 @@ class ProfiActiflAction extends Action
         $stmt = $pdo->prepare("
             SELECT p.id_profil, p.username
             FROM profil p
-            JOIN profil2utilisateur p2u ON p.id_profil = p2u.id_profil
-            WHERE p.id_profil = ? AND p2u.id_utilisateur = ?
+            WHERE p.id_profil = ?
         ");
-        $stmt->execute([$idProfil, $idUtilisateur]);
+        $stmt->execute([$idProfil]);
         $profil = $stmt->fetch();
 
         if (!$profil) {
