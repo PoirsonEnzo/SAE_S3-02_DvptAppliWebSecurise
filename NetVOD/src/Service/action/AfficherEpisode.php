@@ -21,9 +21,26 @@ class AfficherEpisode extends Action
         }
 
         $idEpisode = (int) $_GET['id'];
-        $idUtilisateur = (int) $_SESSION['user']['id']; // récupère l'id utilisateur
+        $idUtilisateur = (int) $_SESSION['user']['id']; // id de l'utilisateur connecté
 
         $pdo = DeefyRepository::getInstance()->getPDO();
+
+        // --- Récupération de l'id_profil par défaut pour cet utilisateur ---
+        $stmtProfil = $pdo->prepare("
+            SELECT id_profil 
+            FROM profil 
+            WHERE id_utilisateur = ? 
+            ORDER BY id_profil ASC 
+            LIMIT 1
+        ");
+        $stmtProfil->execute([$idUtilisateur]);
+        $profil = $stmtProfil->fetch();
+
+        if (!$profil) {
+            return "<p>❌ Aucun profil trouvé pour cet utilisateur.</p>";
+        }
+
+        $idProfil = (int) $profil['id_profil'];
 
         // --- Récupération des infos de l'épisode ---
         $stmt = $pdo->prepare("
@@ -49,26 +66,26 @@ class AfficherEpisode extends Action
             // Vérifie s'il n'est pas déjà enregistré
             $check = $pdo->prepare("
                 SELECT 1 FROM en_cours 
-                WHERE id_utilisateur = :id_utilisateur AND id_episode = :id_episode
+                WHERE id_profil = :id_profil AND id_episode = :id_episode
             ");
             $check->execute([
-                'id_utilisateur' => $idUtilisateur,
+                'id_profil' => $idProfil,
                 'id_episode' => $idEpisode
             ]);
 
             if (!$check->fetch()) {
                 // Ajoute le couple si inexistant
                 $insert = $pdo->prepare("
-                    INSERT INTO en_cours (id_utilisateur, id_episode)
-                    VALUES (:id_utilisateur, :id_episode)
+                    INSERT INTO en_cours (id_profil, id_episode)
+                    VALUES (:id_profil, :id_episode)
                 ");
                 $insert->execute([
-                    'id_utilisateur' => $idUtilisateur,
+                    'id_profil' => $idProfil,
                     'id_episode' => $idEpisode
                 ]);
             }
         } catch (\Exception $e) {
-            // Optionnel : tu peux loguer ou ignorer, car c’est non-bloquant
+            // Logue l'erreur sans bloquer
             error_log("Erreur lors de l'ajout dans en_cours : " . $e->getMessage());
         }
 
