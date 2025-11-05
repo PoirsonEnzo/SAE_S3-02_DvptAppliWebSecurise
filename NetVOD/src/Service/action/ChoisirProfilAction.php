@@ -18,7 +18,7 @@ class ChoisirProfilAction extends Action
         $stmt = $pdo->prepare("
             SELECT p.id_profil, p.username
             FROM profil p
-            JOIN profil2utilisateur p2u ON p.id_profil = p2u.id_profil
+            JOIN profil p2u ON p.id_profil = p2u.id_profil
             WHERE p2u.id_utilisateur = ?
         ");
         $stmt->execute([$idUtilisateur]);
