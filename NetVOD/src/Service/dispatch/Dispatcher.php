@@ -72,7 +72,7 @@ class Dispatcher {
 
     private function renderPage(string $html): void {
         if (!AuthnProvider::isUserRegistered()) {
-            $lien_auth = '<a href="?action=SignIn">Connexion</a>';
+            $lien_auth = '<a href="?action=AddUser">Inscription</a> |<a href="?action=SignIn">Connexion</a>';
         } else {
             $lien_auth = '<a href="?action=SignOut">Déconnexion</a>';
         } 
@@ -89,7 +89,6 @@ class Dispatcher {
             <h1>NetVOD</h1>
             <nav>
                 <a href="?action=default">Accueil</a> |
-                <a href="?action=AddUser">Inscription</a> |
                  $lien_auth |
                 <a href="?action=addProfilAction">Profil</a> |
                 <a href="?action=ChoisirProfilAction">selection</a> |
