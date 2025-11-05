@@ -31,7 +31,7 @@ try {
         "commentaire", "en_cours", "visionnees", "favoris",
         "episode", "public2serie", "genre2serie",
         "public_cible", "genre", "serie",
-        "profil2utilisateur", "profil", "utilisateur"
+        "profil", "utilisateur"
     ];
 
     foreach ($tables as $t) {
@@ -46,6 +46,7 @@ try {
             `id_utilisateur` INT UNSIGNED NOT NULL AUTO_INCREMENT,
             `email` VARCHAR(255) NOT NULL UNIQUE,
             `mot_de_passe` VARCHAR(255) NOT NULL,
+            `num_carte` VARCHAR(255) NOT NULL,
             `date_creation` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id_utilisateur`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
@@ -56,19 +57,9 @@ try {
             `username` VARCHAR(100) NOT NULL,
             `nom` VARCHAR(100) DEFAULT NULL,
             `prenom` VARCHAR(100) DEFAULT NULL,
-            `numero_carte` VARCHAR(20) DEFAULT NULL,
             `genre_prefere` VARCHAR(100) DEFAULT NULL,
-            
+            `id_utilisateur` VARCHAR(100) NOT NULL,
             PRIMARY KEY (`id_profil`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
-
-        // profil2utilisateur
-        "CREATE TABLE `profil2utilisateur` (
-            `id_utilisateur` INT UNSIGNED NOT NULL,
-            `id_profil` INT UNSIGNED NOT NULL,
-            PRIMARY KEY (`id_utilisateur`, `id_profil`),
-            FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE,
-            FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
         // SERIE
@@ -122,6 +113,7 @@ try {
             `resume` TEXT DEFAULT NULL,
             `duree` INT NOT NULL DEFAULT 0,
             `fichier` VARCHAR(256) DEFAULT NULL,
+            `img` VARCHAR(256) DEFAULT NULL,
             `id_serie` INT UNSIGNED NOT NULL,
             PRIMARY KEY (`id_episode`),
             FOREIGN KEY (`id_serie`) REFERENCES `serie`(`id_serie`) ON DELETE CASCADE
@@ -138,19 +130,19 @@ try {
 
         // VISIONNEES
         "CREATE TABLE `visionnees` (
-            `id_utilisateur` INT UNSIGNED NOT NULL,
+            `id_profil` INT UNSIGNED NOT NULL,
             `id_episode` INT UNSIGNED NOT NULL,
-            PRIMARY KEY (`id_utilisateur`, `id_episode`),
-            FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE,
+            PRIMARY KEY (`id_profil`, `id_episode`),
+            FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE,
             FOREIGN KEY (`id_episode`) REFERENCES `episode`(`id_episode`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
         // EN_COURS
         "CREATE TABLE `en_cours` (
-            `id_utilisateur` INT UNSIGNED NOT NULL,
+            `id_profil` INT UNSIGNED NOT NULL,
             `id_episode` INT UNSIGNED NOT NULL,
-            PRIMARY KEY (`id_utilisateur`, `id_episode`),
-            FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE,
+            PRIMARY KEY (`id_profil`, `id_episode`),
+            FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE,
             FOREIGN KEY (`id_episode`) REFERENCES `episode`(`id_episode`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
@@ -175,7 +167,7 @@ try {
     $inserts = [
 
         // Genres
-        "INSERT INTO `episode` (`id_episode`, `numero_episode`, `titre`, `resume`, `duree`, `fichier`, `id_serie`) VALUES
+        "INSERT INTO `episode` (`id_episode`, `numero_episode`, `titre`, `resume`, `duree`,`fichier`, `id_serie`) VALUES
         (1,    1,    'Le lac',    'Le lac se révolte ',    8,    'lake.mp4',    1),
         (2,    2,    'Le lac : les mystères de l\'eau trouble',    'Un grand mystère, l\'eau du lac est trouble. Jack trouvera-t-il la solution ?',    8,    'lake.mp4',    1),
         (3,    3,    'Le lac : les mystères de l\'eau sale',    'Un grand mystère, l\'eau du lac est sale. Jack trouvera-t-il la solution ?',    8,    'lake.mp4',    1),

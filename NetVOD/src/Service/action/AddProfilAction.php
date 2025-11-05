@@ -9,7 +9,7 @@ class AddProfilAction extends Action
     {
         // Vérification de connexion
         if (!isset($_SESSION['user'])) {
-            return "<p>❌ Vous devez être connecté pour créer un profil.</p>";
+            return "<p>Vous devez être connecté pour créer un profil.</p>";
         }
 
         $pdo = DeefyRepository::getInstance()->getPDO();
@@ -19,12 +19,12 @@ class AddProfilAction extends Action
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             // Vérifier le nombre de profils existants
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM profil2utilisateur WHERE id_utilisateur = ?");
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM PROFIL WHERE id_utilisateur = ?");
             $stmt->execute([$idUtilisateur]);
             $nbProfils = (int)$stmt->fetchColumn();
 
             if ($nbProfils >= 4) {
-                return "<p>⚠️ Vous avez déjà atteint le nombre maximal de 4 profils.</p>";
+                return "<p>Vous avez déjà atteint le nombre maximal de 4 profils.</p>";
             }
 
             return <<<HTML
@@ -71,7 +71,7 @@ HTML;
         $stmt->execute([$idUtilisateur]);
         $nbProfils = (int)$stmt->fetchColumn();
         if ($nbProfils >= 4) {
-            return "<p>⚠️ Vous avez déjà 4 profils. Impossible d'en créer un autre.</p>";
+            return "<p>Vous avez déjà 4 profils. Impossible d'en créer un autre.</p>";
         }
 
         // Insertion du profil
@@ -88,7 +88,7 @@ HTML;
             'username' => $username
         ];
 
-        return "<p>✅ Profil <strong>{$username}</strong> créé avec succès !</p>
+        return "<p>Profil <strong>{$username}</strong> créé avec succès !</p>
                 <p><a href='?action=DefaultAction' class='text-blue-500 hover:underline'>Retour a l'index</a></p>";
     }
 }

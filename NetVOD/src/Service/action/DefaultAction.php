@@ -23,10 +23,10 @@ class DefaultAction extends Action
             FROM en_cours ec
             JOIN episode e ON ec.id_episode = e.id_episode
             JOIN serie s ON e.id_serie = s.id_serie
-            WHERE ec.id_utilisateur = :id_utilisateur
+            WHERE ec.id_profil = :id_profil
             ORDER BY e.id_serie, e.numero_episode
         ");
-        $stmt->execute(['id_utilisateur' => $idUtilisateur]);
+        $stmt->execute(['id_profil' => $id_profil]);
         $episodes = $stmt->fetchAll();
 
         $html = "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
