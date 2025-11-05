@@ -44,7 +44,7 @@ class AfficherEpisode extends Action
 
         // --- Récupération des infos de l'épisode ---
         $stmt = $pdo->prepare("
-            SELECT titre, resume, duree, fichier
+            SELECT titre, resume, duree, fichier, img
             FROM episode
             WHERE id_episode = ?
         ");
@@ -60,6 +60,7 @@ class AfficherEpisode extends Action
         $resume = nl2br(htmlspecialchars($ep['resume']));
         $duree = htmlspecialchars($ep['duree']);
         $fichierVideo = htmlspecialchars($ep['fichier']);
+        $imgFile = htmlspecialchars($ep['img'] ?? 'default.png'); // fallback si image manquante
 
         // --- Ajout automatique dans la table en_cours ---
         try {
@@ -93,7 +94,7 @@ class AfficherEpisode extends Action
         $html = "
         <div class='episode-detail'>
             <h2>{$titre}</h2>
-            <img src='img/a.jpg' alt='Image de l’épisode' class='episode-detail-img'>
+            <img src='../../../img/{$imgFile}' alt='Image de l’épisode' class='episode-detail-img'>
 
             <div class='video-container'>
                 <video width='640' height='360' controls>
@@ -139,9 +140,10 @@ class AfficherEpisode extends Action
             }
             $html .= '<div>';
 
-            $html .= "<p><a href='?action=Catalogue' class='btn-retour'>← Retour au catalogue</a></p>
-            </div>
-            ";
+            $html .= "
+            <p><a href='?action=Catalogue' class='btn-retour'>Retour au catalogue</a></p>
+        </div>
+        ";
 
         return $html;
     }

@@ -261,3 +261,25 @@ h2, h3 {
 .btn-retour:hover {
     background: #2f3e68;
 }
+
+
+/* === dimention images === */
+
+.episode-img {
+    width: 300px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.episodes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 100px;
+}
+.episode-card {
+    flex: 0 0 auto;
+    width: 220px;
+    text-align: center;
+}
+
+
