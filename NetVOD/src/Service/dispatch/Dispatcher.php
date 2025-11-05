@@ -2,6 +2,7 @@
 
 namespace Service\dispatch;
 
+use Service\action\ActivateAccountAction;
 use Service\action\AddUserAction;
 use Service\action\AfficherCatalogue;
 use Service\action\AfficherEpisode;
@@ -47,6 +48,9 @@ class Dispatcher {
                 break;
             case 'addProfilAction':
                 $act = new addProfilAction();
+                break;
+            case 'activateAccount':
+                $act = new ActivateAccountAction();
                 break;
             default:
                 $act = new DefaultAction();

@@ -31,6 +31,11 @@ class AuthnProvider
                 throw new AuthnException("Mot de passe incorrect.");
             }
 
+            if ((int)$user['actif'] !== 1) {
+                throw new AuthnException("Votre compte n’est pas encore activé. Consultez le lien reçu par e-mail.");
+            }
+
+
             return [
                 'id'    => $user['id_utilisateur'],
                 'email' => $user['email'],
@@ -91,7 +96,7 @@ class AuthnProvider
             ]);
 
             // Retourne les infos utilisateur + lien d’activation
-            $activationLink = "?action=ActivateAccount&token={$token}";
+            $activationLink = "?action=activateAccount&token={$token}";
             return [
                 'id_utilisateur' => $idUtilisateur,
                 'email' => $email,
