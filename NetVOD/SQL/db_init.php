@@ -138,7 +138,7 @@ try {
 
         // VISIONNEES
         "CREATE TABLE `visionnees` (
-            `id_utilisateur` INT UNSIGNED NOT NULL,
+            `id_profil` INT UNSIGNED NOT NULL,
             `id_episode` INT UNSIGNED NOT NULL,
             PRIMARY KEY (`id_utilisateur`, `id_episode`),
             FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE,
@@ -147,7 +147,7 @@ try {
 
         // EN_COURS
         "CREATE TABLE `en_cours` (
-            `id_utilisateur` INT UNSIGNED NOT NULL,
+            `id_profil` INT UNSIGNED NOT NULL,
             `id_episode` INT UNSIGNED NOT NULL,
             PRIMARY KEY (`id_utilisateur`, `id_episode`),
             FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE,
