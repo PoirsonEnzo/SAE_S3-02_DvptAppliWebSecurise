@@ -140,8 +140,8 @@ try {
         "CREATE TABLE `visionnees` (
             `id_profil` INT UNSIGNED NOT NULL,
             `id_episode` INT UNSIGNED NOT NULL,
-            PRIMARY KEY (`id_utilisateur`, `id_episode`),
-            FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE,
+            PRIMARY KEY (`id_profil`, `id_episode`),
+            FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE,
             FOREIGN KEY (`id_episode`) REFERENCES `episode`(`id_episode`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
@@ -149,8 +149,8 @@ try {
         "CREATE TABLE `en_cours` (
             `id_profil` INT UNSIGNED NOT NULL,
             `id_episode` INT UNSIGNED NOT NULL,
-            PRIMARY KEY (`id_utilisateur`, `id_episode`),
-            FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE,
+            PRIMARY KEY (`id_profil`, `id_episode`),
+            FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE,
             FOREIGN KEY (`id_episode`) REFERENCES `episode`(`id_episode`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
