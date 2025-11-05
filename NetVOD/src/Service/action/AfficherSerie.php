@@ -53,7 +53,7 @@ class AfficherSerie extends Action
         $stmtCount = $pdo->prepare("SELECT COUNT(*) AS nb FROM episode WHERE id_serie = ?");
         $stmtCount->execute([$idSerie]);
         $nbEpisodes = (int) $stmtCount->fetchColumn();
-
+        echo "<br>";
         // --- En-tête série ---
         $html = "
         <div class='serie-details'>
@@ -64,20 +64,19 @@ class AfficherSerie extends Action
             <p><strong>Année de sortie :</strong> {$annee}</p>
             <p><strong>Date d’ajout :</strong> {$dateAjout}</p>
             <p><strong>Nombre d’épisodes :</strong> {$nbEpisodes}</p>
-        </div>";
 
+            <div class='favoris-container'>
+                <form method='post' action='?action=ajouterFavorisAction&id={$idSerie}'>
+                    <button type='submit' class='btn-favori'> Ajouter à mes favoris</button>
+                </form>
+            </div>
+        </div>
+        ";
 
 
         "<h3>Liste des épisodes</h3>
         ";
 
-        // --- Bouton pour ajouter aux favoris ---
-        $html .= "
-            <form method='post' action='?action=ajouterFavorisAction&id={$idSerie}'>
-                <button type='submit' class='btn-favori'>Ajouter à mes favoris</button>
-            </form>
-        ";
-        echo "<br>";
 
         // --- Liste des épisodes ---
         $stmt2 = $pdo->prepare("
