@@ -21,7 +21,7 @@ class DefaultAction extends Action
             return "<p>Aucun profil actif. <a href='?action=ChoisirProfilAction'>Choisir un profil</a></p>";
         }
 
-        // Episodes en cours
+        // --- Épisodes en cours ---
         $stmt = $pdo->prepare("
             SELECT e.id_episode, e.titre, e.img, s.titre_serie
             FROM en_cours ec
@@ -32,7 +32,7 @@ class DefaultAction extends Action
         $stmt->execute(['id_profil' => $idProfil]);
         $episodes = $stmt->fetchAll();
 
-        // Favoris
+        // --- Favoris ---
         $stmt = $pdo->prepare("
             SELECT s.id_serie, s.titre_serie, s.img
             FROM favoris f
@@ -42,7 +42,7 @@ class DefaultAction extends Action
         $stmt->execute(['id_profil' => $idProfil]);
         $favoris = $stmt->fetchAll();
 
-        // Totalep
+        // --- Total épisodes ---
         $stmt = $pdo->prepare("
             SELECT 
                 COUNT(DISTINCT e.id_episode) AS total_episodes,
@@ -57,7 +57,7 @@ class DefaultAction extends Action
         $stmt->execute();
         $totalep = $stmt->fetchAll();
 
-        // DejaVisionnees
+        // --- Déjà visionnées ---
         $stmt = $pdo->prepare("
             SELECT 
                 e.id_serie,
@@ -71,10 +71,12 @@ class DefaultAction extends Action
         $stmt->execute([$idProfil]);
         $vision = $stmt->fetchAll();
 
-        $html = "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
-        $html .= "<h3>Profil actuel : <strong>{$username}</strong></h3>";
+        // --- Compte actif en haut à droite ---
+        $html = "<div class='compte-actif'>Connecté sur le profil : <strong>{$username}</strong></div>";
 
-        // Affichage épisodes en cours
+        $html .= "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
+
+        // --- Affichage épisodes en cours ---
         $html .= "<h3>Épisodes en cours :</h3><div class='series-grid'>";
         foreach ($episodes as $ep) {
             $img = $ep['img'] ?: 'a.jpg';
@@ -87,7 +89,7 @@ class DefaultAction extends Action
         }
         $html .= "</div>";
 
-        // Affichage favoris
+        // --- Affichage favoris ---
         $html .= "<h3>Séries favorites :</h3><div class='series-grid'>";
         foreach ($favoris as $f) {
             $img = $f['img'] ?: 'a.jpg';
@@ -100,7 +102,7 @@ class DefaultAction extends Action
         }
         $html .= "</div>";
 
-        // Affichage déjà visionnées
+        // --- Affichage déjà visionnées ---
         $html .= "<h3>Séries déjà visionnées :</h3><div class='series-grid'>";
         foreach ($totalep as $te) {
             foreach ($vision as $v) {
