@@ -46,7 +46,7 @@ try {
             `id_utilisateur` INT UNSIGNED NOT NULL AUTO_INCREMENT,
             `email` VARCHAR(255) NOT NULL UNIQUE,
             `mot_de_passe` VARCHAR(255) NOT NULL,
-            `num_carte` VARCHAR(255),
+            `num_carte` VARCHAR(255) DEFAULT NULL,
             `date_creation` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `actif` TINYINT(1) NOT NULL DEFAULT 0,
             `token_activation` VARCHAR(255) DEFAULT NULL,
