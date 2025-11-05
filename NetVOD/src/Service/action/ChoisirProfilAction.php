@@ -14,12 +14,11 @@ class ChoisirProfilAction extends Action
         $pdo = DeefyRepository::getInstance()->getPDO();
         $idUtilisateur = (int) $_SESSION['user']['id'];
 
-        // Récupérer tous les profils de l'utilisateur
+        // --- Récupération des profils de l'utilisateur ---
         $stmt = $pdo->prepare("
-            SELECT p.id_profil, p.username
+            SELECT p.id_profil, p.username, p.img_profil
             FROM profil p
-            JOIN profil p2u ON p.id_profil = p2u.id_profil
-            WHERE p2u.id_utilisateur = ?
+            WHERE p.id_utilisateur = ?
         ");
         $stmt->execute([$idUtilisateur]);
         $profils = $stmt->fetchAll();
@@ -28,16 +27,28 @@ class ChoisirProfilAction extends Action
             return "<p>Aucun profil trouvé. <a href='?action=AddProfilAction'>Créer un profil</a></p>";
         }
 
-        // Construction du HTML à l'intérieur de la méthode
-        $html = "<h2>Choisir un profil</h2><ul>";
+        // --- Affichage des profils avec avatars ---
+        $html = "<h2>Choisir un profil</h2><div class='liste-profils' style='display:flex; gap:20px; flex-wrap:wrap; justify-content:center;'>";
         foreach ($profils as $p) {
-            $html .= "<li>
-            <a href='?action=ProfiActiflAction&id={$p['id_profil']}' class='text-blue-500 hover:underline'>
-                {$p['username']}
-            </a>
-          </li>";
+            $username = htmlspecialchars($p['username']);
+            $avatar = htmlspecialchars($p['img_profil'] ?? 'IMG/Profil/default.png'); // avatar par défaut si vide
+            $html .= "<div class='profil-item' style='text-align:center;'>
+                        <a href='?action=ProfiActiflAction&id={$p['id_profil']}' class='profil-lien' style='text-decoration:none; color:#fff;'>
+                            <img src='IMG/Profil/{$avatar}' alt='{$username}' style='width:80px; height:80px; border-radius:50%; object-fit:cover; display:block; margin-bottom:8px;'>
+                            <span>{$username}</span>
+                        </a>
+                      </div>";
         }
-        $html .= "</ul>";
+        $html .= "</div>";
+
+        // --- Bouton de déconnexion du profil ---
+        if (!empty($_SESSION['profil'])) {
+            $html .= "<div class='profil-deconnexion' style='text-align:center; margin-top:30px;'>
+                        <a href='?action=SignoutProfilAction' class='btn-deconnexion' style='padding:10px 20px; background:#4d7aff; color:#fff; border-radius:8px; text-decoration:none;'>
+                            Se déconnecter du profil
+                        </a>
+                      </div>";
+        }
 
         return $html;
     }

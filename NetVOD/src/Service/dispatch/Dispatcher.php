@@ -22,6 +22,8 @@ use Service\action\AjouterFavorisAction;
 use Service\action\AddProfilAction;
 use Service\action\CommentaireAction;
 use Service\action\SuppCommentaireAction;
+use Service\action\QuitterProfilAction;
+
 
 class Dispatcher {
 
@@ -52,6 +54,7 @@ class Dispatcher {
             case 'ResetPassword':       $act = new ResetPasswordAction(); break;
             case 'Commentaire':         $act = new CommentaireAction(); break;
             case 'supprimerCom':        $act = new SuppCommentaireAction(); break;
+            case 'SignoutProfilAction':  $act = new QuitterProfilAction(); break;
             default:                    $act = new DefaultAction(); break;
         }
 

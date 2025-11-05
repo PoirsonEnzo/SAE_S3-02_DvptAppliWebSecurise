@@ -78,6 +78,7 @@ try {
             `prenom` VARCHAR(100) DEFAULT NULL,
             `genre_prefere` VARCHAR(100) DEFAULT NULL,
             `id_utilisateur` VARCHAR(100) NOT NULL,
+            `img_profil` VARCHAR(256) DEFAULT NULL,
             PRIMARY KEY (`id_profil`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
@@ -186,11 +187,12 @@ try {
         "INSERT INTO `utilisateur` (`id_utilisateur`, `email`, `mot_de_passe`, `num_carte`, `date_creation`, actif) VALUES 
         (1, 'aaa@aaa', '$2y$12\$jZRB.0fj7wWut08caFDCCetM5GsF22UyKcmBhlvkFaJ/h6rlyGroC', 12, NOW(), 1);",
 
-        "INSERT INTO `profil` (`id_profil`, `username`, `nom`, `prenom`, `genre_prefere`, `id_utilisateur`) VALUES
-        (1, 'Coquelicot', 'Grenier', 'Matteo', 'Le Rock', '1');",
+        "INSERT INTO `profil` (`id_profil`, `username`, `nom`, `prenom`, `genre_prefere`, `id_utilisateur`, `img_profil`) VALUES
+        (1, 'Coquelicot', 'Grenier', 'Matteo', 'Le Rock', '1', 'DefaultProfil.png');",
 
-        "INSERT INTO `profil` (`id_profil`, `username`, `nom`, `prenom`, `genre_prefere`, `id_utilisateur`) VALUES
-        (2, 'Dawato', 'Poirson', 'Enzo', 'Valorant', '1');",
+        "INSERT INTO `profil` (`id_profil`, `username`, `nom`, `prenom`, `genre_prefere`, `id_utilisateur`, `img_profil`) VALUES
+        (2, 'Dawato', 'Poirson', 'Enzo', 'Valorant', '1', 'DefaultProfil.png');",
+
 
         // SÉRIES
 
