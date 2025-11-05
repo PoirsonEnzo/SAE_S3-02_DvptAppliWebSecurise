@@ -23,7 +23,7 @@ class AjouterFavorisAction extends Action
         // Récupération de l'id du profil courant
         // Si tu stockes le profil actif dans $_SESSION['profil']['id_profil'] :
         if (!isset($_SESSION['profil']['id_profil'])) {
-            return "<p>impossible d'ajouter en favoris : Aucun profil de sélectionné.</p>";
+            return "<div class='favoris'><p>impossible d'ajouter en favoris : Aucun profil de sélectionné.</p></div>";
         }
 
         $idProfil = (int) $_SESSION['profil']['id_profil'];
@@ -33,15 +33,15 @@ class AjouterFavorisAction extends Action
         $check->execute([$idProfil, $idSerie]);
 
         if ($check->fetch()) {
-            return "<p>Cette série est déjà dans vos favoris.</p>
-                    <p><a href='?action=AfficherSerie&id={$idSerie}'>Retour à la série</a></p>";
+            return "<div class='favoris'><p>Cette série est déjà dans vos favoris.</p>
+                    <p><a href='?action=AfficherSerie&id={$idSerie}'>Retour à la série</a></p></div>";
         }
 
         // Insertion dans favoris
         $stmt = $pdo->prepare("INSERT INTO favoris (id_profil, id_serie) VALUES (?, ?)");
         $stmt->execute([$idProfil, $idSerie]);
 
-        return "<p>Série ajoutée à vos favoris !</p>
-                <p><a href='?action=AfficherSerie&id={$idSerie}'>Retour à la série</a></p>";
+        return "<div class='favoris'><p>Série ajoutée à vos favoris !</p>
+                <p><a href='?action=AfficherSerie&id={$idSerie}'>Retour à la série</a></p></div>";
     }
 }
