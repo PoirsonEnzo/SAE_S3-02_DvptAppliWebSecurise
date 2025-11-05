@@ -8,7 +8,9 @@ use Service\action\AfficherCatalogue;
 use Service\action\AfficherEpisode;
 use Service\action\AfficherSerie;
 use Service\action\CatalogueTriAction;
+use Service\action\ForgotPasswordAction;
 use Service\action\RechercheMotCleAction;
+use Service\action\ResetPasswordAction;
 use Service\action\SigninAction;
 use Service\action\SignoutAction;
 use Service\action\DefaultAction;
@@ -65,6 +67,12 @@ class Dispatcher {
                 break;
             case 'CatalogueTri':
                 $act = new CatalogueTriAction();
+                break;
+            case 'ForgotPassword':
+                $act = new ForgotPasswordAction();
+                break;
+            case 'ResetPassword':
+                $act = new ResetPasswordAction();
                 break;
             default:
                 $act = new DefaultAction();

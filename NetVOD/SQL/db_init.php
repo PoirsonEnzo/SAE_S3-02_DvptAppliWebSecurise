@@ -62,6 +62,15 @@ try {
             FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
+        "CREATE TABLE `reset_token` (
+            `id_utilisateur` INT UNSIGNED NOT NULL,
+            `token` VARCHAR(255) NOT NULL UNIQUE,
+            `expiration` DATETIME NOT NULL,
+            PRIMARY KEY (`token`),
+            FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur`(`id_utilisateur`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+
         "CREATE TABLE `profil` (
             `id_profil` INT UNSIGNED NOT NULL AUTO_INCREMENT,
             `username` VARCHAR(100) NOT NULL,

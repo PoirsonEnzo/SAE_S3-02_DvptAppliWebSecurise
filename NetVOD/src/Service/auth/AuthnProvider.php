@@ -109,6 +109,33 @@ class AuthnProvider
     }
 
 
+    public static function generateResetToken(string $email): string
+    {
+        $repo = DeefyRepository::getInstance();
+        $pdo = $repo->getPDO();
+
+        $stmt = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            throw new \Exception("Email inconnu");
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $pdo->prepare("
+        UPDATE utilisateur 
+        SET token_activation = :token, date_token = DATE_ADD(NOW(), INTERVAL 15 MINUTE) 
+        WHERE id_utilisateur = :id
+    ")->execute([
+            'token' => $token,
+            'id' => $user['id_utilisateur']
+        ]);
+
+        return "?action=ResetPassword&token=$token";
+    }
+
+
 
 
     /**

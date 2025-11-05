@@ -24,10 +24,16 @@ class SigninAction extends Action
                         Se connecter
                     </button>
                 </form>
+                <p class="mt-4 text-sm">
+                    <a href="?action=ForgotPassword" class="text-blue-500 hover:underline">
+                        Mot de passe oublié ?
+                    </a>
+                </p>
             </div>
 HTML;
         }
 
+        // Traitement POST
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
 
@@ -42,7 +48,7 @@ HTML;
 
         } catch (\Exception $e) {
             $msg = htmlspecialchars($e->getMessage());
-            return "<p class='text-red-500 font-semibold'>Erreur interne : {$msg}</p>";
+            return "<p class='text-red-500 font-semibold'>Erreur : {$msg}</p>";
         }
     }
 }
