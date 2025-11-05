@@ -9,14 +9,14 @@ class AfficherEpisode extends Action
 {
     public function getResult(): string
     {
-        // 🔹 Vérifie la connexion
+        // Vérifie la connexion
         if (!isset($_SESSION['user'])) {
             return '<br><h2>Il faut se connecter.</h2>
                     <p><a href="?action=SignIn">Se connecter</a> ou 
                     <a href="?action=AddUser">S’inscrire</a></p>';
         }
 
-        // 🔹 Vérifie qu’un ID d’épisode est passé
+        // Vérifie qu’un ID d’épisode est passé
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             return "<p>Aucun épisode sélectionné.</p>";
         }
@@ -24,7 +24,7 @@ class AfficherEpisode extends Action
         $idEpisode = (int) $_GET['id'];
         $pdo = DeefyRepository::getInstance()->getPDO();
 
-        // 🔹 Vérifie que le profil actif existe
+        // Vérifie que le profil actif existe
         if (!isset($_SESSION['profil'])) {
             return "<p class='text-red-500 font-semibold'>
                         Aucun profil sélectionné. 
@@ -34,7 +34,7 @@ class AfficherEpisode extends Action
 
         $idProfil = (int) $_SESSION['profil']['id_profil'];
 
-        // 🔹 Récupération des infos de l’épisode
+        // Récupération des infos de l’épisode
         $stmt = $pdo->prepare("
             SELECT titre, resume, duree, fichier, img, id_serie, numero_episode
             FROM episode
@@ -51,7 +51,7 @@ class AfficherEpisode extends Action
         $idSerie = (int) $ep['id_serie'];
 
         try {
-            // 🔹 Vérifie si le profil a déjà un épisode en cours pour cette série
+            // Vérifie si le profil a déjà un épisode en cours pour cette série
             $check = $pdo->prepare("
                 SELECT e.id_episode 
                 FROM en_cours ec
@@ -66,7 +66,6 @@ class AfficherEpisode extends Action
             $existing = $check->fetch();
 
             if ($existing) {
-                // ✅ Met à jour l’épisode existant pour cette série
                 $update = $pdo->prepare("
                     UPDATE en_cours
                     SET id_episode = :new_episode
@@ -79,7 +78,6 @@ class AfficherEpisode extends Action
                     'old_episode' => $existing['id_episode']
                 ]);
             } else {
-                // ✅ Ajoute un nouvel épisode pour cette série
                 $insert = $pdo->prepare("
                     INSERT INTO en_cours (id_profil, id_episode)
                     VALUES (:id_profil, :id_episode)
@@ -90,7 +88,6 @@ class AfficherEpisode extends Action
                 ]);
             }
 
-            // 🔹 Ajoute à la table "visionnées"
             $insertV = $pdo->prepare("
                 INSERT IGNORE INTO visionnees (id_profil, id_episode)
                 VALUES (:id_profil, :id_episode)
@@ -103,7 +100,7 @@ class AfficherEpisode extends Action
             error_log("Erreur en_cours/visionnees : " . $e->getMessage());
         }
 
-        // 🔹 Sécurisation des données pour affichage
+        // Sécurisation des données pour affichage
         $titre = htmlspecialchars($ep['titre']);
         $resume = nl2br(htmlspecialchars($ep['resume']));
         $duree = htmlspecialchars($ep['duree']);
@@ -128,7 +125,7 @@ class AfficherEpisode extends Action
             <p><a href='?action=Commentaire&id={$idEpisode}' class='btn-retour'>- - Laisser un commentaire - -</a></p>
         ";
 
-        // 🔹 Note moyenne
+        // Note moyenne
         $moyNote = $pdo->prepare("
             SELECT ROUND(AVG(note), 2) AS moyenne
             FROM commentaire
@@ -136,11 +133,11 @@ class AfficherEpisode extends Action
         ");
         $moyNote->execute([$idEpisode]);
         $note = $moyNote->fetchColumn() ?? "Aucune note";
-        $html .= "<p>Note moyenne de cet épisode : <strong>{$note}</strong></p>";
+        $html .= "<div class='note'><p>Note moyenne de cet épisode : <strong>{$note}</strong></p></div>";
 
-        // 🔹 Commentaires
+        // Commentaires
         $comms = $pdo->prepare("
-            SELECT c.texte, p.username
+            SELECT c.texte, p.username,p.id_utilisateur
             FROM commentaire c
             JOIN profil p ON c.id_profil = p.id_profil
             WHERE id_episode = ?
@@ -150,17 +147,17 @@ class AfficherEpisode extends Action
 
         $html .= "<div class='commentaires'><h3>Commentaires :</h3>";
         foreach ($results as $com) {
-            $html .= "<p><strong>{$com['username']} :</strong> " . htmlspecialchars($com['texte']) . "</p>";
+            $html .= "<p><strong>user{$com['id_utilisateur']} | {$com['username']} :</strong> " . htmlspecialchars($com['texte']) . "</p>";
         }
         $html .= "</div>";
 
-        // 🔹 Navigation épisodes
+        // Navigation épisodes
         $stmtNav = $pdo->prepare("
     SELECT id_episode, numero_episode 
     FROM episode 
     WHERE id_serie = :id_serie
 ");
-        // 🔹 Navigation épisodes
+        // Navigation épisodes
         $stmtNav = $pdo->prepare("
     SELECT id_episode, numero_episode 
     FROM episode 
@@ -185,7 +182,7 @@ class AfficherEpisode extends Action
             }
         }
 
-// 🔹 Boutons de navigation avec ton CSS
+        // Boutons de navigation avec ton CSS
         $html .= '<div class="episode-navigation mt-4" style="display:flex; justify-content:center; gap:15px;">';
         if ($prevId) {
             $html .= "<a href='?action=AfficherEpisode&id={$prevId}' class='btn-retour'>&laquo;</a>";

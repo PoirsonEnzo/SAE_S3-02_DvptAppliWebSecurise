@@ -77,9 +77,6 @@ class CommentaireAction extends Action
                     <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p></div>";
         }
 
-
-
-
         return $html;
     }
 }
