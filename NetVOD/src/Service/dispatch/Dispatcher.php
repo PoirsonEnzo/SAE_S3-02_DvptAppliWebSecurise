@@ -7,6 +7,7 @@ use Service\action\AddUserAction;
 use Service\action\AfficherCatalogue;
 use Service\action\AfficherEpisode;
 use Service\action\AfficherSerie;
+use Service\action\RechercheMotCleAction;
 use Service\action\SigninAction;
 use Service\action\SignoutAction;
 use Service\action\DefaultAction;
@@ -57,6 +58,9 @@ class Dispatcher {
                 break;
             case 'ProfiActiflAction':
                 $act = new \Service\action\ProfiActiflAction();
+                break;
+            case 'RechercheMotCle':
+                $act = new RechercheMotCleAction();
                 break;
             default:
                 $act = new DefaultAction();
