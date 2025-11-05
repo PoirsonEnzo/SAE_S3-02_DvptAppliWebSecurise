@@ -108,13 +108,15 @@ class AfficherSerie extends Action
                 $idEp = (int)($ep['id_episode']);
                 $imgFile = htmlspecialchars($ep['img'] ?? 'default.png');
 
-                //chemin vers ton dossier image (adapter si besoin)
+
                 $html .= "
                     <div class='episode-card'>
-                        <a href='?action=afficherEpisode&id={$idEp}'>
+                    <a href='?action=afficherEpisode&id={$idEp}'>
                         <img src='img/{$imgFile}' alt='Image épisode {$num}' class='episode-img'>
-                        <div class='episode-info'>
-                            <strong>Épisode {$num}</strong> : {$titreEp}</a>
+                        <div class='episode-info'>  
+                            
+                                <strong>Épisode {$num}</strong> : {$titreEp}
+                            </a>
                             <p>Durée : {$duree} secondes</p>
                         </div>
                     </div>

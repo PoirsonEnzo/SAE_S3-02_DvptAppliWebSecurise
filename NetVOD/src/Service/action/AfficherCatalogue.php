@@ -33,23 +33,23 @@ class AfficherCatalogue extends Action
 
             $pdo = DeefyRepository::getInstance()->getPDO();
 
-            // 🔹 On récupère aussi le champ 'img'
             $stmt = $pdo->prepare("SELECT id_serie, titre_serie, img FROM serie");
             $stmt->execute();
             $results = $stmt->fetchAll();
 
-            // 🔹 Affichage du catalogue
             $html .= "<div class='series-grid'>";
             foreach ($results as $data) {
                 $id = (int)$data['id_serie'];
                 $titre = htmlspecialchars($data['titre_serie']);
-                $image = htmlspecialchars($data['img'] ?? 'default.png'); // image par défaut si null
+                $image = htmlspecialchars($data['img'] ?? 'a.png');
 
-                // 🔹 On suppose que les images sont dans /img/
+                // Lien sur l'image
                 $html .= "
                     <div class='serie-card'>
-                        <img src='../../../img/{$image}' alt='Image de la série {$titre}' class='serie-img'>
-                        <a href='?action=afficherSerie&id={$id}'>{$titre}</a>
+                        <a href='?action=afficherSerie&id={$id}'>
+                            <img src='../../../img/{$image}' alt='Image de la série {$titre}' class='serie-img'>
+                        </a>
+                        <a href='?action=afficherSerie&id={$id}' class='serie-title'>{$titre}</a>
                     </div>
                 ";
             }

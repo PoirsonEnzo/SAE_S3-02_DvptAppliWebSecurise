@@ -62,7 +62,7 @@ class AfficherEpisode extends Action
         $fichierVideo = htmlspecialchars($ep['fichier']);
         $imgFile = htmlspecialchars($ep['img'] ?? 'default.png'); // fallback si image manquante
 
-        // --- Ajout automatique dans la table en_cours ---
+
         try {
             // Vérifie s'il n'est pas déjà enregistré
             $check = $pdo->prepare("
@@ -95,7 +95,7 @@ class AfficherEpisode extends Action
                 ]);
             }
         } catch (\Exception $e) {
-            // Logue l'erreur sans bloquer
+
             error_log("Erreur lors de l'ajout dans en_cours : " . $e->getMessage());
         }
 
