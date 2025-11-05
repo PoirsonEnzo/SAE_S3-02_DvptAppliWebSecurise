@@ -3,7 +3,7 @@ namespace Service\action;
 
 use Service\repository\DeefyRepository;
 
-class addProfilAction extends Action
+class AddProfilAction extends Action
 {
     public function getResult(): string
     {

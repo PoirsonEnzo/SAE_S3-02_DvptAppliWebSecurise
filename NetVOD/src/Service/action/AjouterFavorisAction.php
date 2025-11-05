@@ -3,7 +3,7 @@ namespace Service\action;
 
 use Service\repository\DeefyRepository;
 
-class ajouterFavorisAction extends Action
+class AjouterFavorisAction extends Action
 {
     public function getResult(): string
     {
