@@ -28,7 +28,7 @@ class CatalogueTriAction extends Action
         if (!in_array($ordre, $ordreValides)) $ordre = 'ASC';
 
         $sql = "
-            SELECT s.id_serie, s.titre_serie, s.date_ajout,
+            SELECT s.id_serie, s.titre_serie, s.date_ajout, s.img,
                    COUNT(e.id_episode) AS nb_episodes,
                    AVG(c.note) AS moy
             FROM serie s
@@ -54,21 +54,21 @@ class CatalogueTriAction extends Action
         <div class='catalogue-controls'>
             <form method='get' action='' class='catalogue-form'>
                 <input type='hidden' name='action' value='CatalogueTri'>
-                <input type='text' name='search' placeholder='🔍 Rechercher...' value='" . htmlspecialchars($motCle) . "'>
-
-                <select name='tri'>
-                    <option value='titre_serie'" . ($tri === 'titre_serie' ? ' selected' : '') . ">Titre</option>
-                    <option value='date_ajout'" . ($tri === 'date_ajout' ? ' selected' : '') . ">Date d’ajout</option>
-                    <option value='nb_episodes'" . ($tri === 'nb_episodes' ? ' selected' : '') . ">Nombre d’épisodes</option>
-                    <option value='moy'" . ($tri === 'moy' ? ' selected' : '') . ">Note moyenne</option>
-                </select>
-
-                <select name='ordre'>
-                    <option value='ASC'" . ($ordre === 'ASC' ? ' selected' : '') . ">Croissant</option>
-                    <option value='DESC'" . ($ordre === 'DESC' ? ' selected' : '') . ">Décroissant</option>
-                </select>
-
-                <button type='submit'>Appliquer</button>
+                <div class='search-group'>
+                    <input type='text' name='search' placeholder='🔍 Rechercher...' class='input-search'>
+                    <select name='tri' class='select-tri'>
+                        <option value='titre_serie'>Titre</option>
+                        <option value='date_ajout'>Date d’ajout</option>
+                        <option value='nb_episodes'>Nombre d’épisodes</option>
+                        <option value='moy'>Note moyenne</option>
+                    </select>
+                    <select name='ordre' class='select-ordre'>
+                        <option value='ASC'>Croissant</option>
+                        <option value='DESC'>Décroissant</option>
+                    </select>
+                    <button type='submit' class='btn-apply'>Appliquer</button>
+                    <a href='?action=CatalogueFiltre' class='btn-filter'> Filtrer par genre/public</a>
+                </div>
             </form>
         </div>
         ";
@@ -82,10 +82,12 @@ class CatalogueTriAction extends Action
                 $id = (int)$data['id_serie'];
                 $nbEp = (int)$data['nb_episodes'];
                 $moy = $data['moy'] ? round($data['moy'], 1) : '–';
-
+                $image = htmlspecialchars($data['img'] ?? 'a.png');
                 $html .= "
                     <div class='serie-card'>
-                        <img src='../../../img/a.jpg' alt='Image de la série {$titre}' class='serie-img'>
+                        <a href='?action=AfficherSerie&id={$id}'>
+                            <img src='../../../img/{$image}' alt='Image de la série {$titre}' class='serie-img'>
+                        </a>
                         <div class='serie-info'>
                             <a href='?action=AfficherSerie&id={$id}'><strong>{$titre}</strong></a>
                             <p>{$nbEp} épisode(s)</p>

@@ -24,7 +24,7 @@ class FiltreCatalogueAction extends Action
 
         // Requête principale
         $sql = "
-            SELECT DISTINCT s.id_serie, s.titre_serie, s.date_ajout
+            SELECT DISTINCT s.id_serie, s.titre_serie, s.img
             FROM serie s
             LEFT JOIN genre2serie gs ON s.id_serie = gs.id_serie
             LEFT JOIN genre g ON gs.id_genre = g.id_genre
@@ -83,7 +83,6 @@ class FiltreCatalogueAction extends Action
         }
 
         $html .= "</select>
-
             <button type='submit'>Filtrer</button>
         </form>
         ";
@@ -94,14 +93,15 @@ class FiltreCatalogueAction extends Action
         } else {
             $html .= "<div class='series-grid'>";
             foreach ($series as $s) {
-                $titre = htmlspecialchars($s['titre_serie']);
                 $id = (int)$s['id_serie'];
+                $titre = htmlspecialchars($s['titre_serie']);
+                $image = htmlspecialchars($s['img'] ?? 'a.png');
                 $html .= "
                     <div class='serie-card'>
-                        <img src='../../../img/a.jpg' alt='Image de la série {$titre}' class='serie-img'>
-                        <div class='serie-info'>
-                            <a href='?action=AfficherSerie&id={$id}'><strong>{$titre}</strong></a>
-                        </div>
+                        <a href='?action=AfficherSerie&id={$id}'>
+                            <img src='../../../img/{$image}' alt='Image de la série {$titre}' class='serie-img'>
+                        </a>
+                        <a href='?action=AfficherSerie&id={$id}' class='serie-title'>{$titre}</a>
                     </div>
                 ";
             }

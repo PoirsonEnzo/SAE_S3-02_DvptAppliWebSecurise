@@ -59,6 +59,7 @@ class Dispatcher {
             case 'CatalogueFiltre':     $act = new FiltreCatalogueAction(); break;
             case 'InitDB':              $act = new InitDB(); break;
             default:                    $act = new DefaultAction(); break;
+
         }
 
         $this->renderPage($act->getResult());
