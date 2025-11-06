@@ -6,6 +6,7 @@ use Service\action\affichage\AfficherCatalogue;
 use Service\action\affichage\AfficherEpisode;
 use Service\action\affichage\AfficherSerie;
 use Service\action\affichage\CatalogueTriAction;
+use Service\action\affichage\FiltreCatalogueAction;
 use Service\action\affichage\RechercheMotCleAction;
 use Service\action\compte\ActivateAccountAction;
 use Service\action\compte\AddUserAction;
@@ -55,6 +56,7 @@ class Dispatcher {
             case 'Commentaire':         $act = new CommentaireAction(); break;
             case 'supprimerCom':        $act = new SuppCommentaireAction(); break;
             case 'SignoutProfilAction': $act = new QuitterProfilAction(); break;
+            case 'CatalogueFiltre':     $act = new FiltreCatalogueAction(); break;
             case 'InitDB':              $act = new InitDB(); break;
             default:                    $act = new DefaultAction(); break;
         }
@@ -86,13 +88,22 @@ class Dispatcher {
             $compte_actif = "<div class='compte-actif'>Aucun profil actif</div>";
         }
 
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if (strpos($host, 'webetu.iutnc.univ-lorraine.fr') !== false) {
+            // En ligne (serveur Webetu)
+            $cssPath = "css/style.css";
+        } else {
+            // En local (Docker)
+            $cssPath = "../css/style.css";
+        }
+
         echo <<<PAGE
         <!DOCTYPE html>
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
             <title>NetVOD</title>
-            <link rel="stylesheet" href="../css/style.css">
+            <link rel="stylesheet" href=$cssPath>
         </head>
         <body>
             <h1>NetVOD</h1>
