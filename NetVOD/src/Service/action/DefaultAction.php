@@ -15,11 +15,14 @@ class DefaultAction extends Action
 
         $pdo = DeefyRepository::getInstance()->getPDO();
         $idProfil = $_SESSION['profil']['id_profil'] ?? null;
-        $username = htmlspecialchars($_SESSION['profil']['username'] ?? '');
 
         if (!$idProfil) {
             return "<p>Aucun profil actif. <a href='?action=ChoisirProfilAction'>Choisir un profil</a></p>";
         }
+
+        // --- Calcul dynamique du chemin des images ---
+        $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+        $imgPrefix = $baseUrl . '/img/'; // compatible Webetu et Docker
 
         // --- Épisodes en cours ---
         $stmt = $pdo->prepare("
@@ -71,20 +74,19 @@ class DefaultAction extends Action
         $stmt->execute([$idProfil]);
         $vision = $stmt->fetchAll();
 
-        // --- Compte actif en haut à droite ---
-
-
-        $html = "<h2>Bienvenue, {$_SESSION['user']['email']} !</h2>";
+        $html = "<h2>Bienvenue, " . htmlspecialchars($_SESSION['user']['email'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . " !</h2>";
 
         // --- Affichage épisodes en cours ---
         $html .= "<h3>Épisodes en cours :</h3><div class='series-grid'>";
         foreach ($episodes as $ep) {
-            $img = $ep['img'] ?: 'a.jpg';
+            $img = htmlspecialchars($ep['img'] ?? 'a.jpg', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $titreSerie = htmlspecialchars($ep['titre_serie'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $titreEp = htmlspecialchars($ep['titre'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
             $html .= "<div class='serie-card'>
                         <a href='?action=AfficherEpisode&id={$ep['id_episode']}'>
-                            <img src='../../../img/{$img}' class='serie-img' alt='{$ep['titre_serie']} - {$ep['titre']}'>
+                            <img src='{$imgPrefix}{$img}' class='serie-img' alt='{$titreSerie} - {$titreEp}'>
                         </a>
-                        <a href='?action=AfficherEpisode&id={$ep['id_episode']}'>{$ep['titre_serie']} - {$ep['titre']}</a>
+                        <a href='?action=AfficherEpisode&id={$ep['id_episode']}'>{$titreSerie} - {$titreEp}</a>
                       </div>";
         }
         $html .= "</div>";
@@ -92,16 +94,15 @@ class DefaultAction extends Action
         // --- Affichage favoris ---
         $html .= "<h3>Séries favorites :</h3><div class='series-grid'>";
         foreach ($favoris as $f) {
-            $img = $f['img'] ?: 'a.jpg';
+            $img = htmlspecialchars($f['img'] ?? 'a.jpg', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $titreSerie = htmlspecialchars($f['titre_serie'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
             $html .= "<div class='serie-card'>
                         <a href='?action=AfficherSerie&id={$f['id_serie']}'>
-                            <img src='../../../img/{$img}' class='serie-img' alt='{$f['titre_serie']}'>
+                            <img src='{$imgPrefix}{$img}' class='serie-img' alt='{$titreSerie}'>
                         </a>
-                        <a href='?action=AfficherSerie&id={$f['id_serie']}'>{$f['titre_serie']}</a>
+                        <a href='?action=AfficherSerie&id={$f['id_serie']}'>{$titreSerie}</a>
                         <div class='etoile'>
-                            <a href='?action=SupFavoris&id={$f['id_serie']}'>
-                                ⭐
-                            </a>
+                            <a href='?action=SupFavoris&id={$f['id_serie']}'>⭐</a>
                         </div>
                       </div>";
         }
@@ -112,12 +113,13 @@ class DefaultAction extends Action
         foreach ($totalep as $te) {
             foreach ($vision as $v) {
                 if ($te['id_serie'] == $v['id_serie'] && $te['total_episodes'] == $v['episodes_vus']) {
-                    $img = $te['img'] ?: 'a.jpg';
+                    $img = htmlspecialchars($te['img'] ?? 'a.jpg', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                    $titreSerie = htmlspecialchars($te['titre_serie'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
                     $html .= "<div class='serie-card'>
                                 <a href='?action=AfficherSerie&id={$te['id_serie']}'>
-                                    <img src='../../../img/{$img}' class='serie-img' alt='{$te['titre_serie']}'>
+                                    <img src='{$imgPrefix}{$img}' class='serie-img' alt='{$titreSerie}'>
                                 </a>
-                                <a href='?action=AfficherSerie&id={$te['id_serie']}'>{$te['titre_serie']}</a>
+                                <a href='?action=AfficherSerie&id={$te['id_serie']}'>{$titreSerie}</a>
                               </div>";
                 }
             }
