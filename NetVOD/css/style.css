@@ -550,6 +550,7 @@ h2, h3 {
     align-items: center;
     height: 70vh; /* prend presque toute la hauteur */
     text-align: center;
+    margin-top: 20px;
     color: #fff;
 }
 
