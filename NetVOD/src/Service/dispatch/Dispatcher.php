@@ -6,6 +6,7 @@ use Service\action\affichage\AfficherCatalogue;
 use Service\action\affichage\AfficherEpisode;
 use Service\action\affichage\AfficherSerie;
 use Service\action\affichage\CatalogueTriAction;
+use Service\action\affichage\FiltreCatalogueAction;
 use Service\action\affichage\RechercheMotCleAction;
 use Service\action\compte\ActivateAccountAction;
 use Service\action\compte\AddUserAction;
@@ -54,6 +55,8 @@ class Dispatcher {
             case 'Commentaire':         $act = new CommentaireAction(); break;
             case 'supprimerCom':        $act = new SuppCommentaireAction(); break;
             case 'SignoutProfilAction': $act = new QuitterProfilAction(); break;
+            case 'CatalogueFiltre':     $act = new FiltreCatalogueAction(); break;
+
             default:                    $act = new DefaultAction(); break;
         }
 
