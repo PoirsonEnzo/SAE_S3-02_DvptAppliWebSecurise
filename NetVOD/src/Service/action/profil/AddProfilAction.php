@@ -17,7 +17,7 @@ class AddProfilAction extends Action
         $message = "";
 
         // --- Dossier des avatars ---
-        $avatarsDir = __DIR__ . '/../../../IMG/Profil/';
+        $avatarsDir = __DIR__ . '/../../../../IMG/Profil/';
         $avatarsUrl = 'IMG/Profil/';
         $avatars = [];
 
