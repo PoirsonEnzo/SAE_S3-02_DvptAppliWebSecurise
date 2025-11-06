@@ -287,7 +287,15 @@ class InitDB
         (18, 2, 18, 'Une enquête haletante, j’étais à fond.', 19),
         (19, 1, 19, 'Une belle conclusion sur l’amitié, très touchant.', 18),
         (20, 2, 20, 'Les images de nuit sont magnifiques.', 16),
-        (21, 1, 21, 'Final épique, toutes les intrigues se rejoignent !', 19);"
+        (21, 1, 21, 'Final épique, toutes les intrigues se rejoignent !', 19);",
+
+         "INSERT INTO `genre2serie` (`id_serie` , `id_genre` ) VALUES
+         (1, 1),
+         (2, 9),
+         (3, 7),
+         (4, 10),
+         (5, 8),
+         (6, 6);",
 
 
 
