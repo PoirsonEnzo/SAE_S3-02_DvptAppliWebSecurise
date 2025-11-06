@@ -34,7 +34,7 @@ try {
         "activation_token", "commentaire", "en_cours", "visionnees", "favoris",
         "episode", "public2serie", "genre2serie",
         "public_cible", "genre", "serie",
-        "profil", "utilisateur" , "reset_token"
+        "profil", "utilisateur" , "reset_token" ,"commentaire_serie"
     ];
     foreach ($tables as $t) {
         $pdo->exec("DROP TABLE IF EXISTS `$t`;");
@@ -166,7 +166,20 @@ try {
             PRIMARY KEY (`id_commentaire`),
             FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE,
             FOREIGN KEY (`id_episode`) REFERENCES `episode`(`id_episode`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+
+        "CREATE TABLE `commentaire_serie` (
+            `id_commentaire` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            `id_profil` INT UNSIGNED NOT NULL,
+            `id_serie` INT UNSIGNED NOT NULL,
+            `texte` TEXT DEFAULT NULL,
+            `note` TINYINT UNSIGNED NOT NULL CHECK (`note` BETWEEN 0 AND 20),
+            PRIMARY KEY (`id_commentaire`),
+            FOREIGN KEY (`id_profil`) REFERENCES `profil`(`id_profil`) ON DELETE CASCADE,
+            FOREIGN KEY (`id_serie`) REFERENCES `serie`(`id_serie`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+
     ];
 
     foreach ($sql as $stmt) {
