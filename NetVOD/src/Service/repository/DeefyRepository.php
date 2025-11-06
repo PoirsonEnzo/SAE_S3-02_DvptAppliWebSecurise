@@ -15,8 +15,17 @@ class DeefyRepository
 
     private function __construct(array $conf)
     {
-        $this->pdo = new \PDO($conf['dsn'], $conf['user'], $conf['pass'], [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+        $this->pdo = new \PDO(
+            $conf['dsn'],
+            $conf['user'],
+            $conf['pass'],
+            [
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+            ]
+        );
     }
+
 
     public static function getInstance()
     {
