@@ -29,22 +29,47 @@ class AfficherCatalogue extends Action
                 <input type='hidden' name='action' value='CatalogueTri'>
                 <div class='search-group'>
                     <input type='text' name='search' placeholder='🔍 Rechercher...' class='input-search'>
+        
                     <select name='tri' class='select-tri'>
                         <option value='titre_serie'>Titre</option>
                         <option value='date_ajout'>Date d’ajout</option>
                         <option value='nb_episodes'>Nombre d’épisodes</option>
                         <option value='moy'>Note moyenne</option>
                     </select>
+        
                     <select name='ordre' class='select-ordre'>
                         <option value='ASC'>Croissant</option>
                         <option value='DESC'>Décroissant</option>
                     </select>
+        
+                    <!-- 🔽 Ajout des filtres genre/public (utilisés par CatalogueTriAction) -->
+                    <select name='genre' class='select-filter'>
+                        <option value=''>-- Genre --</option>";
+                $genres = $pdo->query("SELECT DISTINCT libelle FROM genre ORDER BY libelle")->fetchAll();
+                foreach ($genres as $g) {
+                    $lib = htmlspecialchars($g['libelle']);
+                    $selected = (isset($_GET['genre']) && $_GET['genre'] === $lib) ? 'selected' : '';
+                    $html .= "<option value='{$lib}' {$selected}>{$lib}</option>";
+                }
+
+                $html .= "</select>
+                    <select name='public' class='select-filter'>
+                        <option value=''>-- Public --</option>";
+                $publics = $pdo->query("SELECT DISTINCT libelle FROM public_cible ORDER BY libelle")->fetchAll();
+                foreach ($publics as $p) {
+                    $lib = htmlspecialchars($p['libelle']);
+                    $selected = (isset($_GET['public']) && $_GET['public'] === $lib) ? 'selected' : '';
+                    $html .= "<option value='{$lib}' {$selected}>{$lib}</option>";
+                }
+
+                $html .= "</select>
+        
                     <button type='submit' class='btn-apply'>Appliquer</button>
-                    <a href='?action=CatalogueFiltre' class='btn-filter'> Filtrer par genre/public</a>
                 </div>
             </form>
         </div>
         ";
+
 
         // --- Calcul dynamique du chemin des images ---
         $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web
