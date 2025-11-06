@@ -1,6 +1,7 @@
 <?php
-namespace Service\action;
+namespace Service\action\compte;
 
+use Service\action\Action;
 use Service\auth\AuthnProvider;
 use Service\Exception\AuthnException;
 use Service\repository\DeefyRepository;

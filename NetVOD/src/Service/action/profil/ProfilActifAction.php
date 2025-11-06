@@ -1,9 +1,10 @@
 <?php
-namespace Service\action;
+namespace Service\action\profil;
 
+use Service\action\Action;
 use Service\repository\DeefyRepository;
 
-class ProfiActiflAction extends Action
+class ProfilActifAction extends Action
 {
     public function getResult(): string
     {

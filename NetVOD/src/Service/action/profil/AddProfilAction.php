@@ -1,6 +1,7 @@
 <?php
-namespace Service\action;
+namespace Service\action\profil;
 
+use Service\action\Action;
 use Service\repository\DeefyRepository;
 
 class AddProfilAction extends Action

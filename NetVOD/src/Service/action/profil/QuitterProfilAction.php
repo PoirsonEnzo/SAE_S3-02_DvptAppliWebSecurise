@@ -1,5 +1,7 @@
 <?php
-namespace Service\action;
+namespace Service\action\profil;
+
+use Service\action\Action;
 
 class QuitterProfilAction extends Action
 {

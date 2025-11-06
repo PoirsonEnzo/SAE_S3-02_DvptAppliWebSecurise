@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Service\action;
+namespace Service\action\interaction;
 
+use Service\action\Action;
 use Service\repository\DeefyRepository;
-use \PDO;
 
 class CommentaireAction extends Action
 {

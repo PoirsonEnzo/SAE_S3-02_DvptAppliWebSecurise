@@ -2,27 +2,27 @@
 
 namespace Service\dispatch;
 
-use Service\action\ActivateAccountAction;
-use Service\action\AddUserAction;
-use Service\action\AfficherCatalogue;
-use Service\action\AfficherEpisode;
-use Service\action\AfficherSerie;
-use Service\action\CatalogueTriAction;
-use Service\action\ChoisirProfilAction;
-use Service\action\ForgotPasswordAction;
-use Service\action\ProfiActiflAction;
-use Service\action\RechercheMotCleAction;
-use Service\action\ResetPasswordAction;
-use Service\action\SigninAction;
-use Service\action\SignoutAction;
+use Service\action\affichage\AfficherCatalogue;
+use Service\action\affichage\AfficherEpisode;
+use Service\action\affichage\AfficherSerie;
+use Service\action\affichage\CatalogueTriAction;
+use Service\action\affichage\RechercheMotCleAction;
+use Service\action\compte\ActivateAccountAction;
+use Service\action\compte\AddUserAction;
+use Service\action\compte\ForgotPasswordAction;
+use Service\action\compte\ResetPasswordAction;
+use Service\action\compte\SigninAction;
+use Service\action\compte\SignoutAction;
 use Service\action\DefaultAction;
-use Service\action\SupprimerFavorisAction;
+use Service\action\interaction\AjouterFavorisAction;
+use Service\action\interaction\CommentaireAction;
+use Service\action\interaction\SuppCommentaireAction;
+use Service\action\interaction\SupprimerFavorisAction;
+use Service\action\profil\AddProfilAction;
+use Service\action\profil\ChoisirProfilAction;
+use Service\action\profil\ProfilActifAction;
+use Service\action\profil\QuitterProfilAction;
 use Service\auth\AuthnProvider;
-use Service\action\AjouterFavorisAction;
-use Service\action\AddProfilAction;
-use Service\action\CommentaireAction;
-use Service\action\SuppCommentaireAction;
-use Service\action\QuitterProfilAction;
 
 class Dispatcher {
 
@@ -46,7 +46,7 @@ class Dispatcher {
             case 'AddProfilAction':     $act = new AddProfilAction(); break;
             case 'activateAccount':     $act = new ActivateAccountAction(); break;
             case 'ChoisirProfilAction': $act = new ChoisirProfilAction(); break;
-            case 'ProfiActiflAction':   $act = new ProfiActiflAction(); break;
+            case 'ProfilActifAction':   $act = new ProfilActifAction(); break;
             case 'RechercheMotCle':     $act = new RechercheMotCleAction(); break;
             case 'CatalogueTri':        $act = new CatalogueTriAction(); break;
             case 'ForgotPassword':      $act = new ForgotPasswordAction(); break;

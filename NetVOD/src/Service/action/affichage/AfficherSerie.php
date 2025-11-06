@@ -1,9 +1,10 @@
 <?php
 
-namespace Service\action;
+namespace Service\action\affichage;
 
+use PDO;
+use Service\action\Action;
 use Service\repository\DeefyRepository;
-use \PDO;
 
 class AfficherSerie extends Action
 {
