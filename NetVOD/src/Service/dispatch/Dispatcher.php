@@ -5,7 +5,6 @@ namespace Service\dispatch;
 use Service\action\affichage\AfficherCatalogue;
 use Service\action\affichage\AfficherEpisode;
 use Service\action\affichage\AfficherSerie;
-use Service\action\affichage\CatalogueTriAction;
 use Service\action\affichage\FiltreCatalogueAction;
 use Service\action\affichage\RechercheMotCleAction;
 use Service\action\compte\ActivateAccountAction;
@@ -50,7 +49,6 @@ class Dispatcher {
             case 'ChoisirProfilAction': $act = new ChoisirProfilAction(); break;
             case 'ProfilActifAction':   $act = new ProfilActifAction(); break;
             case 'RechercheMotCle':     $act = new RechercheMotCleAction(); break;
-            case 'CatalogueTri':        $act = new CatalogueTriAction(); break;
             case 'ForgotPassword':      $act = new ForgotPasswordAction(); break;
             case 'ResetPassword':       $act = new ResetPasswordAction(); break;
             case 'Commentaire':         $act = new CommentaireAction(); break;
