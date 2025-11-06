@@ -9,6 +9,7 @@ class AfficherCatalogue extends Action
 {
     public function getResult(): string
     {
+        // Vérification si un utilisateur est connecté
         if (!isset($_SESSION['user'])) {
             return '<br><h2>Il faut se connecter.</h2>
                     <p><a href="?action=SignIn">Se connecter</a> ou 
@@ -45,13 +46,9 @@ class AfficherCatalogue extends Action
         </div>
         ";
 
-        // Détection de l’environnement pour le chemin des images
-        $host = $_SERVER['HTTP_HOST'] ?? '';
-        if (strpos($host, 'webetu.iutnc.univ-lorraine.fr') !== false) {
-            $imgPath = '/img/'; // chemin absolu sur Webetu
-        } else {
-            $imgPath = '../../../img/'; // chemin relatif en local/Docker
-        }
+        // --- Calcul dynamique du chemin des images ---
+        $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web
+        $imgPrefix = $baseUrl . '/img/'; // fonctionnera sur Webetu et en local
 
         // --- AFFICHAGE DES SERIES ---
         $html .= "<div class='series-grid'>";
@@ -63,7 +60,7 @@ class AfficherCatalogue extends Action
             $html .= "
                 <div class='serie-card'>
                     <a href='?action=AfficherSerie&id={$id}'>
-                        <img src='{$imgPath}{$image}' alt='Image de la série {$titre}' class='serie-img'>
+                        <img src='{$imgPrefix}{$image}' alt='Image de la série {$titre}' class='serie-img'>
                     </a>
                     <a href='?action=AfficherSerie&id={$id}' class='serie-title'>{$titre}</a>
                 </div>
