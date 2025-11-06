@@ -298,6 +298,24 @@ class InitDB
          (6, 6);",
 
 
+         "INSERT INTO `public_cible` (`id_public` , `libelle` ) VALUES
+           (1, 'Tout public'),
+           (2, 'Adolescents'),
+           (3, 'Adultes'), 
+           (4 , 'Enfants'),
+           (5 , 'Famille');",
+
+
+
+         "INSERT INTO `public2serie` (`id_serie` , `id_public` ) VALUES
+         (1, 2),
+         (2, 1),
+         (3, 3),
+         (4, 3),
+         (5, 5),
+         (6, 1);",
+
+
 
             ];
             foreach ($inserts as $stmt) {
