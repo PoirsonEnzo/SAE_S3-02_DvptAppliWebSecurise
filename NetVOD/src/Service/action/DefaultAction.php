@@ -7,22 +7,39 @@ class DefaultAction extends Action
 {
     public function getResult(): string
     {
+        // --- Si l'utilisateur n'est pas connecté ---
         if (!isset($_SESSION['user'])) {
-            return '<h2>Bienvenue sur NetVOD !</h2>
-                    <p><a href="?action=SignIn" class="text-blue-500">Se connecter</a> ou 
-                    <a href="?action=AddUser" class="text-blue-500">S’inscrire</a></p>';
+            return <<<HTML
+            <div class="center-message">
+                <h2>Il faut se connecter </h2>
+                <div class="btn-container">
+                    <a href="?action=SignIn" class="btn-center">Se connecter</a>
+                    <a href="?action=AddUser" class="btn-center">S’inscrire</a>
+                </div>
+            </div>
+HTML;
+        }
+
+        $idProfil = $_SESSION['profil']['id_profil'] ?? null;
+
+        // --- Si l'utilisateur n'a pas de profil ---
+        if (!$idProfil) {
+            return <<<HTML
+            <div class="center-message">
+                <h2>Aucun profil actif</h2>
+                <div class="btn-container">
+                    <a href="?action=AddProfilAction" class="btn-center">Créer un profil</a>
+                    <a href="?action=ChoisirProfilAction" class="btn-center">Choisir un profil existant</a>
+                </div>
+            </div>
+HTML;
         }
 
         $pdo = DeefyRepository::getInstance()->getPDO();
-        $idProfil = $_SESSION['profil']['id_profil'] ?? null;
-
-        if (!$idProfil) {
-            return "<p>Aucun profil actif. <a href='?action=ChoisirProfilAction'>Choisir un profil</a></p>";
-        }
 
         // --- Calcul dynamique du chemin des images ---
         $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
-        $imgPrefix = $baseUrl . '/img/'; // compatible Webetu et Docker
+        $imgPrefix = $baseUrl . '/img/';
 
         // --- Épisodes en cours ---
         $stmt = $pdo->prepare("

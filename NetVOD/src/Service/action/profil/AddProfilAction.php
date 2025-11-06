@@ -9,7 +9,15 @@ class AddProfilAction extends Action
     public function getResult(): string
     {
         if (!isset($_SESSION['user'])) {
-            return "<p>Vous devez être connecté pour créer un profil.</p>";
+            return <<<HTML
+    <div class="center-message">
+        <h2>Il faut se connecter pour accéder au profil.</h2>
+        <div class="btn-container">
+            <a href="?action=SignIn" class="btn-center">Se connecter</a>
+            <a href="?action=AddUser" class="btn-center">S’inscrire</a>
+        </div>
+    </div>
+HTML;
         }
 
         $pdo = DeefyRepository::getInstance()->getPDO();

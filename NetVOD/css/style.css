@@ -548,7 +548,7 @@ h2, h3 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 70vh; /* prend presque toute la hauteur */
+    height: 70vh;
     text-align: center;
     margin-top: 20px;
     color: #fff;
@@ -581,7 +581,7 @@ h2, h3 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 20vh;
+    height: 40vh;
     text-align: center;
     color: #fff;
 }

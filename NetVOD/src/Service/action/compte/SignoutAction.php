@@ -9,9 +9,16 @@ class SignoutAction extends Action
     {
         session_unset();
         session_destroy();
+
         return <<<HTML
-        <p class="text-green-500 font-semibold">Vous avez été déconnecté.</p>
-        <p><a href="?action=SignIn" class="text-blue-500 hover:underline">Se reconnecter</a></p>
+        <div class="center-message">
+            <h2>Vous avez été déconnecté</h2>
+            <p>À bientôt ! Connectez-vous à nouveau pour continuer.</p>
+            <div class="btn-container">
+                <a href="?action=SignIn" class="btn-center">Se reconnecter</a>
+                <a href="?action=AddUser" class="btn-center">S’inscrire</a>
+            </div>
+        </div>
 HTML;
     }
 }
