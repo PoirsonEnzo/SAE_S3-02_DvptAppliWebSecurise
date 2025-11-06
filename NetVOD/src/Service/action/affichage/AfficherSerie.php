@@ -10,12 +10,28 @@ class AfficherSerie extends Action
 {
     public function getResult(): string
     {
+        // --- Vérifier si l'utilisateur est connecté ---
         if (!isset($_SESSION['user'])) {
-            return '<br><h2>Il faut se connecter.</h2>
-                    <p><a href="?action=SignIn">Se connecter</a> ou 
-                    <a href="?action=AddUser">S’inscrire</a></p>';
+            return <<<HTML
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:50vh; text-align:center;">
+                <h2>Il faut se connecter pour accéder aux séries.</h2>
+                <a href="?action=SignIn" style="margin:10px; padding:10px 20px; background:#4d7aff; color:#fff; border-radius:8px; text-decoration:none;">Se connecter</a>
+                <a href="?action=AddUser" style="margin:10px; padding:10px 20px; background:#2ecc71; color:#fff; border-radius:8px; text-decoration:none;">S’inscrire</a>
+            </div>
+HTML;
         }
 
+        // --- Vérifier si un profil est sélectionné ---
+        if (!isset($_SESSION['profil']['id_profil'])) {
+            return <<<HTML
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:20vh; text-align:center;">
+                <h2>Veuillez sélectionner un profil pour accéder aux séries.</h2>
+                <a href="?action=ChoisirProfilAction" style="margin:10px; padding:10px 20px; background:#4d7aff; color:#fff; border-radius:8px; text-decoration:none;">Sélectionner un profil</a>
+            </div>
+HTML;
+        }
+
+        // --- Vérifier si un ID de série est fourni ---
         if (!isset($_GET['id'])) {
             return "<p>Aucune série sélectionnée.</p>";
         }
@@ -23,7 +39,7 @@ class AfficherSerie extends Action
         $idSerie = (int) $_GET['id'];
         $pdo = DeefyRepository::getInstance()->getPDO();
 
-        // --- Récupération des informations principales de la série ---
+        // --- Informations principales de la série ---
         $stmt = $pdo->prepare("
             SELECT id_serie, titre_serie, descriptif, annee, date_ajout
             FROM serie
@@ -40,7 +56,7 @@ class AfficherSerie extends Action
         $annee = htmlspecialchars($serie['annee'] ?? '');
         $dateAjout = htmlspecialchars($serie['date_ajout'] ?? '');
 
-        // --- Récupération des genres associés ---
+        // --- Genres associés ---
         $stmtGenres = $pdo->prepare("
             SELECT G.libelle 
             FROM genre2serie GS
@@ -51,7 +67,7 @@ class AfficherSerie extends Action
         $genres = $stmtGenres->fetchAll(PDO::FETCH_COLUMN);
         $genreText = $genres ? htmlspecialchars(implode(', ', $genres)) : 'Inconnu';
 
-        // --- Récupération des publics associés ---
+        // --- Publics associés ---
         $stmtPublics = $pdo->prepare("
             SELECT P.libelle 
             FROM public2serie PS
@@ -62,12 +78,12 @@ class AfficherSerie extends Action
         $publics = $stmtPublics->fetchAll(PDO::FETCH_COLUMN);
         $publicText = $publics ? htmlspecialchars(implode(', ', $publics)) : 'Non précisé';
 
-        // --- Récupération du nombre d'épisodes ---
+        // --- Nombre d'épisodes ---
         $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM episode WHERE id_serie = ?");
         $stmtCount->execute([$idSerie]);
         $nbEpisodes = (int) $stmtCount->fetchColumn();
 
-        // --- Construction HTML ---
+        // --- Construction du HTML ---
         $html = "
         <div class='serie-details'>
             <h2>{$titre}</h2>
@@ -77,38 +93,35 @@ class AfficherSerie extends Action
             <p><strong>Année de sortie :</strong> {$annee}</p>
             <p><strong>Date d’ajout :</strong> {$dateAjout}</p>
             <p><strong>Nombre d’épisodes :</strong> {$nbEpisodes}</p>
-            ";
+        ";
 
         $idProfil = (int) $_SESSION['profil']['id_profil'];
 
-        // Vérifier si déjà en favoris
+        // --- Gestion des favoris ---
         $check = $pdo->prepare("SELECT * FROM favoris WHERE id_profil = ? AND id_serie = ?");
         $check->execute([$idProfil, $idSerie]);
 
         if (!$check->fetch()) {
-            $html .= " 
+            $html .= "
                 <div class='favoris-container'>
                     <form method='post' action='?action=AjouterFavoris&id={$idSerie}'>
                         <button type='submit' class='btn-favori'>Ajouter à mes favoris</button>
                     </form>
                 </div>
             </div>
-    
             <h3>Liste des épisodes</h3>
             ";
-        }else{
-            $html .= " 
+        } else {
+            $html .= "
                 <div class='favoris-container'>
                     <form method='post' action='?action=SupFavoris&id={$idSerie}'>
                         <button type='submit' class='btn-favori'>Supprimer de mes favoris</button>
                     </form>
                 </div>
             </div>
-    
             <h3>Liste des épisodes</h3>
             ";
         }
-
 
         // --- Liste des épisodes ---
         $stmtEpisodes = $pdo->prepare("
@@ -125,24 +138,22 @@ class AfficherSerie extends Action
         } else {
             $html .= "<div class='episodes-grid'>";
             foreach ($episodes as $ep) {
-                $num = (int)($ep['numero_episode']);
+                $num = (int)$ep['numero_episode'];
                 $titreEp = htmlspecialchars($ep['titre']);
                 $duree = htmlspecialchars($ep['duree']);
-                $idEp = (int)($ep['id_episode']);
+                $idEp = (int)$ep['id_episode'];
                 $imgFile = htmlspecialchars($ep['img'] ?? 'default.png');
 
-
                 $html .= "
-                    <div class='episode-card'>
+                <div class='episode-card'>
                     <a href='?action=AfficherEpisode&id={$idEp}'>
                         <img src='img/{$imgFile}' alt='Image épisode {$num}' class='episode-img'>
                         <div class='episode-info'>  
-                            
-                                <strong>Épisode {$num}</strong> : {$titreEp}
-                            </a>
-                            <p>Durée : {$duree} secondes</p>
+                            <strong>Épisode {$num}</strong> : {$titreEp}
                         </div>
-                    </div>
+                    </a>
+                    <p>Durée : {$duree} secondes</p>
+                </div>
                 ";
             }
             $html .= "</div>";

@@ -541,3 +541,72 @@ h2, h3 {
     color: #fff;
     font-weight: bold;
 }
+
+
+.center-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh; /* prend presque toute la hauteur */
+    text-align: center;
+    color: #fff;
+}
+
+.center-message h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+
+.center-message a.btn-center {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(90deg, #4d7aff, #335ccc);
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.center-message a.btn-center:hover {
+    background: linear-gradient(90deg, #335ccc, #4d7aff);
+    transform: scale(1.05);
+}
+
+/* === Centrage message + boutons côte à côte === */
+.center-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
+    text-align: center;
+    color: #fff;
+}
+
+.center-message h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+
+.center-message .btn-container {
+    display: flex;
+    gap: 20px; /* espace entre les boutons */
+}
+
+.center-message a.btn-center {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(90deg, #4d7aff, #335ccc);
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.center-message a.btn-center:hover {
+    background: linear-gradient(90deg, #335ccc, #4d7aff);
+    transform: scale(1.05);
+}
