@@ -252,6 +252,45 @@ class InitDB
         (21,    2,    'Ça roule, ça roule toujours',    'Ça roule la nuit, comme chaque nuit. Jim fonce avec son taxi, pour rejoindre Jack à la plage. De l\'eau a coulé sous les ponts. Le mystère du Lac trouve sa solution alors que les chevaux sont de retour après une virée sur l\'Etoile Noire.',    27,    'cars-by-night.mp4',  'cars-by-night.jpg' ,  6);",
 
 
+                "INSERT INTO `genre` (`id_genre`, `libelle`) VALUES
+            (1, 'Mystère'),
+            (2, 'Nostalgie'),
+            (3, 'Aventure'),
+            (4, 'Comédie'),
+            (5, 'Sport'),
+            (6, 'Drame'),
+            (7, 'Thriller'),
+            (8, 'Action'),
+            (9, 'Science-Fiction'),
+            (10, 'Fantasy');",
+
+
+
+        "INSERT INTO `commentaire_serie` (`id_commentaire` , `id_profil` , `id_serie` , `texte` , `note` ) VALUES
+        (1, 1, 1, 'Un épisode incroyable, le suspense autour du lac est captivant !', 18),
+        (2, 2, 1, 'J’ai trouvé ça un peu lent au début mais la fin est top.', 14),
+        (3, 1, 2, 'Toujours aussi mystérieux, j’adore la mise en scène.', 17),
+        (4, 2, 3, 'Pas mal mais un peu répétitif comparé au précédent.', 12),
+        (5, 1, 5, 'La série commence à devenir vraiment intéressante !', 15),
+        (6, 2, 6, 'Magnifique visuellement, une vraie poésie de l’eau.', 19),
+        (7, 1, 7, 'La musique est superbe, on se sent transporté.', 16),
+        (8, 2, 8, 'Un épisode un peu long, mais l’histoire avance bien.', 13),
+        (9, 1, 9, 'Quelle tension pendant la tempête !', 18),
+        (10, 2, 10, 'Une belle conclusion à la série.', 17),
+        (11, 1, 11, 'Trop drôle, les chevaux sont incroyablement expressifs.', 20),
+        (12, 2, 12, 'Une blague qui m’a fait rire du début à la fin.', 18),
+        (13, 1, 13, 'Les chevaux de l’étoile noire sont un peu bizarres mais fun.', 15),
+        (14, 2, 14, 'L’ambiance plage est reposante, j’adore.', 16),
+        (15, 1, 15, 'Très esthétique, superbe lumière au coucher du soleil.', 19),
+        (16, 2, 16, 'Le lever de soleil m’a mis de bonne humeur !', 18),
+        (17, 1, 17, 'Le surf la nuit, quelle idée géniale !', 17),
+        (18, 2, 18, 'Une enquête haletante, j’étais à fond.', 19),
+        (19, 1, 19, 'Une belle conclusion sur l’amitié, très touchant.', 18),
+        (20, 2, 20, 'Les images de nuit sont magnifiques.', 16),
+        (21, 1, 21, 'Final épique, toutes les intrigues se rejoignent !', 19);"
+
+
+
             ];
             foreach ($inserts as $stmt) {
                 $pdo->exec($stmt);

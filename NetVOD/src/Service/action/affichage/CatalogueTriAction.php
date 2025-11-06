@@ -21,7 +21,6 @@ class CatalogueTriAction extends Action
         $tri = $_GET['tri'] ?? 'titre_serie';
         $ordre = $_GET['ordre'] ?? 'ASC';
 
-        // ✅ Autorise bien "moy" et non "moyenne"
         $triValides = ['titre_serie', 'date_ajout', 'nb_episodes', 'moy'];
         $ordreValides = ['ASC', 'DESC'];
 
