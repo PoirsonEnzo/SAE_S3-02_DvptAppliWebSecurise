@@ -17,6 +17,7 @@ class SuppCommentaireAction extends Action
             return "<div class='commentaire-detail'><p>Aucun commentaire sélectionné.</p></div>";
         }
         $idCom = (int) $_GET['id'];
+        $idEpisode = (int) $_GET['idEp'];
         $pdo = DeefyRepository::getInstance()->getPDO();
 
 
@@ -25,8 +26,8 @@ class SuppCommentaireAction extends Action
         WHERE id_commentaire = ?
         ");
         $stmt->execute([$idCom]);
-
         return "<div class='commentaire-detail'><p>Commentaire supprimé</p>
+                <p><a href='?action=AfficherEpisode&id={$idEpisode}'>Retourner à l'épisode</a> </p>
                 <p><a href='?action=default'>Retourner à l'accueil</a> </p></div>";
     }
 }

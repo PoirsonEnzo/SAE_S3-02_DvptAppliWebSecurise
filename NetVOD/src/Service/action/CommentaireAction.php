@@ -34,7 +34,8 @@ class CommentaireAction extends Action
                 return "<div class='commentaire-detail'><p>Voici votre commentaire :</p>
             <p>Commentaire : {$co['texte']}</p>
             <p>Note : {$co['note']}</p>
-            <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p></div>";
+            <p><a href='?action=supprimerCom&id={$idCom}&idEp={$idEpisode}'>Supprimer le commentaire</a></p>
+            <p><a href='?action=AfficherEpisode&id={$idEpisode}'>Retour à l'épisode</a></p></div>";
             }
         }
 
@@ -74,7 +75,8 @@ class CommentaireAction extends Action
             $idCom = $pdo->lastInsertId();
             $html = "<div class='commentaire-detail'><p>Voici votre commentaire :</p>
                     <p>$commentaire</p>
-                    <p><a href='?action=supprimerCom&id={$idCom}'>Supprimer le commentaire</a></p></div>";
+                    <p><a href='?action=supprimerCom&id={$idCom}&idEp={$idEpisode}'>Supprimer le commentaire</a></p>
+                    <p><a href='?action=AfficherEpisode&id={$idEpisode}'>Retour à l'épisode</a></p></div>";
         }
 
         return $html;
