@@ -25,9 +25,12 @@ HTML;
         $message = "";
 
         // --- Dossier des avatars ---
-        $avatarsDir = __DIR__ . '/../../../../IMG/Profil/';
-        $avatarsUrl = 'IMG/Profil/';
+        $avatarsDir = __DIR__ . '/../../../../img/Profil/';
         $avatars = [];
+
+        // --- Calcul dynamique du chemin des images ---
+        $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web
+        $avatarsUrl = $baseUrl . '/img/Profil/'; // fonctionnera sur Webetu et en local
 
         if (is_dir($avatarsDir)) {
             foreach (scandir($avatarsDir) as $file) {
@@ -84,16 +87,18 @@ HTML;
 HTML;
 
         foreach ($avatars as $file) {
-            $url = $avatarsUrl . $file;
-            $html .= "<img src='$url' data-file='$file' class='avatar-choice'>";
+            $fileSafe = htmlspecialchars($file, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $html .= "<img src='{$avatarsUrl}{$fileSafe}' data-file='{$fileSafe}' class='avatar-choice' alt='{$fileSafe}'>";
         }
+
+        $defaultAvatarSafe = htmlspecialchars($defaultAvatar, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
         $html .= <<<HTML
                 </div>
-                <input type="hidden" name="img" id="selected-avatar" value="$defaultAvatar">
+                <input type="hidden" name="img" id="selected-avatar" value="{$defaultAvatarSafe}">
                 <br><button type="submit">Créer le profil</button>
             </form>
-            $message
+            {$message}
         </div>
 
         <script>

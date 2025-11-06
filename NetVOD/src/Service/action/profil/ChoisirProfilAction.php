@@ -28,25 +28,36 @@ class ChoisirProfilAction extends Action
             return "<p>Aucun profil trouvé. <a href='?action=AddProfilAction'>Créer un profil</a></p>";
         }
 
+        // --- Calcul dynamique du chemin des images (avatars) ---
+        $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web
+        $imgPrefix = $baseUrl . '/img/'; // ajouter "img/" après la racine
+        $avatarsUrl = $imgPrefix . 'Profil/'; // chemin final pour les avatars
+
         // --- Affichage des profils avec avatars ---
-        $html = "<h2>Choisir un profil</h2><div class='liste-profils' style='display:flex; gap:20px; flex-wrap:wrap; justify-content:center;'>";
+        $html = "<h2>Choisir un profil</h2>
+                 <div class='liste-profils' style='display:flex; gap:20px; flex-wrap:wrap; justify-content:center;'>";
+
         foreach ($profils as $p) {
-            $username = htmlspecialchars($p['username']);
-            $avatar = htmlspecialchars($p['img_profil'] ?? 'IMG/Profil/default.png'); // avatar par défaut si vide
+            $username = htmlspecialchars($p['username'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $avatar = htmlspecialchars($p['img_profil'] ?? 'default.png', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
             $html .= "<div class='profil-item' style='text-align:center;'>
                         <a href='?action=ProfilActifAction&id={$p['id_profil']}' class='profil-lien' style='text-decoration:none; color:#fff;'>
-                            <img src='IMG/Profil/{$avatar}' alt='{$username}' style='width:80px; height:80px; border-radius:50%; object-fit:cover; display:block; margin-bottom:8px;'>
+                            <img src='{$avatarsUrl}{$avatar}' alt='{$username}' 
+                                 style='width:80px; height:80px; border-radius:50%; object-fit:cover; display:block; margin-bottom:8px;'>
                             <span>{$username}</span>
                         </a>
                       </div>";
         }
+
         $html .= "</div>";
 
         // --- Bouton de déconnexion du profil ---
         if (!empty($_SESSION['profil'])) {
             $html .= "<div class='profil-deconnexion' style='text-align:center; margin-top:30px;'>
-                        <a href='?action=SignoutProfilAction' class='btn-deconnexion' style='padding:10px 20px; background:#4d7aff; color:#fff; border-radius:8px; text-decoration:none;'>
-                            Se déconnecter du profil
+                        <a href='?action=SignoutProfilAction' class='btn-deconnexion' 
+                           style='padding:10px 20px; background:#4d7aff; color:#fff; border-radius:8px; text-decoration:none;'>
+                           Se déconnecter du profil
                         </a>
                       </div>";
         }
