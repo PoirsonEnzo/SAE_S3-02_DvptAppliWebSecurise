@@ -86,13 +86,22 @@ class Dispatcher {
             $compte_actif = "<div class='compte-actif'>Aucun profil actif</div>";
         }
 
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if (strpos($host, 'webetu.iutnc.univ-lorraine.fr') !== false) {
+            // En ligne (serveur Webetu)
+            $cssPath = "css/style.css";
+        } else {
+            // En local (Docker)
+            $cssPath = "../css/style.css";
+        }
+
         echo <<<PAGE
         <!DOCTYPE html>
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
             <title>NetVOD</title>
-            <link rel="stylesheet" href="../css/style.css">
+            <link rel="stylesheet" href=$cssPath>
         </head>
         <body>
             <h1>NetVOD</h1>
