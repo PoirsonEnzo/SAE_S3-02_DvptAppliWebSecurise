@@ -45,6 +45,14 @@ class AfficherCatalogue extends Action
         </div>
         ";
 
+        // Détection de l’environnement pour le chemin des images
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if (strpos($host, 'webetu.iutnc.univ-lorraine.fr') !== false) {
+            $imgPath = '/img/'; // chemin absolu sur Webetu
+        } else {
+            $imgPath = '../../../img/'; // chemin relatif en local/Docker
+        }
+
         // --- AFFICHAGE DES SERIES ---
         $html .= "<div class='series-grid'>";
         foreach ($results as $data) {
@@ -55,7 +63,7 @@ class AfficherCatalogue extends Action
             $html .= "
                 <div class='serie-card'>
                     <a href='?action=AfficherSerie&id={$id}'>
-                        <img src='../../../img/{$image}' alt='Image de la série {$titre}' class='serie-img'>
+                        <img src='{$imgPath}{$image}' alt='Image de la série {$titre}' class='serie-img'>
                     </a>
                     <a href='?action=AfficherSerie&id={$id}' class='serie-title'>{$titre}</a>
                 </div>

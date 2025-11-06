@@ -15,24 +15,46 @@ class InitDB
         }
 
         try {
-            // --- Connexion en root pour créer base et utilisateur ---
-            $rootPdo = new PDO("mysql:host=db;charset=utf8mb4", "root", "root");
-            $rootPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $host = $_SERVER['HTTP_HOST'] ?? '';
 
-            // --- Création de la base ---
-            $rootPdo->exec("CREATE DATABASE IF NOT EXISTS `netvod` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+            // --- Détermination du chemin de config ---
+            if (strpos($host, 'webetu.iutnc.univ-lorraine.fr') !== false) {
+                // WebETU : base déjà existante
+                $configPath = __DIR__ . '/../../../../config/db.config.ini';
+                $env = 'webetu';
+            } else {
+                // Docker : tout en local
+                $configPath = __DIR__ . '/../../../db.config.ini';
+                $env = 'docker';
+            }
 
-            // --- Création / mise à jour de l'utilisateur SQL ---
-            $rootPdo->exec("CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY 'password';");
-            $rootPdo->exec("ALTER USER 'user'@'%' IDENTIFIED BY 'password';");
-            $rootPdo->exec("GRANT ALL PRIVILEGES ON `netvod`.* TO 'user'@'%';");
-            $rootPdo->exec("FLUSH PRIVILEGES;");
+            if (!file_exists($configPath)) {
+                throw new \RuntimeException("Fichier de configuration introuvable : $configPath");
+            }
 
-            // --- Connexion avec l'utilisateur applicatif ---
-            $pdo = new PDO("mysql:host=db;dbname=netvod;charset=utf8mb4", "user", "password");
+            $config = parse_ini_file($configPath);
+
+            if ($env === 'docker') {
+                // --- Docker : création base + utilisateur ---
+                $rootPdo = new PDO("mysql:host=db;charset=utf8mb4", "root", "root");
+                $rootPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                $rootPdo->exec("CREATE DATABASE IF NOT EXISTS `netvod` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+                $rootPdo->exec("CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY 'password';");
+                $rootPdo->exec("GRANT ALL PRIVILEGES ON `netvod`.* TO 'user'@'%';");
+                $rootPdo->exec("FLUSH PRIVILEGES;");
+
+                // Connexion avec utilisateur app
+                $pdo = new PDO("mysql:host=db;dbname=netvod;charset=utf8mb4", "user", "password");
+            } else {
+                // --- WebETU : connexion directe depuis le fichier ini ---
+                $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $config['host'], $config['database']);
+                $pdo = new PDO($dsn, $config['username'], $config['password']);
+            }
+
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // --- Configuration ---
+            // --- Initialisation tables ---
             $pdo->exec("SET foreign_key_checks = 0;");
             $pdo->exec("SET NAMES utf8mb4;");
             $pdo->exec("SET time_zone = '+00:00';");
@@ -325,14 +347,14 @@ class InitDB
             $pdo->exec("SET foreign_key_checks = 1;");
 
             return <<<HTML
-                    <p>Base initialisée avec succès.</p>
-                    <a href="?action=DefaultAction">Retour à l'accueil</a>
-                    HTML;
-
-
+                <p>Base initialisée avec succès sur <strong>$env</strong>.</p>
+                <a href="?action=DefaultAction">Retour à l'accueil</a>
+            HTML;
 
         } catch (PDOException $e) {
             return "Erreur lors de l'initialisation : " . $e->getMessage();
+        } catch (\RuntimeException $e) {
+            return "Erreur de configuration : " . $e->getMessage();
         }
     }
 }
