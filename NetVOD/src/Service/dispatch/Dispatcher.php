@@ -24,7 +24,6 @@ use Service\action\CommentaireAction;
 use Service\action\SuppCommentaireAction;
 use Service\action\QuitterProfilAction;
 
-
 class Dispatcher {
 
     private string $action;
@@ -54,7 +53,7 @@ class Dispatcher {
             case 'ResetPassword':       $act = new ResetPasswordAction(); break;
             case 'Commentaire':         $act = new CommentaireAction(); break;
             case 'supprimerCom':        $act = new SuppCommentaireAction(); break;
-            case 'SignoutProfilAction':  $act = new QuitterProfilAction(); break;
+            case 'SignoutProfilAction': $act = new QuitterProfilAction(); break;
             default:                    $act = new DefaultAction(); break;
         }
 
@@ -71,11 +70,17 @@ class Dispatcher {
         }
 
         // --- Affichage du profil actif uniquement si sélectionné ---
-
         if (!empty($_SESSION['profil']) && !empty($_SESSION['profil']['username'])) {
             $username = htmlspecialchars($_SESSION['profil']['username']);
-            $compte_actif = "<div class='compte-actif'>Profil actif : <strong>{$username}</strong></div>";
-        }else {
+            $imgProfil = htmlspecialchars($_SESSION['profil']['img_profil'] ?? 'img/Profil/DefaultProfil.png');
+
+            $compte_actif = <<<HTML
+            <div class='compte-actif' style="display:flex; align-items:center; gap:10px;">
+                Profil actif : <strong>{$username}</strong>
+                <img src="{$imgProfil}" alt="Avatar" style="width:50px; height:50px; border-radius:50%;">
+            </div>
+            HTML;
+        } else {
             $compte_actif = "<div class='compte-actif'>Aucun profil actif</div>";
         }
 
