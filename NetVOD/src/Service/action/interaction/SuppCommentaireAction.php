@@ -1,7 +1,8 @@
 <?php
 
-namespace Service\action;
+namespace Service\action\interaction;
 
+use Service\action\Action;
 use Service\repository\DeefyRepository;
 
 class SuppCommentaireAction extends Action

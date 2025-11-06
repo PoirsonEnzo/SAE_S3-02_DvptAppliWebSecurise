@@ -1,6 +1,7 @@
 <?php
-namespace Service\action;
+namespace Service\action\affichage;
 
+use Service\action\Action;
 use Service\repository\DeefyRepository;
 
 class RechercheMotCleAction extends Action

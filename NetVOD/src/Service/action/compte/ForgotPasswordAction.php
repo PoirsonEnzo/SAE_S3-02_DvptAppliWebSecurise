@@ -1,7 +1,8 @@
 <?php
 
-namespace Service\action;
+namespace Service\action\compte;
 
+use Service\action\Action;
 use Service\auth\AuthnProvider;
 
 class ForgotPasswordAction extends Action

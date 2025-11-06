@@ -1,7 +1,8 @@
 <?php
-namespace Service\action;
+namespace Service\action\compte;
 
 use PDO;
+use Service\action\Action;
 use Service\repository\DeefyRepository;
 
 class ActivateAccountAction extends Action

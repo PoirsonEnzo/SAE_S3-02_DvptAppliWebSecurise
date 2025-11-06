@@ -1,5 +1,7 @@
 <?php
-namespace Service\action;
+namespace Service\action\compte;
+
+use Service\action\Action;
 
 class SignoutAction extends Action
 {

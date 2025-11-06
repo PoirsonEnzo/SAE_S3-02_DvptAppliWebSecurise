@@ -1,6 +1,7 @@
 <?php
-namespace Service\action;
+namespace Service\action\profil;
 
+use Service\action\Action;
 use Service\repository\DeefyRepository;
 
 class ChoisirProfilAction extends Action
@@ -33,7 +34,7 @@ class ChoisirProfilAction extends Action
             $username = htmlspecialchars($p['username']);
             $avatar = htmlspecialchars($p['img_profil'] ?? 'IMG/Profil/default.png'); // avatar par défaut si vide
             $html .= "<div class='profil-item' style='text-align:center;'>
-                        <a href='?action=ProfiActiflAction&id={$p['id_profil']}' class='profil-lien' style='text-decoration:none; color:#fff;'>
+                        <a href='?action=ProfilActifAction&id={$p['id_profil']}' class='profil-lien' style='text-decoration:none; color:#fff;'>
                             <img src='IMG/Profil/{$avatar}' alt='{$username}' style='width:80px; height:80px; border-radius:50%; object-fit:cover; display:block; margin-bottom:8px;'>
                             <span>{$username}</span>
                         </a>
