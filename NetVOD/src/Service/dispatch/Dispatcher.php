@@ -14,6 +14,7 @@ use Service\action\compte\ResetPasswordAction;
 use Service\action\compte\SigninAction;
 use Service\action\compte\SignoutAction;
 use Service\action\DefaultAction;
+use Service\action\InitDB;
 use Service\action\interaction\AjouterFavorisAction;
 use Service\action\interaction\CommentaireAction;
 use Service\action\interaction\SuppCommentaireAction;
@@ -54,6 +55,7 @@ class Dispatcher {
             case 'Commentaire':         $act = new CommentaireAction(); break;
             case 'supprimerCom':        $act = new SuppCommentaireAction(); break;
             case 'SignoutProfilAction': $act = new QuitterProfilAction(); break;
+            case 'InitDB':              $act = new InitDB(); break;
             default:                    $act = new DefaultAction(); break;
         }
 
@@ -102,7 +104,7 @@ class Dispatcher {
                 <a href="?action=AddProfilAction">Profil</a> |
                 <a href="?action=ChoisirProfilAction">Sélection</a> |
                 <a href="?action=Catalogue">Catalogue</a> |
-                <a href="/SQL/db_init.php">Initialiser la BD</a>
+                <a href="?action=InitDB">Initialiser la BD</a>
             </nav>
             <hr>
             $html
