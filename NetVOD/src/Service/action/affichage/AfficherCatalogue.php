@@ -1,5 +1,4 @@
 <?php
-
 namespace Service\action\affichage;
 
 use Service\action\Action;
@@ -53,7 +52,6 @@ HTML;
         ";
 
         $params = [];
-
         if (!empty($motCle)) {
             $sql .= " AND (s.titre_serie LIKE :motCle OR s.descriptif LIKE :motCle)";
             $params[':motCle'] = "%$motCle%";
@@ -77,12 +75,15 @@ HTML;
         $genres = $pdo->query("SELECT DISTINCT libelle FROM genre ORDER BY libelle")->fetchAll();
         $publics = $pdo->query("SELECT DISTINCT libelle FROM public_cible ORDER BY libelle")->fetchAll();
 
+        // --- Calcul dynamique du chemin des images ---
+        $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web
+        $imgPrefix = $baseUrl . '/img/'; // fonctionnera sur Webetu et local/Docker
+
         // --- Construction du formulaire de recherche / tri / filtre ---
         $html = "
         <h2>Catalogue des séries</h2>
         <form method='get' action='' class='catalogue-form'>
             <input type='hidden' name='action' value='Catalogue'>
-
             <div class='search-group'>
                 <input type='text' name='search' placeholder='🔍 Rechercher...' value='" . htmlspecialchars($motCle) . "' class='input-search'>
 
@@ -136,7 +137,7 @@ HTML;
                 $html .= "
                     <div class='serie-card'>
                         <a href='?action=AfficherSerie&id={$id}'>
-                            <img src='../../../img/{$image}' alt='Image de la série {$titre}' class='serie-img'>
+                            <img src='{$imgPrefix}{$image}' alt='Image de la série {$titre}' class='serie-img'>
                         </a>
                         <div class='serie-info'>
                             <a href='?action=AfficherSerie&id={$id}'><strong>{$titre}</strong></a>
