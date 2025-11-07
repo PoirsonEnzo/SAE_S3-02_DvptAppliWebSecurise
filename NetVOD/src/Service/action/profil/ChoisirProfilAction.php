@@ -58,14 +58,19 @@ HTML;
                       </div>";
         }
 
-        // --- Bouton "Ajouter un profil" ---
-                $html .= "<div class='profil-item' style='text-align:center;'>
+
+        $nbProfils = count($profils);
+        if($nbProfils<4) {
+
+            // --- Bouton "Ajouter un profil" ---
+            $html .= "<div class='profil-item' style='text-align:center;'>
             <a href='?action=AddProfilAction' class='profil-lien' style='text-decoration:none; color:#fff;'>
                 <img src='{$avatarsUrl}add.png' alt='Ajouter un profil'
                      style='width:80px; height:80px; border-radius:50%; object-fit:cover; display:block; margin-bottom:8px;'>
                 <span>Ajouter</span>
             </a>
           </div>";
+        }
 
 
 

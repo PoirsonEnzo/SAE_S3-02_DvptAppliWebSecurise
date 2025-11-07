@@ -24,6 +24,20 @@ HTML;
         $idUtilisateur = $_SESSION['user']['id'];
         $message = "";
 
+        // Si limite profils atteinte
+        $stmt = $pdo->prepare("
+            SELECT p.id_profil, p.username, p.img_profil
+            FROM profil p
+            WHERE p.id_utilisateur = ?
+        ");
+        $stmt->execute([$idUtilisateur]);
+        $profils = $stmt->fetchAll();
+
+        $nbProfils = count($profils);
+        if($nbProfils>=4){
+            return "<p>Vous avez atteint la limite de création de profils.</p>";
+        }
+
         // --- Dossier des avatars ---
         $avatarsDir = __DIR__ . '/../../../../img/Profil/';
         $avatars = [];
