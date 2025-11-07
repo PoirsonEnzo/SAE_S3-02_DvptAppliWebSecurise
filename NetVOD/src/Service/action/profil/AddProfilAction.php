@@ -87,8 +87,10 @@ HTML;
 HTML;
 
         foreach ($avatars as $file) {
-            $fileSafe = htmlspecialchars($file, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-            $html .= "<img src='{$avatarsUrl}{$fileSafe}' data-file='{$fileSafe}' class='avatar-choice' alt='{$fileSafe}'>";
+            if(($file)!="add.png"){
+                $fileSafe = htmlspecialchars($file, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                $html .= "<img src='{$avatarsUrl}{$fileSafe}' data-file='{$fileSafe}' class='avatar-choice' alt='{$fileSafe}'>";
+            }
         }
 
         $defaultAvatarSafe = htmlspecialchars($defaultAvatar, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');

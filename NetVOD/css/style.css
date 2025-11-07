@@ -131,8 +131,8 @@ body {
     transform: scale(1.05);
 }
 
-/* === Liens visités (violet clair, lisible sur fond sombre) === */
-a:visited {
+/* === Liens (violet clair, lisible sur fond sombre) === */
+a:link {
     color: #c9a3ff;
 }
 

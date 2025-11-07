@@ -112,8 +112,7 @@ class Dispatcher {
             <nav>
                 <a href="?action=default">Accueil</a> |
                 $lien_auth |
-                <a href="?action=AddProfilAction">Profil</a> |
-                <a href="?action=ChoisirProfilAction">Sélection</a> |
+                <a href="?action=ChoisirProfilAction">Profil</a> |
                 <a href="?action=Catalogue">Catalogue</a> |
                 <a href="?action=InitDB">Initialiser la BD</a>
             </nav>
