@@ -38,8 +38,8 @@ HTML;
 
         // --- Calcul dynamique du chemin des images (avatars) ---
         $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web
-        $imgPrefix = $baseUrl . '/img/'; // ajouter "img/" après la racine
-        $avatarsUrl = $imgPrefix . 'Profil/'; // chemin final pour les avatars
+        $imgPrefix = $baseUrl . '/img/';
+        $avatarsUrl = $imgPrefix . 'Profil/';
 
         // --- Affichage des profils avec avatars ---
         $html = "<h2>Choisir un profil</h2>
@@ -71,10 +71,6 @@ HTML;
             </a>
           </div>";
         }
-
-
-
-
 
 
         $html .= "</div>";

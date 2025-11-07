@@ -20,23 +20,24 @@ class ProfilActifAction extends Action
         $idUtilisateur = (int) $_SESSION['user']['id'];
         $pdo = DeefyRepository::getInstance()->getPDO();
 
-        // Vérifier que ce profil appartient bien à l'utilisateur
+        // On récupère aussi l'image du profil
         $stmt = $pdo->prepare("
-            SELECT p.id_profil, p.username
+            SELECT p.id_profil, p.username, p.img_profil
             FROM profil p
-            WHERE p.id_profil = ?
+            WHERE p.id_profil = ? AND p.id_utilisateur = ?
         ");
-        $stmt->execute([$idProfil]);
+        $stmt->execute([$idProfil, $idUtilisateur]);
         $profil = $stmt->fetch();
 
         if (!$profil) {
             return "<p>Profil invalide ou non autorisé.</p>";
         }
 
-        // Mettre le profil dans la session
+        // Enregistrement complet dans la session
         $_SESSION['profil'] = [
-            'id_profil' => $profil['id_profil'],
-            'username' => $profil['username']
+            'id_profil'  => $profil['id_profil'],
+            'username'   => $profil['username'],
+            'img_profil' => $profil['img_profil'] ?? 'DefaultProfil.png'
         ];
 
         // Redirection vers la page d'accueil

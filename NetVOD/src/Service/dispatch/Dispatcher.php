@@ -75,12 +75,17 @@ class Dispatcher {
         // --- Affichage du profil actif uniquement si sélectionné ---
         if (!empty($_SESSION['profil']) && !empty($_SESSION['profil']['username'])) {
             $username = htmlspecialchars($_SESSION['profil']['username']);
-            $imgProfil = htmlspecialchars($_SESSION['profil']['img_profil'] ?? 'img/Profil/DefaultProfil.png');
+
+            // --- Calcul dynamique du chemin des images (avatars) ---
+            $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web
+            $imgPrefix = $baseUrl . '/img/';
+            $avatarsUrl = $imgPrefix . 'Profil/';
+            $imgProfil = htmlspecialchars($_SESSION['profil']['img_profil'] ?? 'DefaultProfil.png');
 
             $compte_actif = <<<HTML
             <div class='compte-actif' style="display:flex; align-items:center; gap:10px;">
                 Profil actif : <strong>{$username}</strong>
-                <img src="{$imgProfil}" alt="Avatar" style="width:50px; height:50px; border-radius:50%;">
+                <img src="{$avatarsUrl}{$imgProfil}" alt="Avatar" style="width:50px; height:50px; border-radius:50%;">
             </div>
             HTML;
         } else {

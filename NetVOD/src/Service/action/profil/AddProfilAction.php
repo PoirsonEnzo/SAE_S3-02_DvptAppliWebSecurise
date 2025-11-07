@@ -24,7 +24,7 @@ HTML;
         $idUtilisateur = $_SESSION['user']['id'];
         $message = "";
 
-        // Si limite profils atteinte
+        // --- Vérifie la limite de profils
         $stmt = $pdo->prepare("
             SELECT p.id_profil, p.username, p.img_profil
             FROM profil p
@@ -33,8 +33,7 @@ HTML;
         $stmt->execute([$idUtilisateur]);
         $profils = $stmt->fetchAll();
 
-        $nbProfils = count($profils);
-        if($nbProfils>=4){
+        if (count($profils) >= 4) {
             return "<p>Vous avez atteint la limite de création de profils.</p>";
         }
 
@@ -43,8 +42,8 @@ HTML;
         $avatars = [];
 
         // --- Calcul dynamique du chemin des images ---
-        $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web
-        $avatarsUrl = $baseUrl . '/img/Profil/'; // fonctionnera sur Webetu et en local
+        $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+        $avatarsUrl = $baseUrl . '/img/Profil/';
 
         if (is_dir($avatarsDir)) {
             foreach (scandir($avatarsDir) as $file) {
@@ -54,32 +53,43 @@ HTML;
             }
         }
 
-        // Avatar par défaut
-        $defaultAvatar = $avatars[0] ?? '';
+        $defaultAvatar = $avatars[0] ?? 'DefaultProfil.png';
 
         // --- Traitement du formulaire ---
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = isset($_POST['username']) ? trim($_POST['username']) : '';
-            $nom = isset($_POST['nom']) ? trim($_POST['nom']) : '';
-            $prenom = isset($_POST['prenom']) ? trim($_POST['prenom']) : '';
-            $genre_prefere = isset($_POST['genre_prefere']) ? trim($_POST['genre_prefere']) : '';
-            $img = isset($_POST['img']) && trim($_POST['img']) !== '' ? trim($_POST['img']) : $defaultAvatar;
+            $username = trim($_POST['username'] ?? '');
+            $nom = trim($_POST['nom'] ?? '');
+            $prenom = trim($_POST['prenom'] ?? '');
+            $genre_prefere = trim($_POST['genre_prefere'] ?? '');
+            $img = trim($_POST['img'] ?? $defaultAvatar);
 
             if (empty($username)) {
                 $message = "<p style='color:red;'>Le nom d'utilisateur est obligatoire.</p>";
             } else {
+                // Insertion du profil
                 $stmt = $pdo->prepare("
                     INSERT INTO profil (username, nom, prenom, genre_prefere, id_utilisateur, img_profil)
                     VALUES (?, ?, ?, ?, ?, ?)
                 ");
                 $stmt->execute([$username, $nom, $prenom, $genre_prefere, $idUtilisateur, $img]);
 
-                $message = "<p style='color:green;'>Profil créé avec succès !</p>
-                            <a href='?action=ChoisirProfilAction'>Retour à la sélection</a>";
+                // On récupère l'ID du profil créé
+                $idProfilCree = $pdo->lastInsertId();
+
+                // Connexion automatique au nouveau profil
+                $_SESSION['profil'] = [
+                    'id_profil'  => $idProfilCree,
+                    'username'   => $username,
+                    'img_profil' => $img
+                ];
+
+                // Redirection automatique vers la page d’accueil
+                header("Location: ?action=DefaultAction");
+                exit();
             }
         }
 
-        // --- Formulaire centré ---
+        // --- Formulaire HTML ---
         $html = <<<HTML
         <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
             <h2>Créer un nouveau profil</h2>
@@ -101,7 +111,7 @@ HTML;
 HTML;
 
         foreach ($avatars as $file) {
-            if(($file)!="add.png"){
+            if ($file !== "add.png") {
                 $fileSafe = htmlspecialchars($file, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
                 $html .= "<img src='{$avatarsUrl}{$fileSafe}' data-file='{$fileSafe}' class='avatar-choice' alt='{$fileSafe}'>";
             }
