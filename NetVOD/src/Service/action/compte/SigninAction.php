@@ -26,7 +26,22 @@ HTML;
 
             } catch (\Exception $e) {
                 $msg = htmlspecialchars($e->getMessage());
-                $message = "<p style='color:red; font-weight:bold;'>Erreur : {$msg}</p>";
+
+                // Si le message contient un token d'activation, crée un lien cliquable
+                if (preg_match("/token=([a-f0-9]{64})/", $msg, $matches)) {
+                    $token = $matches[1];
+                    $message = <<<HTML
+                        <p style="color:red; font-weight:bold;">
+                            Votre compte n’est pas encore activé.
+                        </p>
+                        <a href="?action=activateAccount&token=$token" class="btn-center" 
+                           style="display:inline-block; margin-top:5px; padding:6px 12px; background:#7aa9ff; color:white; text-decoration:none; border-radius:4px;">
+                            Recevoir un nouveau lien d'activation
+                        </a>
+HTML;
+                } else {
+                    $message = "<p style='color:red; font-weight:bold;'>Erreur : {$msg}</p>";
+                }
             }
         }
 

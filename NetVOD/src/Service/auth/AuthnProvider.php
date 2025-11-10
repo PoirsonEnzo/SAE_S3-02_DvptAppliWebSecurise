@@ -24,7 +24,7 @@ class AuthnProvider
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$user) {
-                throw new AuthnException("utilisateur inconnu.");
+                throw new AuthnException("Utilisateur inconnu.");
             }
 
             if (!password_verify($mdp, $user['mot_de_passe'])) {
@@ -32,12 +32,25 @@ class AuthnProvider
             }
 
             if ((int)$user['actif'] !== 1) {
-                throw new AuthnException("Votre compte n’est pas encore activé. Consultez le lien reçu par e-mail.");
+                // Générer un nouveau token d'activation
+                $token = bin2hex(random_bytes(32));
+                $expiration = date('Y-m-d H:i:s', strtotime('+1 day'));
+                $pdo->prepare("
+                INSERT INTO activation_token (id_utilisateur, token, expiration)
+                VALUES (:id, :token, :expiration)
+                ON DUPLICATE KEY UPDATE token = :token, expiration = :expiration
+            ")->execute([
+                    'id' => $user['id_utilisateur'],
+                    'token' => $token,
+                    'expiration' => $expiration
+                ]);
+
+                $activationLink = "?action=activateAccount&token=$token";
+                throw new AuthnException("Votre compte n’est pas encore activé. <a href='$activationLink'>Cliquez ici pour recevoir un nouveau lien d'activation</a>.");
             }
 
-
             return [
-                'id'    => $user['id_utilisateur'],
+                'id_utilisateur' => $user['id_utilisateur'],
                 'email' => $user['email'],
                 'role'  => (int)$user['role']
             ];
@@ -46,6 +59,8 @@ class AuthnProvider
             throw new AuthnException("Erreur base de données : " . $e->getMessage());
         }
     }
+
+
 
     /**
      * Enregistrement d’un nouvel utilisateur
@@ -73,9 +88,9 @@ class AuthnProvider
 
             // Insertion utilisateur (désactivé par défaut)
             $insert = $pdo->prepare("
-            INSERT INTO utilisateur (email, mot_de_passe, date_creation)
-            VALUES (:email, :mot_de_passe, NOW())
-        ");
+                INSERT INTO utilisateur (email, mot_de_passe, date_creation)
+                VALUES (:email, :mot_de_passe, NOW())
+            ");
             $insert->execute([
                 'email' => $email,
                 'mot_de_passe' => $hash,
@@ -85,19 +100,21 @@ class AuthnProvider
 
             // Génération du token aléatoire
             $token = bin2hex(random_bytes(32));
+            $expiration = date('Y-m-d H:i:s', strtotime('+1 day'));
 
-            // Enregistrement du token avec date d'expiration
+            // Enregistrement du token
             $insertToken = $pdo->prepare("
-            INSERT INTO activation_token (id_utilisateur, token, expiration)
-            VALUES (:id, :token, DATE_ADD(NOW(), INTERVAL 15 MINUTE))
-        ");
+                INSERT INTO activation_token (id_utilisateur, token, expiration)
+                VALUES (:id, :token, :expiration)
+            ");
             $insertToken->execute([
                 'id' => $idUtilisateur,
-                'token' => $token
+                'token' => $token,
+                'expiration' => $expiration
             ]);
 
-            // Retourne les infos utilisateur + lien d’activation
             $activationLink = "?action=activateAccount&token={$token}";
+
             return [
                 'id_utilisateur' => $idUtilisateur,
                 'email' => $email,
@@ -109,7 +126,9 @@ class AuthnProvider
         }
     }
 
-
+    /**
+     * Génération d’un token de réinitialisation pour un compte existant
+     */
     public static function generateResetToken(string $email): string
     {
         $repo = DeefyRepository::getInstance();
@@ -125,10 +144,10 @@ class AuthnProvider
 
         $token = bin2hex(random_bytes(32));
         $pdo->prepare("
-        UPDATE utilisateur 
-        SET token_activation = :token, date_token = DATE_ADD(NOW(), INTERVAL 15 MINUTE) 
-        WHERE id_utilisateur = :id
-    ")->execute([
+            UPDATE utilisateur 
+            SET token_activation = :token, date_token = DATE_ADD(NOW(), INTERVAL 15 MINUTE) 
+            WHERE id_utilisateur = :id
+        ")->execute([
             'token' => $token,
             'id' => $user['id_utilisateur']
         ]);
@@ -136,12 +155,19 @@ class AuthnProvider
         return "?action=ResetPassword&token=$token";
     }
 
-
-
+    /**
+     * Vérifie si un utilisateur est connecté
+     * @return bool
+     */
+    public static function isUserRegistered(): bool
+    {
+        return !empty($_SESSION['user']);
+    }
 
     /**
-     * @return array Les données de l'utilisateur [id_utilisateur, email]
-     * @throws AuthnException Si aucun utilisateur n'est connecté.
+     * Récupère les informations de l'utilisateur connecté
+     * @return array
+     * @throws AuthnException
      */
     public static function getSignedInUser(): array
     {
@@ -153,19 +179,11 @@ class AuthnProvider
     }
 
     /**
-     * @return bool
-     */
-    public static function isUserRegistered(): bool
-    {
-        return !empty($_SESSION['user']);
-    }
-
-
-    /**
-     * Déconnecte l'utilisateur.
+     * Déconnecte l'utilisateur
      */
     public static function signout(): void
     {
         unset($_SESSION['user']);
+        unset($_SESSION['user_role']);
     }
 }

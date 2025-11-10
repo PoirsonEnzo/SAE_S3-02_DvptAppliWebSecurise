@@ -24,11 +24,11 @@ class ActivateAccountAction extends Action
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
-            return "<p class='text-red-500'>Lien d’activation expiré ou invalide.</p>";
+            return "<p class='text-red-500'>Lien d’activation expiré ou invalide. Essayez de vous reconnecter pour recevoir un nouveau lien.</p>";
         }
 
         // Active le compte
-        $pdo->prepare("UPDATE utilisateur SET actif = TRUE WHERE id_utilisateur = :id")
+        $pdo->prepare("UPDATE utilisateur SET actif = 1 WHERE id_utilisateur = :id")
             ->execute(['id' => $row['id_utilisateur']]);
 
         // Supprime le token
