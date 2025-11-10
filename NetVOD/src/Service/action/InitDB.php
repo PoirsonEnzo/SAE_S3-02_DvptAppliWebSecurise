@@ -9,9 +9,13 @@ class InitDB
 {
     public function getResult(): string
     {
-        if (!empty($_SESSION)) {
-            session_unset();
-            session_destroy();
+
+        // --- Vérification du rôle admin ---
+        if (!isset($_SESSION['user_role']) || (int)$_SESSION['user_role'] !== 100) {
+            return <<<HTML
+        <p style="color:red;">Accès refusé : vous n'avez pas les droits nécessaires pour initialiser la base de données.</p>
+        <a href="?action=DefaultAction">Retour à l'accueil</a>
+    HTML;
         }
 
         try {
@@ -81,6 +85,7 @@ class InitDB
             `actif` TINYINT(1) NOT NULL DEFAULT 0,
             `token_activation` VARCHAR(255) DEFAULT NULL,
             `date_token` DATETIME DEFAULT NULL,
+            `role` INT NOT NULL DEFAULT 1,
             PRIMARY KEY (`id_utilisateur`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
@@ -227,8 +232,8 @@ class InitDB
             // --- Insertions initiales séries/épisodes ---
             $inserts = [
 
-                "INSERT INTO `utilisateur` (`id_utilisateur`, `email`, `mot_de_passe`, `num_carte`, `date_creation`, actif) VALUES 
-        (1, 'aaa@aaa', '$2y$12\$jZRB.0fj7wWut08caFDCCetM5GsF22UyKcmBhlvkFaJ/h6rlyGroC', 12, NOW(), 1);",
+                "INSERT INTO `utilisateur` (`id_utilisateur`, `email`, `mot_de_passe`, `num_carte`, `date_creation`, `actif` , `role`) VALUES 
+        (1, 'aaa@aaa', '$2y$12\$jZRB.0fj7wWut08caFDCCetM5GsF22UyKcmBhlvkFaJ/h6rlyGroC', 12, NOW(), 1 , 100 );",
 
                 "INSERT INTO `profil` (`id_profil`, `username`, `nom`, `prenom`, `genre_prefere`, `id_utilisateur`, `img_profil`) VALUES
         (1, 'Coquelicot', 'Grenier', 'Matteo', 'Le Rock', '1', 'DefaultProfil.png');",

@@ -37,6 +37,9 @@ HTML;
             return "<p>Vous avez atteint la limite de création de profils.</p>";
         }
 
+        // --- Récupération des genres depuis la base ---
+        $genres = $pdo->query("SELECT DISTINCT libelle FROM genre ORDER BY libelle")->fetchAll();
+
         // --- Dossier des avatars ---
         $avatarsDir = __DIR__ . '/../../../../img/Profil/';
         $avatars = [];
@@ -104,7 +107,17 @@ HTML;
                 <input type="text" name="prenom"><br>
 
                 <label>Genre préféré :</label><br>
-                <input type="text" name="genre_prefere"><br><br>
+                <select name="genre_prefere" required>
+                    <option value="">-- Choisir un genre --</option>
+HTML;
+
+        foreach ($genres as $g) {
+            $lib = htmlspecialchars($g['libelle']);
+            $html .= "<option value='{$lib}'>{$lib}</option>";
+        }
+
+        $html .= <<<HTML
+                </select><br><br>
 
                 <h3>Choisir une image de profil</h3>
                 <div class="avatar-selection">

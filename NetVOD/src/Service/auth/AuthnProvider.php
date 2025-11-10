@@ -39,6 +39,7 @@ class AuthnProvider
             return [
                 'id'    => $user['id_utilisateur'],
                 'email' => $user['email'],
+                'role'  => (int)$user['role']
             ];
 
         } catch (PDOException $e) {

@@ -17,6 +17,7 @@ class SigninAction extends Action
             try {
                 $user = AuthnProvider::signin($email, $password);
                 $_SESSION['user'] = $user;
+                $_SESSION['user_role'] = $user['role'];
 
                 $message = <<<HTML
                 <p style="color:green; font-weight:bold;">Connexion réussie ! Bienvenue, <strong>{$user['email']}</strong>.</p>
