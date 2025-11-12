@@ -13,10 +13,15 @@ class InitDB
         // --- Vérification du rôle admin ---
         if (!isset($_SESSION['user_role']) || (int)$_SESSION['user_role'] !== 100) {
             return <<<HTML
-        <p style="color:red;">Accès refusé : vous n'avez pas les droits nécessaires pour initialiser la base de données.</p>
-        <a href="?action=DefaultAction">Retour à l'accueil</a>
+    <div class="center-message">
+        <h2>Accès refusé</h2>
+        <p>Vous n'avez pas les droits nécessaires pour initialiser la base de données.</p>
+            <a href="?action=DefaultAction" class="btn-center">Retour à l'accueil</a>
+        </div>
+    </div>
     HTML;
         }
+
 
         try {
             $host = $_SERVER['HTTP_HOST'] ?? '';
@@ -352,9 +357,11 @@ class InitDB
             $pdo->exec("SET foreign_key_checks = 1;");
 
             return <<<HTML
+                <div class="center-message">
                 <p>Base initialisée avec succès sur <strong>$env</strong>.</p>
-                <a href="?action=DefaultAction">Retour à l'accueil</a>
-            HTML;
+                <a href="?action=DefaultAction" class="btn-center">Retour à l'accueil</a>
+</div>
+HTML;
 
         } catch (PDOException $e) {
             return "Erreur lors de l'initialisation : " . $e->getMessage();
