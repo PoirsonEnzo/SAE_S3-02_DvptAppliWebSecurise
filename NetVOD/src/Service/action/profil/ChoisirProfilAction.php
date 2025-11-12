@@ -33,8 +33,15 @@ HTML;
         $profils = $stmt->fetchAll();
 
         if (!$profils) {
-            return "<p>Aucun profil trouvé. <a href='?action=AddProfilAction'>Créer un profil</a></p>";
+            return <<<HTML
+                <div class="center-message">
+                <h2>Aucun profil trouvé</h2>
+                <p>Vous n'avez pas encore créé de profil.</p>
+                <a href='?action=AddProfilAction' class='btn-center'>Créer un profil</a>
+            </div>
+        HTML;
         }
+
 
         // --- Calcul dynamique du chemin des images (avatars) ---
         $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'); // chemin relatif à la racine Web

@@ -11,7 +11,13 @@ class ActivateAccountAction extends Action
     {
         $token = $_GET['token'] ?? '';
         if (!$token) {
-            return "<p class='text-red-500'>Lien d’activation invalide.</p>";
+            return <<<HTML
+            <div class="center-message">
+                <h2>Lien d’activation invalide</h2>
+                <p>Veuillez vérifier votre lien ou demander un nouveau lien d’activation.</p>
+                <a href="?action=ForgotPassword" class="btn-center">Recevoir un nouveau lien</a>
+            </div>
+        HTML;
         }
 
         $pdo = DeefyRepository::getInstance()->getPDO();
@@ -35,9 +41,12 @@ class ActivateAccountAction extends Action
         $pdo->prepare("DELETE FROM activation_token WHERE token = :token")
             ->execute(['token' => $token]);
 
-        return "
-            <p class='text-green-500 font-semibold'>Votre compte a bien été activé !</p>
-            <a href='?action=SignIn' class='text-blue-600 underline'>Se connecter</a>
-        ";
+        return <<<HTML
+        <div class="center-message">
+            <h2>Compte activé avec succès !</h2>
+            <p>Votre compte a bien été activé.</p>
+            <a href="?action=SignIn" class="btn-center">Se connecter</a>
+        </div>
+        HTML;
     }
 }
