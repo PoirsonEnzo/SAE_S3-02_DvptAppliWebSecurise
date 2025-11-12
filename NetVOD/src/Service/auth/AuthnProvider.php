@@ -9,17 +9,26 @@ use Service\repository\DeefyRepository;
 
 class AuthnProvider
 {
+    private PDO $pdo;
+
+
+
+    public function __construct()
+    {
+        $this->pdo = DeefyRepository::getInstance()->getPDO();
+    }
+
+
+
+
     /**
      * Authentification d'un utilisateur existant
      * @throws AuthnException
      */
-    public static function signin(string $email, string $mdp): array
+    public function signin(string $email, string $mdp): array
     {
         try {
-            $repo = DeefyRepository::getInstance();
-            $pdo = $repo->getPDO();
-
-            $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE email = :email");
+            $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE email = :email");
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -32,14 +41,15 @@ class AuthnProvider
             }
 
             if ((int)$user['actif'] !== 1) {
-                // Générer un nouveau token d'activation
+                // Génération d’un nouveau token d’activation
                 $token = bin2hex(random_bytes(32));
                 $expiration = date('Y-m-d H:i:s', strtotime('+1 day'));
-                $pdo->prepare("
-                INSERT INTO activation_token (id_utilisateur, token, expiration)
-                VALUES (:id, :token, :expiration)
-                ON DUPLICATE KEY UPDATE token = :token, expiration = :expiration
-            ")->execute([
+
+                $this->pdo->prepare("
+                    INSERT INTO activation_token (id_utilisateur, token, expiration)
+                    VALUES (:id, :token, :expiration)
+                    ON DUPLICATE KEY UPDATE token = :token, expiration = :expiration
+                ")->execute([
                     'id' => $user['id_utilisateur'],
                     'token' => $token,
                     'expiration' => $expiration
@@ -62,32 +72,30 @@ class AuthnProvider
 
 
 
+
     /**
      * Enregistrement d’un nouvel utilisateur
      * @throws AuthnException
      */
-    public static function register(string $email, string $password): array
+    public function register(string $email, string $password): array
     {
         if (strlen($password) < 10) {
             throw new AuthnException("Le mot de passe doit contenir au moins 10 caractères.");
         }
 
         try {
-            $repo = DeefyRepository::getInstance();
-            $pdo = $repo->getPDO();
-
             // Vérifie si l'utilisateur existe déjà
-            $stmt = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = :email");
+            $stmt = $this->pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = :email");
             $stmt->execute(['email' => $email]);
             if ($stmt->fetch()) {
                 throw new AuthnException("Un compte existe déjà avec cet email.");
             }
 
-            // Hash sécurisé du mot de passe
+            // Hash sécurisé
             $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
             // Insertion utilisateur (désactivé par défaut)
-            $insert = $pdo->prepare("
+            $insert = $this->pdo->prepare("
                 INSERT INTO utilisateur (email, mot_de_passe, date_creation)
                 VALUES (:email, :mot_de_passe, NOW())
             ");
@@ -96,24 +104,22 @@ class AuthnProvider
                 'mot_de_passe' => $hash,
             ]);
 
-            $idUtilisateur = $pdo->lastInsertId();
+            $idUtilisateur = $this->pdo->lastInsertId();
 
-            // Génération du token aléatoire
+            // Génération du token d’activation
             $token = bin2hex(random_bytes(32));
             $expiration = date('Y-m-d H:i:s', strtotime('+1 day'));
 
-            // Enregistrement du token
-            $insertToken = $pdo->prepare("
+            $this->pdo->prepare("
                 INSERT INTO activation_token (id_utilisateur, token, expiration)
                 VALUES (:id, :token, :expiration)
-            ");
-            $insertToken->execute([
+            ")->execute([
                 'id' => $idUtilisateur,
                 'token' => $token,
                 'expiration' => $expiration
             ]);
 
-            $activationLink = "?action=activateAccount&token={$token}";
+            $activationLink = "?action=activateAccount&token=$token";
 
             return [
                 'id_utilisateur' => $idUtilisateur,
@@ -126,15 +132,14 @@ class AuthnProvider
         }
     }
 
-    /**
-     * Génération d’un token de réinitialisation pour un compte existant
-     */
-    public static function generateResetToken(string $email): string
-    {
-        $repo = DeefyRepository::getInstance();
-        $pdo = $repo->getPDO();
 
-        $stmt = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = :email");
+
+    /**
+     * Génère un token de réinitialisation pour un utilisateur existant
+     */
+    public function generateResetToken(string $email): string
+    {
+        $stmt = $this->pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -143,9 +148,10 @@ class AuthnProvider
         }
 
         $token = bin2hex(random_bytes(32));
-        $pdo->prepare("
+
+        $this->pdo->prepare("
             UPDATE utilisateur 
-            SET token_activation = :token, date_token = DATE_ADD(NOW(), INTERVAL 15 MINUTE) 
+            SET token_activation = :token, date_token = DATE_ADD(NOW(), INTERVAL 15 MINUTE)
             WHERE id_utilisateur = :id
         ")->execute([
             'token' => $token,
@@ -155,21 +161,14 @@ class AuthnProvider
         return "?action=ResetPassword&token=$token";
     }
 
-    /**
-     * Vérifie si un utilisateur est connecté
-     * @return bool
-     */
-    public static function isUserRegistered(): bool
+
+
+    public function isUserRegistered(): bool
     {
         return !empty($_SESSION['user']);
     }
 
-    /**
-     * Récupère les informations de l'utilisateur connecté
-     * @return array
-     * @throws AuthnException
-     */
-    public static function getSignedInUser(): array
+    public function getSignedInUser(): array
     {
         if (empty($_SESSION['user'])) {
             throw new AuthnException("Aucun utilisateur n'est authentifié.");
@@ -178,12 +177,10 @@ class AuthnProvider
         return $_SESSION['user'];
     }
 
-    /**
-     * Déconnecte l'utilisateur
-     */
-    public static function signout(): void
+
+
+    public function signout(): void
     {
-        unset($_SESSION['user']);
-        unset($_SESSION['user_role']);
+        unset($_SESSION['user'], $_SESSION['user_role']);
     }
 }
