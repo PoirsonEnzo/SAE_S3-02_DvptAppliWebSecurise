@@ -34,8 +34,10 @@ class CommentaireAction extends Action
                 return "<div class='commentaire-detail'><p>Voici votre commentaire :</p>
             <p>Commentaire : {$co['texte']}</p>
             <p>Note : {$co['note']}</p>
-            <p><a href='?action=supprimerCom&id={$idCom}&idEp={$idEpisode}'>Supprimer le commentaire</a></p>
-            <p><a href='?action=AfficherEpisode&id={$idEpisode}'>Retour à l'épisode</a></p></div>";
+            <div class='center-message'>
+            <div class='btn-container'>
+            <a class='btn-center' href='?action=supprimerCom&id={$idCom}&idEp={$idEpisode}'>Supprimer le commentaire</a>
+            <a class='btn-center' href='?action=AfficherEpisode&id={$idEpisode}'>Retour à l'épisode</a></div></div></div>";
             }
         }
 
@@ -75,8 +77,10 @@ class CommentaireAction extends Action
             $idCom = $pdo->lastInsertId();
             $html = "<div class='commentaire-detail'><p>Voici votre commentaire :</p>
                     <p>$commentaire</p>
-                    <p><a href='?action=supprimerCom&id={$idCom}&idEp={$idEpisode}'>Supprimer le commentaire</a></p>
-                    <p><a href='?action=AfficherEpisode&id={$idEpisode}'>Retour à l'épisode</a></p></div>";
+                    <div class='center-message'>
+                    <div class='btn-container'>
+                    <a class='btn-center' href='?action=supprimerCom&id={$idCom}&idEp={$idEpisode}'>Supprimer le commentaire</a>
+                    <a class='btn-center' href='?action=AfficherEpisode&id={$idEpisode}'>Retour à l'épisode</a></div></div></div>";
         }
 
         return $html;

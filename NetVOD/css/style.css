@@ -453,6 +453,63 @@ h2, h3 {
 
 }
 
+.commentaire-ligne {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #554f4f;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-left: 4px solid #007BFF;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.commentaire-texte {
+    flex: 1;
+    color: #f0f0f0;
+}
+
+.commentaire-texte strong {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #f0f0f0;
+}
+
+.commentaire-texte p {
+    background-color: #554f4f;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-left: 0px solid #dbdfe4;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.boutonSupp {
+    background-color: #e74c3c;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 15px;
+    align-self: center;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.boutonSupp:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.boutonSupp:active {
+    background-color: #a93226;
+    transform: scale(0.97);
+}
+
 .note {
     margin: 20px auto;
     padding: 10px;

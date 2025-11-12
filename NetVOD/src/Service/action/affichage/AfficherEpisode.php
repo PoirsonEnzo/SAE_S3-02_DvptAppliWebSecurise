@@ -138,7 +138,7 @@ class AfficherEpisode extends Action
 
         // Commentaires
         $comms = $pdo->prepare("
-            SELECT c.texte, p.username,p.id_utilisateur
+            SELECT c.texte, p.username,p.id_utilisateur,p.id_profil,c.id_commentaire
             FROM commentaire c
             JOIN profil p ON c.id_profil = p.id_profil
             WHERE id_episode = ?
@@ -148,7 +148,19 @@ class AfficherEpisode extends Action
 
         $html .= "<div class='commentaires'><h3>Commentaires :</h3>";
         foreach ($results as $com) {
-            $html .= "<p><strong>user{$com['id_utilisateur']} | {$com['username']} :</strong> " . htmlspecialchars($com['texte']) . "</p>";
+            $idCom = $com['id_commentaire'];
+            if($com['id_profil'] == $idProfil){
+                $html .= "
+                    <div class='commentaire-ligne'>
+                        <div class='commentaire-texte'>
+                            <p><strong>user{$com['id_utilisateur']} | {$com['username']} :</strong>
+                            " . htmlspecialchars($com['texte']) . "</p>
+                        </div>
+                        <a class='boutonSupp' href='?action=supprimerCom&id={$idCom}&idEp={$idEpisode}'>🗑</a>
+                    </div>";
+            }else {
+                $html .= "<p><strong>user{$com['id_utilisateur']} | {$com['username']} :</strong> " . htmlspecialchars($com['texte']) . "</p>";
+            }
         }
         $html .= "</div>";
 
