@@ -29,7 +29,7 @@ HTML;
         // POST
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         try {
-            $link = AuthnProvider::generateResetToken($email);
+            $link = (new AuthnProvider)->generateResetToken($email);
 
             return <<<HTML
             <p class="text-green-600 font-semibold">Lien de réinitialisation généré !</p>

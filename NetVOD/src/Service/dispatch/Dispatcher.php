@@ -66,7 +66,7 @@ class Dispatcher {
     private function renderPage(string $html): void {
 
         // --- Lien connexion / déconnexion ---
-        if (!AuthnProvider::isUserRegistered()) {
+        if (!(new AuthnProvider)->isUserRegistered()) {
             $lien_auth = '<a href="?action=AddUser">Inscription</a> | <a href="?action=SignIn">Connexion</a>';
         } else {
             $lien_auth = '<a href="?action=SignOut">Déconnexion</a>';

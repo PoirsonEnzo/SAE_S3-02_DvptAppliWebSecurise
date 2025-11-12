@@ -24,7 +24,7 @@ class AddUserAction extends Action
                 $message = "<p style='color:red; font-weight:bold;'>Les mots de passe ne correspondent pas.</p>";
             } else {
                 try {
-                    $user = AuthnProvider::register($email, $password);
+                    $user = (new AuthnProvider)->register($email, $password);
                     $pdo = DeefyRepository::getInstance()->getPDO();
 
                     $stmtId = $pdo->prepare("SELECT id_utilisateur FROM utilisateur WHERE email = ?");

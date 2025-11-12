@@ -15,7 +15,7 @@ class SigninAction extends Action
             $password = $_POST['password'] ?? '';
 
             try {
-                $user = AuthnProvider::signin($email, $password);
+                $user = (new AuthnProvider)->signin($email, $password);
                 $_SESSION['user'] = $user;
                 $_SESSION['user_role'] = $user['role'];
 
