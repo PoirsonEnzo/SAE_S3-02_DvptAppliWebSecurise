@@ -13,12 +13,14 @@ class AddUserAction extends Action
         $message = "";
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
+            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
             $password = $_POST['password'] ?? '';
             $password2 = $_POST['password2'] ?? '';
             $carte = $_POST['carte'] ?? '';
 
-            if ($password !== $password2) {
+            if (!$email) {
+                $message = "<p style='color:red; font-weight:bold;'>Veuillez saisir un email valide.</p>";
+            } elseif ($password !== $password2) {
                 $message = "<p style='color:red; font-weight:bold;'>Les mots de passe ne correspondent pas.</p>";
             } else {
                 try {
@@ -39,17 +41,18 @@ class AddUserAction extends Action
 
                     $activationLink = "?action=activateAccount&token=$token";
                     $message = <<<HTML
-                        <p style='color:green; font-weight:bold;'>Compte créé avec succès pour <strong>{$user['email']}</strong>.</p>
-                        <div class="btn-container">
-                            <a href="$activationLink" class="btn-center">Activer le compte</a>
-                        </div>
-                    HTML;
+                <p style='color:green; font-weight:bold;'>Compte créé avec succès pour <strong>{$user['email']}</strong>.</p>
+                <div class="btn-container">
+                    <a href="$activationLink" class="btn-center">Activer le compte</a>
+                </div>
+            HTML;
 
                 } catch (AuthnException $e) {
                     $message = "<p style='color:red; font-weight:bold;'>Erreur : " . htmlspecialchars($e->getMessage()) . "</p>";
                 }
             }
         }
+
 
         return <<<HTML
         <div class="center-message">
