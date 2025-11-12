@@ -28,7 +28,9 @@ class SuppCommentaireAction extends Action
         ");
         $stmt->execute([$idCom]);
         return "<div class='commentaire-detail'><p>Commentaire supprimé</p>
-                <p><a href='?action=AfficherEpisode&id={$idEpisode}'>Retourner à l'épisode</a> </p>
-                <p><a href='?action=default'>Retourner à l'accueil</a> </p></div>";
+                <div class='center-message'>
+                <div class='btn-container'>
+                <a class='btn-center' href='?action=AfficherEpisode&id={$idEpisode}'>Retourner à l'épisode</a> 
+                <a class='btn-center' href='?action=default'>Retourner à l'accueil</a></div></div></div>";
     }
 }
