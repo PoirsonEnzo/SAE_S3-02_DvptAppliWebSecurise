@@ -9,9 +9,10 @@ class InitDB
 {
     public function getResult(): string
     {
+        $host = $_SERVER['HTTP_HOST'] ?? '';
 
         // --- Vérification du rôle admin ---
-        if (!isset($_SESSION['user_role']) || (int)$_SESSION['user_role'] !== 100) {
+        if ((strpos($host, 'webetu.iutnc.univ-lorraine.fr') !== false) && (!isset($_SESSION['user_role']) || (int)$_SESSION['user_role'] !== 100)) {
             return <<<HTML
     <div class="center-message">
         <h2>Accès refusé</h2>
@@ -24,8 +25,6 @@ class InitDB
 
 
         try {
-            $host = $_SERVER['HTTP_HOST'] ?? '';
-
             // --- Détermination du chemin de config ---
             if (strpos($host, 'webetu.iutnc.univ-lorraine.fr') !== false) {
                 // WebETU : base déjà existante

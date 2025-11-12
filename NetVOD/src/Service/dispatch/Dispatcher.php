@@ -2,6 +2,7 @@
 
 namespace Service\dispatch;
 
+use PDO;
 use Service\action\affichage\AfficherCatalogue;
 use Service\action\affichage\AfficherEpisode;
 use Service\action\affichage\AfficherSerie;
@@ -24,6 +25,7 @@ use Service\action\profil\ChoisirProfilAction;
 use Service\action\profil\ProfilActifAction;
 use Service\action\profil\QuitterProfilAction;
 use Service\auth\AuthnProvider;
+use Service\repository\DeefyRepository;
 
 class Dispatcher {
 
@@ -31,7 +33,40 @@ class Dispatcher {
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) session_start();
+
         $this->action = $_GET['action'] ?? 'default';
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+
+        // --- Détection du chemin de config ---
+        if(strpos($host, 'webetu.iutnc.univ-lorraine.fr') === false) {
+            $configPath = __DIR__ . '/../../../db.config.ini';
+            if (!file_exists($configPath)) {
+                die("Erreur : le fichier de configuration est introuvable à l'emplacement : {$configPath}");
+            }
+
+            // --- Initialisation du dépôt ---
+            DeefyRepository::setConfig($configPath);
+
+            // --- Vérification si la base existe ---
+            try {
+                $config = parse_ini_file($configPath);
+                $dsn = sprintf('mysql:host=%s;charset=utf8mb4', $config['host']);
+                $pdo = new PDO($dsn, $config['username'], $config['password']);
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                $stmt = $pdo->query("SHOW DATABASES LIKE 'netvod';");
+                if ($stmt->rowCount() === 0) {
+                    // Base absente → initialisation automatique
+                    $init = new InitDB();
+                    echo $init->getResult();
+                    exit;
+                }
+
+            } catch (PDOException $e) {
+                die("Erreur lors de la vérification de la base : " . $e->getMessage());
+            }
+        }
+
     }
 
     public function run(): void {
