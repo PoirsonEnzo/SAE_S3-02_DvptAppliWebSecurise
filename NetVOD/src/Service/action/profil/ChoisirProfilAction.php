@@ -21,7 +21,7 @@ HTML;
         }
 
         $pdo = DeefyRepository::getInstance()->getPDO();
-        $idUtilisateur = (int) $_SESSION['user']['id'];
+        $idUtilisateur = (int) $_SESSION['user']['id_utilisateur'];
 
         // --- Récupération des profils de l'utilisateur ---
         $stmt = $pdo->prepare("

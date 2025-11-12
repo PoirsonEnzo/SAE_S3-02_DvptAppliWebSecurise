@@ -21,7 +21,7 @@ HTML;
         }
 
         $pdo = DeefyRepository::getInstance()->getPDO();
-        $idUtilisateur = $_SESSION['user']['id'];
+        $idUtilisateur = $_SESSION['user']['id_utilisateur'];
         $message = "";
 
         // --- Vérifie la limite de profils

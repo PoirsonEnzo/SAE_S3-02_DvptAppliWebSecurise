@@ -17,7 +17,7 @@ class ProfilActifAction extends Action
         }
 
         $idProfil = (int) $_GET['id'];
-        $idUtilisateur = (int) $_SESSION['user']['id'];
+        $idUtilisateur = (int) $_SESSION['user']['id_utilisateur'];
         $pdo = DeefyRepository::getInstance()->getPDO();
 
         // On récupère aussi l'image du profil
